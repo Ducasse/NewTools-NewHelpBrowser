@@ -39,14 +39,14 @@ TopicBuilderVisitor >> addContents: aSubtopicsCollection [
 TopicBuilderVisitor >> initialize [ 
 	
 	super initialize.
-	helpTopic := LinkedList new.
+	helpTopic := OrderedCollection new.
 	contentsList := LinkedList new.
 	actualLevel := 1.
 ]
 
 { #category : #accessing }
 TopicBuilderVisitor >> rootTopic [
-	^ helpTopic.
+	^ helpTopic
 ]
 
 { #category : #visiting }
@@ -82,9 +82,13 @@ TopicBuilderVisitor >> visit: anObject [
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
 
-	text := Text new .
+	text := Text new.
 	^ aCollection collect: [ :each | 
-		each class = PRHeader ifTrue: [ contentsList add: text. text := Text new. self visit: each ] ifFalse: [ text := text , (self textComposer start: each). ] ].
+		each class = PRHeader 
+			ifTrue: [ contentsList add: text. 
+				text := Text new. self visit: each ] 
+			ifFalse: [ text := text , (self textComposer start: each) ]
+		]
 
 	
 ]
@@ -92,11 +96,10 @@ TopicBuilderVisitor >> visitAll: aCollection [
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
 
-	(anObject level) > actualLevel 	
+	anObject level > actualLevel 	
 		ifTrue: 
-			[ (helpTopic at:  helpTopic size) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopic at: 1) ]	
+			[ (helpTopic at: helpTopic size) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopic at: 1) ]	
 		 ifFalse: 
 			[ actualLevel := (anObject level).
-			helpTopic add: (HelpTopic named: anObject text) ].
-	"^ super visitHeader:  anObject"
+			helpTopic add: (HelpTopic named: anObject text) ]
 ]
