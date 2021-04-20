@@ -157,6 +157,11 @@ SpNewHelpBrowserPresenter >> topicFileSystem: aFileSystem [
 	^ topic
 ]
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenter >> topicList [
+	^ topicList
+]
+
 { #category : #utils }
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 
