@@ -32,6 +32,10 @@ SpNewHelpBrowserPresenterTest >> setUp [
 	filesystem := FileSystem memory
 ]
 
+{ #category : #'tests - interaction' }
+SpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
+]
+
 { #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsPerDefault [
 

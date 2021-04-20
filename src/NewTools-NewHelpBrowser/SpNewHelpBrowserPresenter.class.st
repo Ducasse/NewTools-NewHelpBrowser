@@ -19,7 +19,7 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 
 	 ^ SpBoxLayout newTopToBottom
 			add: (SpPanedLayout newLeftToRight
-				add: #loadedTopicList;
+				add: #topicList;
 				add: #textOutput;
 				yourself);
 			yourself
