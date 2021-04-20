@@ -10,5 +10,8 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 
 	spec for: #'common' do: [
 		spec 
-			package: #'NewTools-NewHelpBrowser' ]
+			package: #'NewTools-NewHelpBrowser';
+			package: #'TopicBuilderVisitor';
+			package: #'TopicBuilderVisitor' with: [ spec requires: #('TopicBuilderVisitor'). ]
+		]
 ]
