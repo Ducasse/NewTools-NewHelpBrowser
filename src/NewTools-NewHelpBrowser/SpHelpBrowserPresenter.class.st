@@ -102,7 +102,7 @@ SpHelpBrowserPresenter class >> topicFileSystem: aFileSystem [
 	aFileSystem isFile ifTrue: [ 
 		visitor := self helpTopicVisitor.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
-		^ (HelpTopic named: aFileSystem basenameWithoutExtension) subtopics:  (visitor rootTopics) ].
+		^ (HelpTopic named: aFileSystem basenameWithoutExtension) subtopics:  visitor rootTopics ].
 	
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
 	subTopic := aFileSystem children do: [ :each | topic addSubtopic: (self topicFileSystem: each) ].

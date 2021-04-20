@@ -2,13 +2,14 @@ Class {
 	#name : #SpNewHelpBrowserPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
-		'loadedTopicList',
 		'helpText',
 		'textOutput',
 		'syntaxHelper',
 		'textInput',
 		'helpTopicCache',
-		'rootTopic'
+		'rootTopic',
+		'topicList',
+		'helpTopicVisitor'
 	],
 	#category : #'NewTools-NewHelpBrowser'
 }
@@ -45,7 +46,7 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> connectPresenters [
  
-	loadedTopicList
+	topicList
 		whenSelectionChangedDo: [ :selection | 
 					| text |
 					text := selection selectedItem contents.
@@ -65,6 +66,18 @@ SpNewHelpBrowserPresenter >> helpTopic [
 	^ helpTopicCache ifNil: [ helpTopicCache := SystemHelp asHelpTopic ]
 ]
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenter >> helpTopic: aHelpTopic [ 
+	helpTopicCache := aHelpTopic 
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> helpTopicVisitor [
+	
+	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor new. ].
+	^ helpTopicVisitor
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> initialExtent [
 	^ 800@600
@@ -74,8 +87,8 @@ SpNewHelpBrowserPresenter >> initialExtent [
 SpNewHelpBrowserPresenter >> initializePresenters [
 
 	super initializePresenters.
-	loadedTopicList := self newTree.
-	loadedTopicList 
+	topicList := self newTree.
+	topicList 
 		roots: { self helpTopic };
 		children: [ :aNode | aNode subtopics ];
 		display: [ :each | each title ].
@@ -124,19 +137,37 @@ SpNewHelpBrowserPresenter >> render: aString [
 	textOutput morph setText: (self morphWriter start: document asPillar) 
 ]
 
-{ #category : #accessing }
-SpNewHelpBrowserPresenter >> rootTopic [
-
-	^ rootTopic
-]
-
-{ #category : #accessing }
-SpNewHelpBrowserPresenter >> rootTopic: anObject [
-
-	rootTopic := anObject
-]
-
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> title [
 	^ 'Help Topic Browser'
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicFileSystem: aFileSystem [
+
+	| topic visitor subTopic |
+	
+	aFileSystem isFile ifTrue: [ 
+		visitor := self helpTopicVisitor.
+		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
+		^ (HelpTopic named: aFileSystem basenameWithoutExtension) subtopics:  visitor rootTopics ].
+	
+	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
+	subTopic := aFileSystem children do: [ :each | topic addSubtopic: (self topicFileSystem: each) ].
+	^ topic
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
+
+	| topic visitor subTopic |
+	
+	aFileSystem isFile ifTrue: [ 
+		visitor := self helpTopicVisitor.
+		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
+		^ (HelpTopic named: aFileSystem basenameWithoutExtension) subtopics:  visitor rootTopics ].
+	
+	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
+	subTopic := aFileSystem children do: [ :each | topic addSubtopic: (self topicFileSystem: each) ].
+	self helpTopic: topic.
 ]

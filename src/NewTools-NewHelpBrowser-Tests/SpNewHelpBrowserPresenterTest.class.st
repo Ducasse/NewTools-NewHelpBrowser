@@ -33,32 +33,38 @@ SpNewHelpBrowserPresenterTest >> setUp [
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsPerDefault [
 
-	| directory topic |
-	[ directory := filesystem workingDirectory / self class spDirectoryName.
-	filesystem createDirectory: self class spDirectoryName.
-		
-	topic := SpHelpBrowserPresenter topicFileSystem: directory.
-	self assert: directory exists.
-	self assert: topic title equals: directory basenameWithoutExtension ]
-		ensure: [ filesystem workingDirectory ensureDeleteAllChildren ]
+	| topic browser |
+	browser := SpNewHelpBrowserPresenter new.
+	topic := browser helpTopic.
+	self 
+		assert: topic title equals: 'Help' 
 
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectoryWithSubFile [
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsThatISpecify [
 
-	| directory subfile topic|
-	self skip.
-	[ directory := filesystem workingDirectory / self class spDirectoryName.
+	| topic browser |
+	browser := SpNewHelpBrowserPresenter new.
+	browser helpTopic: (HelpTopic named: 'foo').
+	topic := browser helpTopic.
+	self 
+		assert: topic title equals: 'foo' 
+
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
+
+	| directory browser |
+	directory := filesystem workingDirectory / self class spDirectoryName.
 	filesystem createDirectory: self class spDirectoryName.
-	(subfile := directory / self class spFileName) 
-		writeStreamDo: [ :stream | stream nextPutAll: self class spFileContentsOneSection ].
+	browser := SpNewHelpBrowserPresenter new.
+	browser topicsFromFileSystem: directory.
 	
-	topic := SpHelpBrowserPresenter topicFileSystem: directory.
-	self assert: directory exists.
-	self assert: (topic subtopics at: 1) title equals: subfile basenameWithoutExtension ]
-		ensure: [ filesystem workingDirectory ensureDeleteAllChildren ]
+	self assert: browser helpTopic title equals: directory basenameWithoutExtension
+	
 
 ]
