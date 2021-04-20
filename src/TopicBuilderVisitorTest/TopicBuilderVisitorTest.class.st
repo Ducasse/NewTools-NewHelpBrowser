@@ -69,10 +69,11 @@ TopicBuilderVisitorTest >> testTopicBuilderWithMoreSections [
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: self class spFileContentsMoreSections ].
 	self visitFile: file.
-	self assert: (visitor rootTopic at: 2) title equals: 'Section 2'.
+	self assert: (visitor rootTopics at: 2) title equals: 'Section 2'.
 	self
-		assert: (visitor rootTopic at: 2) contents asString
-		equals: Character cr asString , 'blabla2' , Character cr asString
+		assert: (visitor rootTopics at: 2) contents asString
+		equals: Character cr asString , 'blabla2' , Character cr asString.
+	self assert: visitor rootTopics size equals: 2.
 ]
 
 { #category : #tests }
@@ -84,13 +85,14 @@ TopicBuilderVisitorTest >> testTopicBuilderWithMoreSubSection [
 			stream nextPutAll: self class spFileContentsWithMoreSubSection ].
 	self visitFile: file.
 	self
-		assert: ((visitor rootTopic at: 1) subtopics at: 2) title
+		assert: ((visitor rootTopics at: 1) subtopics at: 2) title
 		equals: 'Section 3'.
 	self
 		assert:
-		((visitor rootTopic at: 1) subtopics at: 2) contents asString
+		((visitor rootTopics at: 1) subtopics at: 2) contents asString
 		equals: Character cr asString , 'blabla3' , Character cr asString.
-	self assert: visitor rootTopic size equals: 1
+	self assert: visitor rootTopics size equals: 1.
+	self assert: visitor rootTopics first subtopics size equals: 2
 ]
 
 { #category : #tests }
@@ -105,9 +107,9 @@ blabla
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: self class spFileContentsOneSection ].
 	self visitFile: file.
-	self assert: (visitor rootTopic at: 1) title equals: 'Section 1'.
-	self assert: (visitor rootTopic at: 1) contents asString equals: text.
-	self assert: visitor rootTopic size equals: 1
+	self assert: (visitor rootTopics at: 1) title equals: 'Section 1'.
+	self assert: (visitor rootTopics at: 1) contents asString equals: text.
+	self assert: visitor rootTopics size equals: 1
 ]
 
 { #category : #tests }
@@ -119,13 +121,14 @@ TopicBuilderVisitorTest >> testTopicBuilderWithOneSubSection [
 			stream nextPutAll: self class spFileContentsWithOneSubSection ].
 	self visitFile: file.
 	self
-		assert: ((visitor rootTopic at: 1) subtopics at: 1) title
+		assert: ((visitor rootTopics at: 1) subtopics at: 1) title
 		equals: 'Section 2'.
 	self
 		assert:
-		((visitor rootTopic at: 1) subtopics at: 1) contents asString
+		((visitor rootTopics at: 1) subtopics at: 1) contents asString
 		equals: Character cr asString , 'blabla2' , Character cr asString.
-	self assert: visitor rootTopic size equals: 1
+	self assert: visitor rootTopics size equals: 1.
+	self assert: visitor rootTopics first subtopics size equals: 1
 ]
 
 { #category : #tests }

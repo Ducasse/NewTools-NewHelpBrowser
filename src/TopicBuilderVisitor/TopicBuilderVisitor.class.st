@@ -45,7 +45,7 @@ TopicBuilderVisitor >> initialize [
 ]
 
 { #category : #accessing }
-TopicBuilderVisitor >> rootTopic [
+TopicBuilderVisitor >> rootTopics [
 	^ helpTopic
 ]
 
@@ -98,7 +98,7 @@ TopicBuilderVisitor >> visitHeader: anObject [
 
 	anObject level > actualLevel 	
 		ifTrue: 
-			[ (helpTopic at: helpTopic size) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopic at: 1) ]	
+			[ (helpTopic at: helpTopic size) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopics at: 1) ]	
 		 ifFalse: 
 			[ actualLevel := (anObject level).
 			helpTopic add: (HelpTopic named: anObject text) ]
