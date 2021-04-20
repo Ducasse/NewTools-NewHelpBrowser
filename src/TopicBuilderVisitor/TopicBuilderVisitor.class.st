@@ -74,6 +74,11 @@ TopicBuilderVisitor >> textComposer: aPRVisitorClass [
 	textComposer := aPRVisitorClass new
 ]
 
+{ #category : #visiting }
+TopicBuilderVisitor >> visit: anObject [
+	^ anObject accept: self
+]
+
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
 
