@@ -2,7 +2,8 @@ Class {
 	#name : #TopicBuilderVisitorTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'filesystem'
+		'filesystem',
+		'visitor'
 	],
 	#category : #TopicBuilderVisitorTest
 }
@@ -55,61 +56,80 @@ TopicBuilderVisitorTest class >> spFileName [
 { #category : #running }
 TopicBuilderVisitorTest >> setUp [
 	super setUp.
-	filesystem := FileSystem memory
-	"Put here a common initialization logic for tests"
+	filesystem := FileSystem memory.
+	visitor := TopicBuilderVisitor new.
+	
 ]
 
 { #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderWithMoreSections [
 
-	| file visitor|
-	 (file := filesystem workingDirectory / self class spFileName) 
-		writeStreamDo: [ :stream | stream nextPutAll: self class spFileContentsMoreSections ].
-	visitor := TopicBuilderVisitor new.
-	visitor start:  (MicroDownParser parse: file) asPillar.
-	self assert:  (visitor rootTopic at: 2) title equals: 'Section 2'.
-	self assert:  (visitor rootTopic at: 2) contents asString equals: Character cr asString, 'blabla2', Character cr asString
+	| file |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: self class spFileContentsMoreSections ].
+	self visitFile: file.
+	self assert: (visitor rootTopic at: 2) title equals: 'Section 2'.
+	self
+		assert: (visitor rootTopic at: 2) contents asString
+		equals: Character cr asString , 'blabla2' , Character cr asString
 ]
 
 { #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderWithMoreSubSection [
 
-	| file visitor|
-	 (file := filesystem workingDirectory / self class spFileName) 
-		writeStreamDo: [ :stream | stream nextPutAll: self class spFileContentsWithMoreSubSection ].
-	visitor := TopicBuilderVisitor new.
-	visitor start:  (MicroDownParser parse: file) asPillar.
-	self assert:  ((visitor rootTopic at: 1) subtopics at: 2) title equals: 'Section 3'.
-	self assert:  ((visitor rootTopic at: 1) subtopics at: 2) contents asString equals: Character cr asString , 'blabla3' , Character cr asString.
+	| file |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+			stream nextPutAll: self class spFileContentsWithMoreSubSection ].
+	self visitFile: file.
+	self
+		assert: ((visitor rootTopic at: 1) subtopics at: 2) title
+		equals: 'Section 3'.
+	self
+		assert:
+		((visitor rootTopic at: 1) subtopics at: 2) contents asString
+		equals: Character cr asString , 'blabla3' , Character cr asString.
 	self assert: visitor rootTopic size equals: 1
 ]
 
 { #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderWithOneSection [
 
-	| file visitor text |
+	| file text |
 	text := '
 blabla
 blabla
 '.
-	 (file := filesystem workingDirectory / self class spFileName) 
-		writeStreamDo: [ :stream | stream nextPutAll: self class spFileContentsOneSection ].
-	visitor := TopicBuilderVisitor new.
-	visitor start:  (MicroDownParser parse: file) asPillar.
-	self assert:  (visitor rootTopic at: 1) title equals: 'Section 1'.
-	self assert:  (visitor rootTopic at: 1) contents asString equals: text.
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: self class spFileContentsOneSection ].
+	self visitFile: file.
+	self assert: (visitor rootTopic at: 1) title equals: 'Section 1'.
+	self assert: (visitor rootTopic at: 1) contents asString equals: text.
 	self assert: visitor rootTopic size equals: 1
 ]
 
 { #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderWithOneSubSection [
 
-	| file visitor|
-	 (file := filesystem workingDirectory / self class spFileName) 
-		writeStreamDo: [ :stream | stream nextPutAll: self class spFileContentsWithOneSubSection ].
-	visitor := TopicBuilderVisitor new.
-	visitor start:  (MicroDownParser parse: file) asPillar.
-	self assert:  ((visitor rootTopic at: 1) subtopics at: 1) title equals: 'Section 2'.
-	self assert:  ((visitor rootTopic at: 1) subtopics at: 1) contents asString equals: Character cr asString , 'blabla2' , Character cr asString.
+	| file |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+			stream nextPutAll: self class spFileContentsWithOneSubSection ].
+	self visitFile: file.
+	self
+		assert: ((visitor rootTopic at: 1) subtopics at: 1) title
+		equals: 'Section 2'.
+	self
+		assert:
+		((visitor rootTopic at: 1) subtopics at: 1) contents asString
+		equals: Character cr asString , 'blabla2' , Character cr asString.
 	self assert: visitor rootTopic size equals: 1
+]
+
+{ #category : #tests }
+TopicBuilderVisitorTest >> visitFile: file [
+
+	visitor start: (MicroDownParser parse: file) asPillar
 ]
