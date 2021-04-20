@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest ]
+        platform: [ macos-latest, windows-latest ]
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +21,6 @@ jobs:
         id: smalltalkci
         with:
           smalltalk-version: Pharo64-9.0
-      - run: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-version }}
+      - run: smalltalkci -s ${{ steps.smalltalkci.outputs.smalltalk-image }}
         shell: bash
         timeout-minutes: 15
