@@ -74,8 +74,8 @@ SpNewHelpBrowserPresenter >> helpTopic: aHelpTopic [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
-	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor new. ].
-	^ helpTopicVisitor
+	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := MDTopicBuilder. ].
+	^ helpTopicVisitor new
 ]
 
 { #category : #initialization }
@@ -153,12 +153,14 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 	| topic visitor subTopic |
 	
 	aFileSystem isFile ifTrue: [ 
+		
+		self halt.
 		visitor := self helpTopicVisitor.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
 		^ visitor rootTopics ].
-	
+
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
 	subTopic := aFileSystem children do: [ :file |
-		 (self topicFileSystem: file) do:[:each | topic addSubtopic: each ] ].
+		 (self topicsFromFileSystem: file) do:[:each | topic addSubtopic: each ] ].
 	self helpTopic: topic.
 ]

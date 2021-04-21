@@ -32,6 +32,13 @@ un paragraphe sur Foo'
 ]
 
 { #category : #resources }
+SpNewHelpBrowserPresenterTest class >> spFd2 [
+
+	^ '# Chapitre 3
+Un paragraphe'
+]
+
+{ #category : #resources }
 SpNewHelpBrowserPresenterTest class >> spFileContentsOneSection [
 
 	^ '# Section 1
@@ -118,6 +125,27 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	self assert: browser helpTopic title equals: directory basenameWithoutExtension
 	
 
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnDirectoryWithFiles [
+	| directory file1 file2 browser rootTopics |
+	filesystem createDirectory: 'test'.
+	directory := filesystem workingDirectory / 'test'.
+	
+	
+	file1 := filesystem workingDirectory / 'test/fd1.md'.
+	file1 writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
+	
+	file2 := filesystem workingDirectory / 'test/fd2.md'.
+	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
+	
+	browser := SpNewHelpBrowserPresenter new.
+	self halt.
+	rootTopics := (browser topicsFromFileSystem: directory) helpTopic.
+	self assert: rootTopics subtopics size equals: 3
+	
+	
 ]
 
 { #category : #tests }
