@@ -43,6 +43,35 @@ This is a codeblock
 This is a paragraph
 ```
 This is a codeblock
+```
+'
+]
+
+{ #category : #resources }
+TopicBuilderTest class >> spSectionsWithSubSectionsWithSomeBlocks [
+
+	^ '# Section 1
+This is a test
+```
+This is a codeblock
+```
+## SubSection 1
+This is a paragraph
+```
+This is a codeblock
+```
+## SubSection 2
+This is a paragraph
+```
+This is a codeblock
+```
+This is a paragraphe
+# Section 2
+This a paragraphe
+## SubSection 3
+This is a paragraphe
+```
+This is a codeblock
 ```'
 ]
 
@@ -86,4 +115,18 @@ TopicBuilderTest >> testTopicBuilderWithSectionAndSubSection [
 	self visitFile: file.
 	self assert: visitor rootTopics first subtopics first contents size equals: 2.
 	self assert: visitor rootTopics size equals: 1	
+]
+
+{ #category : #tests }
+TopicBuilderTest >> testTopicBuilderWithSectionsAndSubSections [
+
+	| file |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: self class spSectionsWithSubSectionsWithSomeBlocks ].
+	self visitFile: file.
+	self assert: visitor rootTopics first subtopics first contents size equals: 2.
+	self assert: (visitor rootTopics first subtopics at: 2) contents size equals: 3.
+	self assert: (visitor rootTopics at: 2) subtopics first contents size equals: 2.
+	self assert: visitor rootTopics size equals: 2
 ]
