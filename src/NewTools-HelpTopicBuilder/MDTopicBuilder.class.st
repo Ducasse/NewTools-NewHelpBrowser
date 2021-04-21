@@ -1,11 +1,11 @@
 Class {
-	#name : #TopicBuilder,
+	#name : #MDTopicBuilder,
 	#superclass : #TopicBuilderVisitor,
 	#category : #'NewTools-HelpTopicBuilder'
 }
 
 { #category : #'visiting-document' }
-TopicBuilder >> visitAll: aCollection [
+MDTopicBuilder >> visitAll: aCollection [
 	| collection |
 	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 

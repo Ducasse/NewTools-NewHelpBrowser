@@ -1,11 +1,11 @@
 Class {
-	#name : #TopicBuilderTest,
+	#name : #MDTopicBuilderTest,
 	#superclass : #TopicBuilderVisitorTest,
 	#category : #'NewTools-HelpTopicBuilder-Tests'
 }
 
 { #category : #resources }
-TopicBuilderTest class >> spMoreSectionsWithSomeBlocks [
+MDTopicBuilderTest class >> spMoreSectionsWithSomeBlocks [
 
 	^ '# Section 1
 This is a first section
@@ -22,7 +22,7 @@ This is a second paragraphe
 ]
 
 { #category : #resources }
-TopicBuilderTest class >> spOneSectionWithSomeBlocks [
+MDTopicBuilderTest class >> spOneSectionWithSomeBlocks [
 
 	^ '# Section 1
 This is a test
@@ -32,7 +32,7 @@ This is a codeblock
 ]
 
 { #category : #resources }
-TopicBuilderTest class >> spOneSectionWithSubSectionWithSomeBlocks [
+MDTopicBuilderTest class >> spOneSectionWithSubSectionWithSomeBlocks [
 
 	^ '# Section 1
 This is a test
@@ -48,7 +48,7 @@ This is a codeblock
 ]
 
 { #category : #resources }
-TopicBuilderTest class >> spSectionsWithSubSectionsWithSomeBlocks [
+MDTopicBuilderTest class >> spSectionsWithSubSectionsWithSomeBlocks [
 
 	^ '# Section 1
 This is a test
@@ -76,13 +76,13 @@ This is a codeblock
 ]
 
 { #category : #running }
-TopicBuilderTest >> setUp [
+MDTopicBuilderTest >> setUp [
 	super setUp.
-	visitor := TopicBuilder new
+	visitor := MDTopicBuilder new
 ]
 
 { #category : #tests }
-TopicBuilderTest >> testTopicBuilderWithMoreSections [
+MDTopicBuilderTest >> testMDTopicBuilderWithMoreSections [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -94,7 +94,7 @@ TopicBuilderTest >> testTopicBuilderWithMoreSections [
 ]
 
 { #category : #tests }
-TopicBuilderTest >> testTopicBuilderWithOneSection [
+MDTopicBuilderTest >> testMDTopicBuilderWithOneSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -106,7 +106,7 @@ TopicBuilderTest >> testTopicBuilderWithOneSection [
 ]
 
 { #category : #tests }
-TopicBuilderTest >> testTopicBuilderWithSectionAndSubSection [
+MDTopicBuilderTest >> testMDTopicBuilderWithSectionAndSubSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -118,7 +118,7 @@ TopicBuilderTest >> testTopicBuilderWithSectionAndSubSection [
 ]
 
 { #category : #tests }
-TopicBuilderTest >> testTopicBuilderWithSectionsAndSubSections [
+MDTopicBuilderTest >> testMDTopicBuilderWithSectionsAndSubSections [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
