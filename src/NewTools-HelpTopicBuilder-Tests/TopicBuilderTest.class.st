@@ -31,6 +31,21 @@ This is a codeblock
 ```'
 ]
 
+{ #category : #resources }
+TopicBuilderTest class >> spOneSectionWithSubSectionWithSomeBlocks [
+
+	^ '# Section 1
+This is a test
+```
+This is a codeblock
+```
+## SubSection 1
+This is a paragraph
+```
+This is a codeblock
+```'
+]
+
 { #category : #running }
 TopicBuilderTest >> setUp [
 	super setUp.
@@ -58,5 +73,17 @@ TopicBuilderTest >> testTopicBuilderWithOneSection [
 		stream nextPutAll: self class spOneSectionWithSomeBlocks ].
 	self visitFile: file.
 	self assert: visitor rootTopics first contents size equals: 2.
+	self assert: visitor rootTopics size equals: 1	
+]
+
+{ #category : #tests }
+TopicBuilderTest >> testTopicBuilderWithSectionAndSubSection [
+
+	| file |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: self class spOneSectionWithSubSectionWithSomeBlocks ].
+	self visitFile: file.
+	self assert: visitor rootTopics first subtopics first contents size equals: 2.
 	self assert: visitor rootTopics size equals: 1	
 ]
