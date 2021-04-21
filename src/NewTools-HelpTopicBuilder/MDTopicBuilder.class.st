@@ -1,3 +1,6 @@
+"
+The textComposer inherite from TopicBuilderVisitor but it unused in MDTopicBuilder. 
+"
 Class {
 	#name : #MDTopicBuilder,
 	#superclass : #TopicBuilderVisitor,
