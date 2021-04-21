@@ -62,6 +62,22 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
+TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
+
+	| file text header |
+	text := '# SectionTest
+	This is a paragraphe'.
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: text ].
+	header := (MicroDownParser parse: file) asPillar children first.
+	visitor visitHeader: header.
+	self assert: visitor rootTopics first title equals: 'SectionTest'.
+	self assert: visitor rootTopics first contents equals: ''
+
+]
+
+{ #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 
 	| file |
