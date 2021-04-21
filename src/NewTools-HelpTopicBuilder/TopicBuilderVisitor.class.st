@@ -35,6 +35,12 @@ TopicBuilderVisitor >> addContents: aSubtopicsCollection [
 		self addContents: each subtopics ] ]
 ]
 
+{ #category : #accessing }
+TopicBuilderVisitor >> contentsList [
+
+	^ contentsList 
+]
+
 { #category : #initialization }
 TopicBuilderVisitor >> initialize [ 
 	
@@ -52,7 +58,6 @@ TopicBuilderVisitor >> rootTopics [
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
 	self visit: anObject.
-	contentsList add: contents.
 	contentsList removeFirst.
 	helpTopic do: [ :each | 
 		each contents: contentsList first.
@@ -81,14 +86,16 @@ TopicBuilderVisitor >> visit: anObject [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
-
+	| collection |
 	contents := Text new.
-	^ aCollection collect: [ :each | 
+	collection := aCollection collect: [ :each | 
 		each class = PRHeader 
 			ifTrue: [ contentsList add: contents. 
 				contents := Text new. self visit: each ] 
 			ifFalse: [ contents := contents , (self textComposer start: each) ]
-		]
+		].
+	self contentsList add: contents.
+	^ collection
 
 	
 ]

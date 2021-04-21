@@ -62,6 +62,22 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
+TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInContentsList [
+
+	| file text document |
+	text := '# SectionTest
+This is a paragraphe'.
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: text ].
+	document := (MicroDownParser parse: file) asPillar.
+	visitor visitAll: document children.
+	self assert: visitor contentsList first asString equals: ''.
+	self assert: (visitor contentsList at: 2) asString equals: Character cr asString , 'This is a paragraphe' , Character cr asString 
+
+]
+
+{ #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 
 	| file text header |
