@@ -15,6 +15,23 @@ SpNewHelpBrowserPresenterTest class >> spDirectoryName [
 ]
 
 { #category : #resources }
+SpNewHelpBrowserPresenterTest class >> spFd1 [
+
+	^ '# Chapitre Bar
+Un paragraphe sur Bar
+
+## 1
+Un paragraphe
+
+## 2
+Un paragraphe
+
+# Chapitre Foo
+
+un paragraphe sur Foo'
+]
+
+{ #category : #resources }
 SpNewHelpBrowserPresenterTest class >> spFileContentsOneSection [
 
 	^ '# Section 1
@@ -101,4 +118,16 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	self assert: browser helpTopic title equals: directory basenameWithoutExtension
 	
 
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnFile [
+	| file browser rootTopics |
+	file := filesystem workingDirectory / 'fd1.md'.
+	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
+	browser := SpNewHelpBrowserPresenter new.
+	rootTopics := browser topicsFromFileSystem: file.
+	self assert: rootTopics size equals: 2
+	
+	
 ]
