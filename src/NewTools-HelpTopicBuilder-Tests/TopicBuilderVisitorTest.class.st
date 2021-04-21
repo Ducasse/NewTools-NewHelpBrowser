@@ -57,12 +57,12 @@ TopicBuilderVisitorTest class >> spFileName [
 TopicBuilderVisitorTest >> setUp [
 	super setUp.
 	filesystem := FileSystem memory.
-	visitor := TopicBuilderVisitor new.
+	visitor := TopicBuilderVisitor new
 	
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderWithMoreSections [
+TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -77,7 +77,7 @@ TopicBuilderVisitorTest >> testTopicBuilderWithMoreSections [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderWithMoreSubSection [
+TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSubSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -96,7 +96,7 @@ TopicBuilderVisitorTest >> testTopicBuilderWithMoreSubSection [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderWithOneSection [
+TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSection [
 
 	| file text |
 	text := '
@@ -113,7 +113,7 @@ blabla
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderWithOneSubSection [
+TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
