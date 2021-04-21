@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #resources }
-TopicBuilderTest class >> spSectionWithSomeBlock [
+TopicBuilderTest class >> spOneSectionWithSomeBlock [
 
 	^ '# Section 1
 This is a test
@@ -26,7 +26,7 @@ TopicBuilderTest >> testTopicBuilderWithOneSection [
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
-		stream nextPutAll: self class spSectionWithSomeBlock ].
+		stream nextPutAll: self class spOneSectionWithSomeBlock ].
 	self visitFile: file.
 	self assert: visitor rootTopics first contents size equals: 2.
 	self assert: visitor rootTopics size equals: 1	
