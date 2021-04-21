@@ -141,7 +141,6 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOn
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	self halt.
 	rootTopics := (browser topicsFromFileSystem: directory) helpTopic.
 	self assert: rootTopics subtopics size equals: 3
 	

@@ -154,7 +154,6 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 	
 	aFileSystem isFile ifTrue: [ 
 		
-		self halt.
 		visitor := self helpTopicVisitor.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
 		^ visitor rootTopics ].
