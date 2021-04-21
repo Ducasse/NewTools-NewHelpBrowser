@@ -5,8 +5,8 @@ Class {
 		'helpTopic',
 		'actualLevel',
 		'contentsList',
-		'text',
-		'textComposer'
+		'textComposer',
+		'contents'
 	],
 	#category : #'NewTools-HelpTopicBuilder'
 }
@@ -52,7 +52,7 @@ TopicBuilderVisitor >> rootTopics [
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
 	self visit: anObject.
-	contentsList add: text.
+	contentsList add: contents.
 	contentsList removeFirst.
 	helpTopic do: [ :each | 
 		each contents: contentsList first.
@@ -82,12 +82,12 @@ TopicBuilderVisitor >> visit: anObject [
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
 
-	text := Text new.
+	contents := Text new.
 	^ aCollection collect: [ :each | 
 		each class = PRHeader 
-			ifTrue: [ contentsList add: text. 
-				text := Text new. self visit: each ] 
-			ifFalse: [ text := text , (self textComposer start: each) ]
+			ifTrue: [ contentsList add: contents. 
+				contents := Text new. self visit: each ] 
+			ifFalse: [ contents := contents , (self textComposer start: each) ]
 		]
 
 	
