@@ -91,6 +91,29 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTest [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault [
+
+	| visitor browser |
+	browser := SpNewHelpBrowserPresenter new.
+	visitor := browser helpTopicVisitor.
+	self 
+		assert: visitor equals: MDTopicBuilder 
+
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecify [
+
+	| visitor browser |
+	browser := SpNewHelpBrowserPresenter new.
+	browser helpTopicVisitor: TopicBuilderVisitor.
+	visitor := browser helpTopicVisitor.
+	self 
+		assert: visitor equals: TopicBuilderVisitor 
+
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsPerDefault [
 
 	| topic browser |

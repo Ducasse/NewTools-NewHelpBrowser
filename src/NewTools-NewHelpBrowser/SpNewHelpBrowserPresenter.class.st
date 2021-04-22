@@ -78,6 +78,11 @@ SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	^ helpTopicVisitor
 ]
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [ 
+	helpTopicVisitor := aClass
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> initialExtent [
 	^ 800@600
