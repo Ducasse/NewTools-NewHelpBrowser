@@ -75,7 +75,7 @@ SpNewHelpBrowserPresenter >> helpTopic: aHelpTopic [
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
 	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := MDTopicBuilder. ].
-	^ helpTopicVisitor new
+	^ helpTopicVisitor
 ]
 
 { #category : #initialization }
@@ -154,7 +154,7 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 	
 	aFileSystem isFile ifTrue: [ 
 		
-		visitor := self helpTopicVisitor.
+		visitor := self helpTopicVisitor new.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
 		^ visitor rootTopics ].
 
