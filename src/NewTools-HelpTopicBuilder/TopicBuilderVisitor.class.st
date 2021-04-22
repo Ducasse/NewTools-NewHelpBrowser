@@ -21,6 +21,11 @@ TopicBuilderVisitor class >> with: aActualTopic [
 ]
 
 { #category : #accessing }
+TopicBuilderVisitor >> actualLevel [
+	^ actualLevel
+]
+
+{ #category : #accessing }
 TopicBuilderVisitor >> actualLevel: aActualLevel [
 
 	actualLevel := aActualLevel
