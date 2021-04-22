@@ -13,7 +13,7 @@ MDTopicBuilder >> visitAll: aCollection [
 	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
 		each class = PRHeader 
-			ifTrue: [ contentsList add: contents. 
+			ifTrue: [ self contentsListAdd: contents. 
 				contents := OrderedCollection new. self visit: each ] 
 			ifFalse: [ contents add: each ]
 		].

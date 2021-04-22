@@ -62,6 +62,12 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
+TopicBuilderVisitorTest >> testGetContentsListAtInitialization [
+
+	self assert: visitor contentsList isEmpty
+]
+
+{ #category : #tests }
 TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInContentsList [
 
 	| file text document |

@@ -41,6 +41,12 @@ TopicBuilderVisitor >> contentsList [
 	^ contentsList 
 ]
 
+{ #category : #adding }
+TopicBuilderVisitor >> contentsListAdd: anObject [
+
+	contentsList add: anObject
+]
+
 { #category : #initialization }
 TopicBuilderVisitor >> initialize [ 
 	
@@ -90,7 +96,7 @@ TopicBuilderVisitor >> visitAll: aCollection [
 	contents := Text new.
 	collection := aCollection collect: [ :each | 
 		each class = PRHeader 
-			ifTrue: [ contentsList add: contents. 
+			ifTrue: [ self contentsListAdd: contents. 
 				contents := Text new. self visit: each ] 
 			ifFalse: [ contents := contents , (self textComposer start: each) ]
 		].
