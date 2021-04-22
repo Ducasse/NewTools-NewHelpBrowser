@@ -62,6 +62,41 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
+TopicBuilderVisitorTest >> testAddContentsAddContentsInTopic [
+
+	| topics |
+	topics := OrderedCollection new.
+	topics add: (HelpTopic named: '1');
+	add: (HelpTopic named: '2');
+	add: (HelpTopic named: '3').
+	visitor contentsListAdd: 1;
+	contentsListAdd: 2;
+	contentsListAdd: 3.
+	visitor addContents: topics.
+	self assert: topics first contents equals: 1.
+	self assert: topics second contents equals: 2.
+	self assert: topics third contents equals: 3
+]
+
+{ #category : #tests }
+TopicBuilderVisitorTest >> testAddContentsAddContentsUseContentsList [
+
+	| topics size |
+	topics := OrderedCollection new.
+	topics add: (HelpTopic named: '1');
+	add: (HelpTopic named: '2');
+	add: (HelpTopic named: '3').
+	visitor contentsListAdd: 1;
+	contentsListAdd: 2;
+	contentsListAdd: 3;
+	contentsListAdd: 4.
+	size := visitor contentsList size.
+	visitor addContents: topics.
+	self assert: visitor contentsList size equals: size - 3 
+
+]
+
+{ #category : #tests }
 TopicBuilderVisitorTest >> testGetContentsListAfterAddObject [
 
 	visitor contentsListAdd: 1.
