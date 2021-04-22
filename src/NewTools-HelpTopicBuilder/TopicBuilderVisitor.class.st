@@ -2,11 +2,11 @@ Class {
 	#name : #TopicBuilderVisitor,
 	#superclass : #PRVisitor,
 	#instVars : [
-		'helpTopic',
 		'actualLevel',
 		'contentsList',
 		'textComposer',
-		'contents'
+		'contents',
+		'helpTopics'
 	],
 	#category : #'NewTools-HelpTopicBuilder'
 }
@@ -56,21 +56,21 @@ TopicBuilderVisitor >> contentsListAdd: anObject [
 TopicBuilderVisitor >> initialize [ 
 	
 	super initialize.
-	helpTopic := OrderedCollection new.
+	helpTopics := OrderedCollection new.
 	contentsList := LinkedList new.
 	actualLevel := 1.
 ]
 
 { #category : #accessing }
 TopicBuilderVisitor >> rootTopics [
-	^ helpTopic
+	^ helpTopics
 ]
 
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
 	self visit: anObject.
 	contentsList removeFirst.
-	helpTopic do: [ :each | 
+	helpTopics do: [ :each | 
 		each contents: contentsList first.
 		contentsList removeFirst.
 		self addContents: each subtopics ]
@@ -116,8 +116,8 @@ TopicBuilderVisitor >> visitHeader: anObject [
 
 	anObject level > actualLevel 	
 		ifTrue: 
-			[ (helpTopic at: helpTopic size) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopics at: 1) ]	
+			[ (helpTopics last) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopics at: 1) ]	
 		 ifFalse: 
 			[ actualLevel := (anObject level).
-			helpTopic add: (HelpTopic named: anObject text) ]
+			helpTopics add: (HelpTopic named: anObject text) ]
 ]
