@@ -62,6 +62,16 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
+TopicBuilderVisitorTest >> testGetContentsListAfterAddObject [
+
+	visitor contentsListAdd: 1.
+	visitor contentsListAdd: 2.
+	self assert: visitor contentsList size equals: 2.
+	self assert: visitor contentsList first equals: 1.
+	self assert: visitor contentsList second equals: 2
+]
+
+{ #category : #tests }
 TopicBuilderVisitorTest >> testGetContentsListAtInitialization [
 
 	self assert: visitor contentsList isEmpty
