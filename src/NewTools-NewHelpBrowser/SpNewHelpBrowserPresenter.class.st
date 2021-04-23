@@ -142,6 +142,11 @@ SpNewHelpBrowserPresenter >> render: aString [
 	textOutput morph setText: (self morphWriter start: document asPillar) 
 ]
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [ 
+	rootTopic := aHelpTopic asHelpTopic
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> title [
 	^ 'Help Topic Browser'
