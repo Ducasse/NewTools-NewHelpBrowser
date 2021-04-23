@@ -114,6 +114,18 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecif
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotRootTopicThatISpecify [
+
+	| topic browser |
+	browser := SpNewHelpBrowserPresenter new.
+	topic := HelpTopic named: 'Test'.
+	browser rootTopic: topic.
+	self 
+		assert: browser rootTopic equals: topic 
+
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsPerDefault [
 
 	| topic browser |

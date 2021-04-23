@@ -143,6 +143,11 @@ SpNewHelpBrowserPresenter >> render: aString [
 ]
 
 { #category : #accessing }
+SpNewHelpBrowserPresenter >> rootTopic [
+	^ rootTopic
+]
+
+{ #category : #accessing }
 SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [ 
 	rootTopic := aHelpTopic asHelpTopic
 ]
