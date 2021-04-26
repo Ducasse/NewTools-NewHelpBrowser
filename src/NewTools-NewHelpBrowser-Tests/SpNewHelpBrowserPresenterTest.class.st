@@ -90,6 +90,18 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTest [
 
 ]
 
+{ #category : #'tests - interaction' }
+SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
+
+	| browser topic |
+	topic := HelpTopic named: 'Test'.
+	browser := SpNewHelpBrowserPresenter on: topic.
+	self assert: browser rootTopic equals: topic.
+	window := browser openWithSpec. 
+	
+
+]
+
 { #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault [
 
