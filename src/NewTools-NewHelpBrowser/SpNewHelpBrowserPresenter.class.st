@@ -46,10 +46,10 @@ SpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
-					| text |
-					text := selection selectedItem contents.
-					text ifNotNil: [ 
-							self render: text ]].
+					| node |
+					node := selection selectedItem node.
+					node ifNotNil: [ 
+							self renderNode: node ]].
 ]
 
 { #category : #utils }
@@ -62,7 +62,7 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
-	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := MDTopicBuilder. ].
+	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
 	^ helpTopicVisitor
 ]
 
@@ -128,6 +128,12 @@ SpNewHelpBrowserPresenter >> render: aString [
 							on: MicParsingError
 							do: [ :ex | textOutput morph setText: text. ^ self ].
 	textOutput morph setText: (self morphWriter start: document asPillar) 
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> renderNode: aNode [
+
+	textOutput morph setText: (self morphWriter start: aNode) 
 ]
 
 { #category : #accessing }

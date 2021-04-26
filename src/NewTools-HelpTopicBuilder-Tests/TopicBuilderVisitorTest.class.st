@@ -69,10 +69,10 @@ TopicBuilderVisitorTest >> testAddContentsAddContentsInTopic [
 	topics add: (HelpTopic named: '1');
 	add: (HelpTopic named: '2');
 	add: (HelpTopic named: '3').
-	visitor contentsListAdd: 1;
-	contentsListAdd: 2;
-	contentsListAdd: 3.
-	visitor addContents: topics.
+	visitor nodesListAdd: 1;
+	nodesListAdd: 2;
+	nodesListAdd: 3.
+	visitor addSubtopicsNodes: topics.
 	self assert: topics first contents equals: 1.
 	self assert: topics second contents equals: 2.
 	self assert: topics third contents equals: 3
@@ -86,13 +86,13 @@ TopicBuilderVisitorTest >> testAddContentsAddContentsUseContentsList [
 	topics add: (HelpTopic named: '1');
 	add: (HelpTopic named: '2');
 	add: (HelpTopic named: '3').
-	visitor contentsListAdd: 1;
-	contentsListAdd: 2;
-	contentsListAdd: 3;
-	contentsListAdd: 4.
-	size := visitor contentsList size.
-	visitor addContents: topics.
-	self assert: visitor contentsList size equals: size - 3 
+	visitor nodesListAdd: 1;
+	nodesListAdd: 2;
+	nodesListAdd: 3;
+	nodesListAdd: 4.
+	size := visitor nodesList size.
+	visitor addSubtopicsNodes: topics.
+	self assert: visitor nodesList size equals: size - 3 
 
 ]
 
@@ -112,17 +112,17 @@ TopicBuilderVisitorTest >> testGetActualLevelThatISpecify [
 { #category : #tests }
 TopicBuilderVisitorTest >> testGetContentsListAfterAddObject [
 
-	visitor contentsListAdd: 1.
-	visitor contentsListAdd: 2.
-	self assert: visitor contentsList size equals: 2.
-	self assert: visitor contentsList first equals: 1.
-	self assert: visitor contentsList second equals: 2
+	visitor nodesListAdd: 1.
+	visitor nodesListAdd: 2.
+	self assert: visitor nodesList size equals: 2.
+	self assert: visitor nodesList first equals: 1.
+	self assert: visitor nodesList second equals: 2
 ]
 
 { #category : #tests }
 TopicBuilderVisitorTest >> testGetContentsListAtInitialization [
 
-	self assert: visitor contentsList isEmpty
+	self assert: visitor nodesList isEmpty
 ]
 
 { #category : #tests }
@@ -136,8 +136,8 @@ This is a paragraphe'.
 		stream nextPutAll: text ].
 	document := (MicroDownParser parse: file) asPillar.
 	visitor visitAll: document children.
-	self assert: visitor contentsList first asString equals: ''.
-	self assert: (visitor contentsList at: 2) asString equals: Character cr asString , 'This is a paragraphe' , Character cr asString 
+	self assert: visitor nodesList first asString equals: ''.
+	self assert: (visitor nodesList at: 2) asString equals: Character cr asString , 'This is a paragraphe' , Character cr asString 
 
 ]
 
