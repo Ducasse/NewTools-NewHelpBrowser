@@ -46,10 +46,16 @@ SpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
-					| node |
-					node := selection selectedItem node.
-					node ifNotNil: [ 
-							self renderNode: node ]].
+					| item node text |
+					item := selection selectedItem.
+					item class = HelpTopic ifTrue:
+						[ text := item contents.
+						text ifNotNil: [ 
+							self render: text ] ] 
+					ifFalse: 
+						[					 node := item node.
+						 node ifNotNil: [ 
+							self renderNode: node ]]]
 ]
 
 { #category : #utils }
