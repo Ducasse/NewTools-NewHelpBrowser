@@ -6,7 +6,6 @@ Class {
 		'textOutput',
 		'syntaxHelper',
 		'textInput',
-		'helpTopicCache',
 		'rootTopic',
 		'topicList',
 		'helpTopicVisitor'
@@ -35,10 +34,9 @@ SpNewHelpBrowserPresenter class >> open [
 SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 	"Open the receiver on the given help topic or any other object that can be transformed into
 	 a help topic by sending #asHelpTopic."
-	"SpHelpBrowser openOn: SystemHelp"
-	
-	^self new
-		rootTopic: aHelpTopic;
+	"self openOn: (HelpTopic new "
+
+	^ (self on:  aHelpTopic)
 		openWithSpec;
 		yourself
 ]
@@ -59,16 +57,6 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 
 	^  '# Empty Help
 	This a dummy help.'
-]
-
-{ #category : #actions }
-SpNewHelpBrowserPresenter >> helpTopic [
-	^ helpTopicCache ifNil: [ helpTopicCache := SystemHelp asHelpTopic ]
-]
-
-{ #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopic: aHelpTopic [ 
-	helpTopicCache := aHelpTopic 
 ]
 
 { #category : #utils }
@@ -94,7 +82,7 @@ SpNewHelpBrowserPresenter >> initializePresenters [
 	super initializePresenters.
 	topicList := self newTree.
 	topicList 
-		roots: { self helpTopic };
+		roots: { self rootTopic };
 		children: [ :aNode | aNode subtopics ];
 		display: [ :each | each title ].
 	
@@ -144,12 +132,18 @@ SpNewHelpBrowserPresenter >> render: aString [
 
 { #category : #accessing }
 SpNewHelpBrowserPresenter >> rootTopic [
-	^ rootTopic
+	^ rootTopic ifNil: [ self rootTopic: SystemHelp2 asHelpTopic. rootTopic ]
 ]
 
 { #category : #accessing }
 SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [ 
 	rootTopic := aHelpTopic asHelpTopic
+]
+
+{ #category : #initialization }
+SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
+	
+	rootTopic := anHelpTopic
 ]
 
 { #category : #initialization }
@@ -176,5 +170,5 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
 	subTopic := aFileSystem children do: [ :file |
 		 (self topicsFromFileSystem: file) do:[:each | topic addSubtopic: each ] ].
-	self helpTopic: topic.
+	self rootTopic: topic.
 ]

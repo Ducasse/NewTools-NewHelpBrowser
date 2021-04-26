@@ -90,6 +90,18 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTest [
 
 ]
 
+{ #category : #'tests - interaction' }
+SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
+
+	| browser topic |
+	topic := HelpTopic named: 'Test'.
+	browser := SpNewHelpBrowserPresenter on: topic.
+	self assert: browser rootTopic equals: topic.
+	window := browser openWithSpec. 
+	
+
+]
+
 { #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault [
 
@@ -130,7 +142,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsPerDefault [
 
 	| topic browser |
 	browser := SpNewHelpBrowserPresenter new.
-	topic := browser helpTopic.
+	topic := browser rootTopic.
 	self 
 		assert: topic title equals: 'Help' 
 
@@ -141,8 +153,8 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsThatISpecify [
 
 	| topic browser |
 	browser := SpNewHelpBrowserPresenter new.
-	browser helpTopic: (HelpTopic named: 'foo').
-	topic := browser helpTopic.
+	browser rootTopic: (HelpTopic named: 'foo').
+	topic := browser rootTopic.
 	self 
 		assert: topic title equals: 'foo' 
 
@@ -157,7 +169,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	browser := SpNewHelpBrowserPresenter new.
 	browser topicsFromFileSystem: directory.
 	
-	self assert: browser helpTopic title equals: directory basenameWithoutExtension
+	self assert: browser rootTopic title equals: directory basenameWithoutExtension
 	
 
 ]
@@ -176,7 +188,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOn
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := (browser topicsFromFileSystem: directory) helpTopic.
+	rootTopics := (browser topicsFromFileSystem: directory) rootTopic.
 	self assert: rootTopics subtopics size equals: 3
 	
 	
