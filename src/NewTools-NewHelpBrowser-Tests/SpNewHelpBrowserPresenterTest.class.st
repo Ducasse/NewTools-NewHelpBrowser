@@ -21,10 +21,10 @@ SpNewHelpBrowserPresenterTest class >> spFd1 [
 Un paragraphe sur Bar
 
 ## 1
-Un paragraphe
+_Un paragraphe 1_
 
 ## 2
-Un paragraphe
+Un paragraphe 2
 
 # Chapitre Foo
 
@@ -35,7 +35,7 @@ un paragraphe sur Foo'
 SpNewHelpBrowserPresenterTest class >> spFd2 [
 
 	^ '# Chapitre 3
-Un paragraphe'
+Un paragraphe sur 3'
 ]
 
 { #category : #resources }
@@ -109,7 +109,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault 
 	browser := SpNewHelpBrowserPresenter new.
 	visitor := browser helpTopicVisitor.
 	self 
-		assert: visitor equals: MDTopicBuilder 
+		assert: visitor equals: TopicBuilderVisitor
 
 ]
 
@@ -118,10 +118,10 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecif
 
 	| visitor browser |
 	browser := SpNewHelpBrowserPresenter new.
-	browser helpTopicVisitor: TopicBuilderVisitor.
+	browser helpTopicVisitor: MDTopicBuilder.
 	visitor := browser helpTopicVisitor.
 	self 
-		assert: visitor equals: TopicBuilderVisitor 
+		assert: visitor equals: MDTopicBuilder 
 
 ]
 
