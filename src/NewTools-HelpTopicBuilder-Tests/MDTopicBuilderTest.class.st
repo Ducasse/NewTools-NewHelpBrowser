@@ -83,8 +83,8 @@ MDTopicBuilderTest >> setUp [
 
 { #category : #tests }
 MDTopicBuilderTest >> testMDTopicBuilderWithMoreSections [
-
 	| file |
+	self skip.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | stream nextPutAll: self class spMoreSectionsWithSomeBlocks ].
 	self visitFile: file.
@@ -97,6 +97,7 @@ MDTopicBuilderTest >> testMDTopicBuilderWithMoreSections [
 MDTopicBuilderTest >> testMDTopicBuilderWithOneSection [
 
 	| file |
+	self skip.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: self class spOneSectionWithSomeBlocks ].
@@ -109,6 +110,7 @@ MDTopicBuilderTest >> testMDTopicBuilderWithOneSection [
 MDTopicBuilderTest >> testMDTopicBuilderWithSectionAndSubSection [
 
 	| file |
+	self skip.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: self class spOneSectionWithSubSectionWithSomeBlocks ].
@@ -121,6 +123,7 @@ MDTopicBuilderTest >> testMDTopicBuilderWithSectionAndSubSection [
 MDTopicBuilderTest >> testMDTopicBuilderWithSectionsAndSubSections [
 
 	| file |
+	self skip.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: self class spSectionsWithSubSectionsWithSomeBlocks ].
