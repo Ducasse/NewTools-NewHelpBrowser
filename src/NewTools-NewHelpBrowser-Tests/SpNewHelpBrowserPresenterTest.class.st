@@ -175,8 +175,8 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnDirectoryWithFiles [
-	| directory file1 file2 browser rootTopics |
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDirectoryWithFiles [
+	| directory file1 file2 browser rootTopic |
 	filesystem createDirectory: 'test'.
 	directory := filesystem workingDirectory / 'test'.
 	
@@ -188,20 +188,20 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOn
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := (browser topicsFromSystem: directory) rootTopic.
-	self assert: rootTopics subtopics size equals: 3
+	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	self assert: rootTopic subtopics size equals: 3
 	
 	
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnFile [
-	| file browser rootTopics |
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile [
+	| file browser rootTopic |
 	file := filesystem workingDirectory / 'fd1.md'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := browser topicsFromFileSystem: file.
-	self assert: rootTopics size equals: 2
+	rootTopic := (browser topicsFromSystem: file) rootTopic.
+	self assert: rootTopic subtopics size equals: 2
 	
 	
 ]
