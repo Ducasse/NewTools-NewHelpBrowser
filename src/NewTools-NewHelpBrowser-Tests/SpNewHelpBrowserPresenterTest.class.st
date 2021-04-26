@@ -167,7 +167,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	directory := filesystem workingDirectory / self class spDirectoryName.
 	filesystem createDirectory: self class spDirectoryName.
 	browser := SpNewHelpBrowserPresenter new.
-	browser topicsFromFileSystem: directory.
+	browser topicsFromSystem: directory.
 	
 	self assert: browser rootTopic title equals: directory basenameWithoutExtension
 	
@@ -188,7 +188,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOn
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := (browser topicsFromFileSystem: directory) rootTopic.
+	rootTopics := (browser topicsFromSystem: directory) rootTopic.
 	self assert: rootTopics subtopics size equals: 3
 	
 	

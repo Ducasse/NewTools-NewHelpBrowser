@@ -159,16 +159,26 @@ SpNewHelpBrowserPresenter >> topicList [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 
-	| topic visitor subTopic |
+	| visitor subTopic |
 	
 	aFileSystem isFile ifTrue: [ 
 		
 		visitor := self helpTopicVisitor new.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
 		^ visitor rootTopics ].
+	
+	subTopic := OrderedCollection new.
+	aFileSystem children do: [ :file |
+		 subTopic addAll: (self topicsFromFileSystem: file)].
+	^ subTopic
+	
+]
 
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsFromSystem: aFileSystem [
+
+	| topic |
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
-	subTopic := aFileSystem children do: [ :file |
-		 (self topicsFromFileSystem: file) do:[:each | topic addSubtopic: each ] ].
-	self rootTopic: topic.
+	(self topicsFromFileSystem: aFileSystem) do: [ :each | topic addSubtopic: each ].
+	self rootTopic: topic	
 ]
