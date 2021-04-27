@@ -171,18 +171,23 @@ SpNewHelpBrowserPresenter >> topicList [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 
-	| visitor subTopic |
+	| visitor subTopic sorted |
 	
 	aFileSystem isFile ifTrue: [ 
-		
-		visitor := self helpTopicVisitor new.
-		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
-		^ visitor rootTopics ].
+		aFileSystem extension = 'mic'
+			ifTrue: [ 	
+				visitor := self helpTopicVisitor new.
+				visitor start: (MicroDownParser parse: aFileSystem) asPillar.
+				^ visitor rootTopics ] ].
 	
 	subTopic := OrderedCollection new.
-	aFileSystem children do: [ :file |
-		 subTopic addAll: (self topicsFromFileSystem: file)].
-	^ subTopic
+	sorted := SortedCollection sortBlock: [ :a :b | a basename >= b basename ].
+	sorted addAll: (aFileSystem children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
+	
+		
+	sorted 	do: [ :fileOrFolder |
+			 subTopic addAll: (self topicsFromFileSystem: fileOrFolder)].
+		^ subTopic
 	
 ]
 
@@ -192,5 +197,5 @@ SpNewHelpBrowserPresenter >> topicsFromSystem: aFileSystem [
 	| topic |
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
 	(self topicsFromFileSystem: aFileSystem) do: [ :each | topic addSubtopic: each ].
-	self rootTopic: topic	
+	self rootTopic: topic.
 ]
