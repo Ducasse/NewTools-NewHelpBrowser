@@ -172,7 +172,6 @@ SpNewHelpBrowserPresenter >> topicList [
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 
 	| visitor subTopic sorted |
-	
 	aFileSystem isFile ifTrue: [ 
 		aFileSystem extension = 'mic'
 			ifTrue: [ 	
