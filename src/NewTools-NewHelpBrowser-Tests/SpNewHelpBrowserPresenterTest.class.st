@@ -21,10 +21,10 @@ SpNewHelpBrowserPresenterTest class >> spFd1 [
 Un paragraphe sur Bar
 
 ## 1
-Un paragraphe
+_Un paragraphe 1_
 
 ## 2
-Un paragraphe
+Un paragraphe 2
 
 # Chapitre Foo
 
@@ -35,7 +35,7 @@ un paragraphe sur Foo'
 SpNewHelpBrowserPresenterTest class >> spFd2 [
 
 	^ '# Chapitre 3
-Un paragraphe'
+Un paragraphe sur 3'
 ]
 
 { #category : #resources }
@@ -109,7 +109,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault 
 	browser := SpNewHelpBrowserPresenter new.
 	visitor := browser helpTopicVisitor.
 	self 
-		assert: visitor equals: MDTopicBuilder 
+		assert: visitor equals: TopicBuilderVisitor
 
 ]
 
@@ -118,10 +118,10 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecif
 
 	| visitor browser |
 	browser := SpNewHelpBrowserPresenter new.
-	browser helpTopicVisitor: TopicBuilderVisitor.
+	browser helpTopicVisitor: MDTopicBuilder.
 	visitor := browser helpTopicVisitor.
 	self 
-		assert: visitor equals: TopicBuilderVisitor 
+		assert: visitor equals: MDTopicBuilder 
 
 ]
 
@@ -167,7 +167,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	directory := filesystem workingDirectory / self class spDirectoryName.
 	filesystem createDirectory: self class spDirectoryName.
 	browser := SpNewHelpBrowserPresenter new.
-	browser topicsFromFileSystem: directory.
+	browser topicsFromSystem: directory.
 	
 	self assert: browser rootTopic title equals: directory basenameWithoutExtension
 	
@@ -175,8 +175,8 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnDirectoryWithFiles [
-	| directory file1 file2 browser rootTopics |
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDirectoryWithFiles [
+	| directory file1 file2 browser rootTopic |
 	filesystem createDirectory: 'test'.
 	directory := filesystem workingDirectory / 'test'.
 	
@@ -188,20 +188,20 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOn
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := (browser topicsFromFileSystem: directory) rootTopic.
-	self assert: rootTopics subtopics size equals: 3
+	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	self assert: rootTopic subtopics size equals: 3
 	
 	
 ]
 
 { #category : #tests }
-SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromFileSystemOnFile [
-	| file browser rootTopics |
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile [
+	| file browser rootTopic |
 	file := filesystem workingDirectory / 'fd1.md'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopics := browser topicsFromFileSystem: file.
-	self assert: rootTopics size equals: 2
+	rootTopic := (browser topicsFromSystem: file) rootTopic.
+	self assert: rootTopic subtopics size equals: 2
 	
 	
 ]

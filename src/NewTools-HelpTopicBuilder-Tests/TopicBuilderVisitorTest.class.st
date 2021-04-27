@@ -62,37 +62,37 @@ TopicBuilderVisitorTest >> setUp [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testAddContentsAddContentsInTopic [
+TopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 
 	| topics |
 	topics := OrderedCollection new.
-	topics add: (HelpTopic named: '1');
-	add: (HelpTopic named: '2');
-	add: (HelpTopic named: '3').
-	visitor contentsListAdd: 1;
-	contentsListAdd: 2;
-	contentsListAdd: 3.
-	visitor addContents: topics.
-	self assert: topics first contents equals: 1.
-	self assert: topics second contents equals: 2.
-	self assert: topics third contents equals: 3
+	topics add: (NodeHelpTopic named: '1');
+	add: (NodeHelpTopic named: '2');
+	add: (NodeHelpTopic named: '3').
+	visitor nodesListAdd: (OrderedCollection new: 1);
+	nodesListAdd: (OrderedCollection new: 2);
+	nodesListAdd: (OrderedCollection new: 3).
+	visitor addSubtopicsNodes: topics.
+	self assert: topics first node class equals: PRDocument.
+	self assert: topics second node class equals: PRDocument.
+	self assert: topics third node class equals: PRDocument
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testAddContentsAddContentsUseContentsList [
+TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 
 	| topics size |
 	topics := OrderedCollection new.
 	topics add: (HelpTopic named: '1');
 	add: (HelpTopic named: '2');
 	add: (HelpTopic named: '3').
-	visitor contentsListAdd: 1;
-	contentsListAdd: 2;
-	contentsListAdd: 3;
-	contentsListAdd: 4.
-	size := visitor contentsList size.
-	visitor addContents: topics.
-	self assert: visitor contentsList size equals: size - 3 
+	visitor nodesListAdd: (OrderedCollection new: 1);
+	nodesListAdd: (OrderedCollection new: 2);
+	nodesListAdd: (OrderedCollection new: 3);
+	nodesListAdd: (OrderedCollection new: 4).
+	size := visitor nodesList size.
+	visitor addSubtopicsNodes: topics.
+	self assert: visitor nodesList size equals: size - 3 
 
 ]
 
@@ -110,23 +110,23 @@ TopicBuilderVisitorTest >> testGetActualLevelThatISpecify [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testGetContentsListAfterAddObject [
+TopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
 
-	visitor contentsListAdd: 1.
-	visitor contentsListAdd: 2.
-	self assert: visitor contentsList size equals: 2.
-	self assert: visitor contentsList first equals: 1.
-	self assert: visitor contentsList second equals: 2
+	visitor nodesListAdd: 1.
+	visitor nodesListAdd: 2.
+	self assert: visitor nodesList size equals: 2.
+	self assert: visitor nodesList first equals: 1.
+	self assert: visitor nodesList second equals: 2
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testGetContentsListAtInitialization [
+TopicBuilderVisitorTest >> testGetNodesListAtInitialization [
 
-	self assert: visitor contentsList isEmpty
+	self assert: visitor nodesList isEmpty
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInContentsList [
+TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInNodesList [
 
 	| file text document |
 	text := '# SectionTest
@@ -136,8 +136,8 @@ This is a paragraphe'.
 		stream nextPutAll: text ].
 	document := (MicroDownParser parse: file) asPillar.
 	visitor visitAll: document children.
-	self assert: visitor contentsList first asString equals: ''.
-	self assert: (visitor contentsList at: 2) asString equals: Character cr asString , 'This is a paragraphe' , Character cr asString 
+	self assert: visitor nodesList first isEmpty.
+	self assert: visitor nodesList second size equals: 1 
 
 ]
 
@@ -166,9 +166,6 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 		stream nextPutAll: self class spFileContentsMoreSections ].
 	self visitFile: file.
 	self assert: (visitor rootTopics at: 2) title equals: 'Section 2'.
-	self
-		assert: (visitor rootTopics at: 2) contents asString
-		equals: Character cr asString , 'blabla2' , Character cr asString.
 	self assert: visitor rootTopics size equals: 2.
 ]
 
@@ -183,10 +180,6 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSubSection [
 	self
 		assert: ((visitor rootTopics at: 1) subtopics at: 2) title
 		equals: 'Section 3'.
-	self
-		assert:
-		((visitor rootTopics at: 1) subtopics at: 2) contents asString
-		equals: Character cr asString , 'blabla3' , Character cr asString.
 	self assert: visitor rootTopics size equals: 1.
 	self assert: visitor rootTopics first subtopics size equals: 2
 ]
@@ -204,7 +197,6 @@ blabla
 		stream nextPutAll: self class spFileContentsOneSection ].
 	self visitFile: file.
 	self assert: (visitor rootTopics at: 1) title equals: 'Section 1'.
-	self assert: (visitor rootTopics at: 1) contents asString equals: text.
 	self assert: visitor rootTopics size equals: 1
 ]
 
@@ -219,10 +211,6 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
 	self
 		assert: ((visitor rootTopics at: 1) subtopics at: 1) title
 		equals: 'Section 2'.
-	self
-		assert:
-		((visitor rootTopics at: 1) subtopics at: 1) contents asString
-		equals: Character cr asString , 'blabla2' , Character cr asString.
 	self assert: visitor rootTopics size equals: 1.
 	self assert: visitor rootTopics first subtopics size equals: 1
 ]

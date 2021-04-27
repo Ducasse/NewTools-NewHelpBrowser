@@ -46,10 +46,16 @@ SpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
-					| text |
-					text := selection selectedItem contents.
-					text ifNotNil: [ 
-							self render: text ]].
+					| item node text |
+					item := selection selectedItem.
+					item class = HelpTopic ifTrue:
+						[ text := item contents.
+						text ifNotNil: [ 
+							self render: text ] ] 
+					ifFalse: 
+						[					 node := item node.
+						 node ifNotNil: [ 
+							self renderNode: node ]]]
 ]
 
 { #category : #utils }
@@ -62,7 +68,7 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
-	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := MDTopicBuilder. ].
+	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
 	^ helpTopicVisitor
 ]
 
@@ -130,6 +136,12 @@ SpNewHelpBrowserPresenter >> render: aString [
 	textOutput morph setText: (self morphWriter start: document asPillar) 
 ]
 
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> renderNode: aNode [
+
+	textOutput morph setText: (self morphWriter start: aNode) 
+]
+
 { #category : #accessing }
 SpNewHelpBrowserPresenter >> rootTopic [
 	^ rootTopic ifNil: [ self rootTopic: SystemHelp2 asHelpTopic. rootTopic ]
@@ -159,16 +171,26 @@ SpNewHelpBrowserPresenter >> topicList [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
 
-	| topic visitor subTopic |
+	| visitor subTopic |
 	
 	aFileSystem isFile ifTrue: [ 
 		
 		visitor := self helpTopicVisitor new.
 		visitor start: (MicroDownParser parse: aFileSystem) asPillar.
 		^ visitor rootTopics ].
+	
+	subTopic := OrderedCollection new.
+	aFileSystem children do: [ :file |
+		 subTopic addAll: (self topicsFromFileSystem: file)].
+	^ subTopic
+	
+]
 
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsFromSystem: aFileSystem [
+
+	| topic |
 	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
-	subTopic := aFileSystem children do: [ :file |
-		 (self topicsFromFileSystem: file) do:[:each | topic addSubtopic: each ] ].
-	self rootTopic: topic.
+	(self topicsFromFileSystem: aFileSystem) do: [ :each | topic addSubtopic: each ].
+	self rootTopic: topic	
 ]

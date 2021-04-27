@@ -3,10 +3,9 @@ Class {
 	#superclass : #PRVisitor,
 	#instVars : [
 		'actualLevel',
-		'contentsList',
-		'textComposer',
 		'contents',
-		'helpTopics'
+		'helpTopics',
+		'nodesList'
 	],
 	#category : #'NewTools-HelpTopicBuilder'
 }
@@ -32,24 +31,12 @@ TopicBuilderVisitor >> actualLevel: aActualLevel [
 ]
 
 { #category : #accessing }
-TopicBuilderVisitor >> addContents: aSubtopicsCollection [
+TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 	
-	aSubtopicsCollection ifNotNil: [ aSubtopicsCollection do: 
-		[ :each | each contents: contentsList first.
-		contentsList removeFirst.
-		self addContents: each subtopics ] ]
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor >> contentsList [
-
-	^ contentsList 
-]
-
-{ #category : #adding }
-TopicBuilderVisitor >> contentsListAdd: anObject [
-
-	contentsList add: anObject
+	aSubtopicsCollection ifNotNil: [ aSubtopicsCollection do:
+		[ :each | nodesList first do: [ :node | each addNode: node ].
+		nodesList removeFirst.
+		self addSubtopicsNodes: each subtopics ] ]
 ]
 
 { #category : #initialization }
@@ -57,8 +44,20 @@ TopicBuilderVisitor >> initialize [
 	
 	super initialize.
 	helpTopics := OrderedCollection new.
-	contentsList := LinkedList new.
+	nodesList := LinkedList new.
 	actualLevel := 1.
+]
+
+{ #category : #accessing }
+TopicBuilderVisitor >> nodesList [
+
+	^ nodesList 
+]
+
+{ #category : #adding }
+TopicBuilderVisitor >> nodesListAdd: anObject [
+
+	nodesList add: anObject
 ]
 
 { #category : #accessing }
@@ -69,25 +68,13 @@ TopicBuilderVisitor >> rootTopics [
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
 	self visit: anObject.
-	contentsList removeFirst.
+	nodesList removeFirst.
 	helpTopics do: [ :each | 
-		each contents: contentsList first.
-		contentsList removeFirst.
-		self addContents: each subtopics ]
+		nodesList first do: [ :node | each addNode: node ].
+		nodesList removeFirst.
+		self addSubtopicsNodes: each subtopics ]
 	
 	
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor >> textComposer [
-
-	^ textComposer ifNil: [ textComposer := PRRichTextComposer new ].
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor >> textComposer: aPRVisitorClass [
-
-	textComposer := aPRVisitorClass new
 ]
 
 { #category : #visiting }
@@ -98,14 +85,14 @@ TopicBuilderVisitor >> visit: anObject [
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
 	| collection |
-	contents := Text new.
+	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
 		each class = PRHeader 
-			ifTrue: [ self contentsListAdd: contents. 
-				contents := Text new. self visit: each ] 
-			ifFalse: [ contents := contents , (self textComposer start: each) ]
+			ifTrue: [ self nodesListAdd: contents. 
+				contents := OrderedCollection new. self visit: each ] 
+			ifFalse: [ contents add: each ]
 		].
-	self contentsList add: contents.
+	self nodesList add: contents.
 	^ collection
 
 	
@@ -113,11 +100,8 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-
-	anObject level > actualLevel 	
-		ifTrue: 
-			[ (helpTopics last) addSubtopic:  (((self class with: anObject level)  visitHeader: anObject) rootTopics at: 1) ]	
-		 ifFalse: 
-			[ actualLevel := (anObject level).
-			helpTopics add: (HelpTopic named: anObject text) ]
+		anObject level > 1 ifTrue: 
+			[ helpTopics last  addSubtopic: (NodeHelpTopic named: anObject text) with: anObject level ] 
+		ifFalse: 
+		[ helpTopics add: (NodeHelpTopic named: anObject text) ]
 ]
