@@ -1,3 +1,16 @@
+"
+pillarParser := PRPillarParser new.
+writer := PRMicrodownWriter new.
+doc := pillarParser parse: (FileSystem workingDirectory / 'withStyle.pillar') contents.
+d := writer start: doc; contents.
+t := FileSystem disk createDirectory: 'Book'.
+directory :=  FileSystem disk workingDirectory / 'Book'.
+file := directory / 'fd1.md'.
+file writeStreamDo: [ :st | st nextPutAll: d ].
+browser := SpNewHelpBrowserPresenter new.
+rootTopic := (browser topicsFromSystem: directory) rootTopic.
+SpNewHelpBrowserPresenter openOn: rootTopic
+"
 Class {
 	#name : #TopicBuilderVisitor,
 	#superclass : #PRVisitor,
