@@ -1,4 +1,5 @@
 "
+```
 pillarParser := PRPillarParser new.
 writer := PRMicrodownWriter new.
 doc := pillarParser parse: (FileSystem workingDirectory / 'withStyle.pillar') contents.
@@ -10,6 +11,12 @@ file writeStreamDo: [ :st | st nextPutAll: d ].
 browser := SpNewHelpBrowserPresenter new.
 rootTopic := (browser topicsFromSystem: directory) rootTopic.
 SpNewHelpBrowserPresenter openOn: rootTopic
+```
+
+```
+TopicBuilderVisitor internalizeHelpFrom: 'doc'.
+SpNewHelpBrowserPresenter openOn: TopicBuilderVisitor helpCache
+```
 "
 Class {
 	#name : #TopicBuilderVisitor,
@@ -20,8 +27,29 @@ Class {
 		'helpTopics',
 		'nodesList'
 	],
+	#classInstVars : [
+		'helpCache'
+	],
 	#category : #'NewTools-HelpTopicBuilder'
 }
+
+{ #category : #accessing }
+TopicBuilderVisitor class >> helpCache [
+	^ helpCache
+]
+
+{ #category : #accessing }
+TopicBuilderVisitor class >> helpCache: aCache [
+	helpCache := aCache
+]
+
+{ #category : #accessing }
+TopicBuilderVisitor class >> internalizeHelpFrom: aFolderName [
+	| directory browser |
+	directory := FileSystem workingDirectory / aFolderName.
+	browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
+	self helpCache: browser rootTopic
+]
 
 { #category : #'instance creation' }
 TopicBuilderVisitor class >> with: aActualTopic [
