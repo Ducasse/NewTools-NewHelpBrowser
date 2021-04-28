@@ -79,11 +79,11 @@ SpNewHelpBrowserPresenter >> docTopicsFromFileSystem: aFileSystem [
 				^ visitor rootTopics ] ].
 	
 	subTopic := OrderedCollection new.
-	topic := NodeHelpTopic named: aFileSystem basenameWithoutExtension.	
-	sorted := SortedCollection sortBlock: [ :a :b | a basename >= b basename ].
+	topic := NodeHelpTopic named: aFileSystem basenameWithoutExtension capitalized.	
+	sorted := SortedCollection sortBlock: [ :a :b | a basename <= b basename ].
 	sorted addAll: (aFileSystem children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
 	
-		
+	
 	sorted 	do: [ :fileOrFolder |
 			 (self docTopicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
 		subTopic add: topic.
