@@ -23,7 +23,7 @@ Un paragraphe sur Bar
 ## 1
 _Un paragraphe 1_
 
-## 2
+### 2
 Un paragraphe 2
 
 # Chapitre Foo
@@ -181,10 +181,10 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDire
 	directory := filesystem workingDirectory / 'test'.
 	
 	
-	file1 := filesystem workingDirectory / 'test/fd1.md'.
+	file1 := filesystem workingDirectory / 'test/fd1.mic'.
 	file1 writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	
-	file2 := filesystem workingDirectory / 'test/fd2.md'.
+	file2 := filesystem workingDirectory / 'test/fd2.mic'.
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
@@ -197,7 +197,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDire
 { #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile [
 	| file browser rootTopic |
-	file := filesystem workingDirectory / 'fd1.md'.
+	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
 	rootTopic := (browser topicsFromSystem: file) rootTopic.
