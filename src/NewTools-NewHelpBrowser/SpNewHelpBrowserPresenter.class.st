@@ -7,11 +7,15 @@ browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
 SpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
 
+Execute the following code to charge doc in the cache :
 ```
-| directory browser |
-directory := FileSystem workingDirectory / 'doc'.
-browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
-SpNewHelpBrowserPresenter openOn: browser rootTopic
+| doc |
+doc := FileSystem disk workingDirectory / 'doc'.
+SpNewHelpBrowserPresenter internalizeHelpFrom: doc.
+```
+And to watch the cache inspect that :
+```
+SpNewHelpBrowserPresenter helpCache
 ```
 "
 Class {
