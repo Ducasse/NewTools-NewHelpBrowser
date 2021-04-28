@@ -6,6 +6,13 @@ directory := FileSystem workingDirectory / 'doc'.
 browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
 SpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
+
+```
+| directory browser |
+directory := FileSystem workingDirectory / 'doc'.
+browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
 "
 Class {
 	#name : #SpNewHelpBrowserPresenter,
@@ -19,6 +26,10 @@ Class {
 		'topicList',
 		'helpTopicVisitor'
 	],
+	#classInstVars : [
+		'filesystem',
+		'helpCache'
+	],
 	#category : #'NewTools-NewHelpBrowser'
 }
 
@@ -31,6 +42,63 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 				add: #textOutput;
 				yourself);
 			yourself
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> emptyHelpCache [
+	helpCache := nil
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> filesystem [
+	^ filesystem
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> filesystem: aFileSystem [
+	filesystem := aFileSystem
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> helpCache [
+	^ helpCache ifNil: [ helpCache := 'helpCache is empty' ]
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> helpCache: aCache [
+	helpCache := aCache.
+]
+
+{ #category : #cache }
+SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
+	self filesystem: FileSystem memory.
+	aFolderOrFile isDirectory 
+		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename.
+					self filesystem workingDirectory / aFolderOrFile basename.
+					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: aFolderOrFile basename ] ]
+		ifFalse: [ | file |
+					file := self filesystem workingDirectory / aFolderOrFile basename.
+					file writeStreamDo: [ :stream |stream nextPutAll: aFolderOrFile contents ] ].
+		
+		self helpCache: self filesystem workingDirectory / aFolderOrFile basename.
+	
+	
+]
+
+{ #category : #cache }
+SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFolderName [
+
+	aFolderOrFile isDirectory 
+		ifTrue:  [ | directoryPath |
+					directoryPath := aFolderName , '/' ,aFolderOrFile basename.
+					self filesystem workingDirectory / aFolderName.
+					self filesystem createDirectory: directoryPath.
+					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: directoryPath ] ]
+		ifFalse: [ | file filePath |
+					filePath := aFolderName , '/' , aFolderOrFile basename.
+					file := self filesystem workingDirectory / filePath.
+					file writeStreamDo: [ :stream |stream nextPutAll: aFolderOrFile contents ] ].
+	
 ]
 
 { #category : #examples }
