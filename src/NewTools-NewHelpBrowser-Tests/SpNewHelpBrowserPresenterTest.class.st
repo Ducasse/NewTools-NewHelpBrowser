@@ -161,6 +161,32 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotTopicsThatISpecify [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromFileSystemOnFile [
+	| file browser rootTopic |
+	file := filesystem workingDirectory / 'fd1.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
+	browser := SpNewHelpBrowserPresenter new.
+	rootTopic := (browser docTopicsFromFileSystem: file).
+	self assert: rootTopic size equals: 2
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromSystem [
+	| file directory browser rootTopic |
+	filesystem createDirectory: 'test'.
+	directory := filesystem workingDirectory / 'test'.
+	file := filesystem workingDirectory / 'test/fd1.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
+	browser := SpNewHelpBrowserPresenter new.
+	rootTopic := (browser docTopicsFromSystem: directory) rootTopic.
+	self assert: rootTopic subtopics size equals: 2
+	
+	
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 
 	| directory browser |
