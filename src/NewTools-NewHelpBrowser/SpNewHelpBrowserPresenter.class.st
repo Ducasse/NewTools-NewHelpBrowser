@@ -1,3 +1,12 @@
+"
+Execute the following code to open HelpBrowser on doc :
+```
+| directory browser |
+directory := FileSystem workingDirectory / 'doc'.
+browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
+"
 Class {
 	#name : #SpNewHelpBrowserPresenter,
 	#superclass : #SpPresenter,
@@ -56,6 +65,37 @@ SpNewHelpBrowserPresenter >> connectPresenters [
 						[					 node := item node.
 						 node ifNotNil: [ 
 							self renderNode: node ]]]
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> docTopicsFromFileSystem: aFileSystem [
+
+	| visitor subTopic sorted topic |
+	aFileSystem isFile ifTrue: [ 
+		aFileSystem extension = 'mic'
+			ifTrue: [ 	
+				visitor := self helpTopicVisitor new.
+				visitor start: (MicroDownParser parse: aFileSystem) asPillar.
+				^ visitor rootTopics ] ].
+	
+	subTopic := OrderedCollection new.
+	topic := NodeHelpTopic named: aFileSystem basenameWithoutExtension.	
+	sorted := SortedCollection sortBlock: [ :a :b | a basename >= b basename ].
+	sorted addAll: (aFileSystem children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
+	
+		
+	sorted 	do: [ :fileOrFolder |
+			 (self docTopicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
+		subTopic add: topic.
+		^ subTopic
+	
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> docTopicsFromSystem: aFileSystem [
+	| topic |
+	topic := (self docTopicsFromFileSystem: aFileSystem) first.
+	self rootTopic: topic.
 ]
 
 { #category : #utils }
