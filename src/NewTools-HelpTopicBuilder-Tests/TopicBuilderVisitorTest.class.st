@@ -9,6 +9,23 @@ Class {
 }
 
 { #category : #resources }
+TopicBuilderVisitorTest class >> spFileContentsLevelsSections [
+
+	^ '# Section 1
+blabla1
+## Section 2
+blabla2
+### Section 3
+blabla3
+#### Section 4
+blabla4
+##### Section 5
+blabla5
+###### Section 6
+blabla6'
+]
+
+{ #category : #resources }
 TopicBuilderVisitorTest class >> spFileContentsMoreSections [
 
 	^ '# Section 1
@@ -155,6 +172,28 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 	self assert: visitor rootTopics first title equals: 'SectionTest'.
 	self assert: visitor rootTopics first contents equals: ''
 
+]
+
+{ #category : #tests }
+TopicBuilderVisitorTest >> testTopicBuilderVisitorWithLevelsSections [
+
+	| file topic |
+	(file := filesystem workingDirectory / self class spFileName) 
+		writeStreamDo: [ :stream | 
+		stream nextPutAll: self class spFileContentsLevelsSections ].
+	self visitFile: file.
+	topic := visitor rootTopics first.
+	self assert: topic title equals: 'Section 1'.
+	topic := topic subtopics first.
+	self assert: topic title equals: 'Section 2'.
+	topic := topic subtopics first.
+	self assert: topic title equals: 'Section 3'.
+	topic := topic subtopics first.
+	self assert: topic title equals: 'Section 4'.
+	topic := topic subtopics first.
+	self assert: topic title equals: 'Section 5'.
+	topic := topic subtopics first.
+	self assert: topic title equals: 'Section 6'.
 ]
 
 { #category : #tests }
