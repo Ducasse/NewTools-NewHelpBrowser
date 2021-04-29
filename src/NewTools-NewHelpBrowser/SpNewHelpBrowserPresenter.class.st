@@ -136,7 +136,8 @@ SpNewHelpBrowserPresenter >> connectPresenters [
 					ifFalse: 
 						[					 node := item node.
 						 node ifNotNil: [ 
-							self renderNode: node ]]]
+							self renderNode: node ]]];
+				displayIcon: [ :each | each icon ]
 ]
 
 { #category : #utils }
