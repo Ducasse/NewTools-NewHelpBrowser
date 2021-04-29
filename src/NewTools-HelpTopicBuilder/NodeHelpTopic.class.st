@@ -13,6 +13,12 @@ NodeHelpTopic >> addNode: aNode [
 	node add: aNode
 ]
 
+{ #category : #accessing }
+NodeHelpTopic >> addSubtopic: aSubTopic [
+	self iconName: #bookIcon.
+	super addSubtopic: aSubTopic
+]
+
 { #category : #adding }
 NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 	aLevel - 1 > 1 ifTrue: 
@@ -26,10 +32,17 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 NodeHelpTopic >> initialize [ 
 
 	super initialize.
-	node := PRDocument new
+	node := PRDocument new.
+	self iconName: #pageIcon
 ]
 
 { #category : #accessing }
 NodeHelpTopic >> node [
 	^ node
+]
+
+{ #category : #accessing }
+NodeHelpTopic >> subtopics: aCollection [
+	self iconName: #bookIcon.
+	super subtopics: aCollection
 ]
