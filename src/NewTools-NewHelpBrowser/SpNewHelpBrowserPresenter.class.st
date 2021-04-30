@@ -50,6 +50,7 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 
 { #category : #accessing }
 SpNewHelpBrowserPresenter class >> emptyHelpCache [
+
 	helpCache := nil
 ]
 
@@ -65,7 +66,8 @@ SpNewHelpBrowserPresenter class >> filesystem: aFileSystem [
 
 { #category : #accessing }
 SpNewHelpBrowserPresenter class >> helpCache [
-	^ helpCache ifNil: [ helpCache := 'helpCache is empty' ]
+
+	^ helpCache ifNil: [ helpCache := FileSystem memory workingDirectory ]
 ]
 
 { #category : #accessing }
