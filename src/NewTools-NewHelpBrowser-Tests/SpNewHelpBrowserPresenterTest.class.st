@@ -80,6 +80,14 @@ SpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
 
 ]
 
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testHelpCacheReturnFileReferenceEmptyIfNil [
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	self assert: SpNewHelpBrowserPresenter helpCache hasChildren not 
+
+	
+]
+
 { #category : #'tests - interaction' }
 SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTest [
 
