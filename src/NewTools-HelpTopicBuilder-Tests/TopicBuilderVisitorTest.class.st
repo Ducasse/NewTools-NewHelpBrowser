@@ -154,7 +154,7 @@ This is a paragraphe'.
 	document := (MicroDownParser parse: file) asPillar.
 	visitor visitAll: document children.
 	self assert: visitor nodesList first isEmpty.
-	self assert: visitor nodesList second size equals: 1 
+	self assert: visitor nodesList second size equals: 2 
 
 ]
 
