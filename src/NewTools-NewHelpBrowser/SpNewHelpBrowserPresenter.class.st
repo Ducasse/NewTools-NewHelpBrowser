@@ -3,7 +3,7 @@ Execute the following code to open HelpBrowser on doc :
 ```
 | directory browser |
 directory := FileSystem workingDirectory / 'doc'.
-browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
+browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
 SpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
 
@@ -16,6 +16,13 @@ SpNewHelpBrowserPresenter internalizeHelpFrom: doc.
 And to watch the cache inspect that :
 ```
 SpNewHelpBrowserPresenter helpCache
+```
+
+After that you can also open the HelpBrowser with the helpCache :
+```
+| browser |
+browser := SpNewHelpBrowserPresenter new topicsFromSystem.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
 "
 Class {
@@ -274,6 +281,11 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 		subTopic add: topic.
 		^ subTopic
 	
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsFromSystem [
+	self topicsFromSystem: self class helpCache.
 ]
 
 { #category : #utils }
