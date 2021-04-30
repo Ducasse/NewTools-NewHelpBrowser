@@ -166,7 +166,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromFileSyste
 	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser docTopicsFromFileSystem: file).
+	rootTopic := (browser topicsFromFileSystem: file).
 	self assert: rootTopic size equals: 2
 	
 	
@@ -180,7 +180,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromSystem [
 	file := filesystem workingDirectory / 'test/fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser docTopicsFromSystem: directory) rootTopic.
+	rootTopic := (browser topicsFromSystem: directory) rootTopic.
 	self assert: rootTopic subtopics size equals: 2
 	
 	

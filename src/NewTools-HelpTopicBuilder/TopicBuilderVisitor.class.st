@@ -47,7 +47,7 @@ TopicBuilderVisitor class >> helpCache: aCache [
 TopicBuilderVisitor class >> internalizeHelpFrom: aFolderName [
 	| directory browser |
 	directory := FileSystem workingDirectory / aFolderName.
-	browser := SpNewHelpBrowserPresenter new docTopicsFromSystem: directory.
+	browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
 	self helpCache: browser rootTopic
 ]
 

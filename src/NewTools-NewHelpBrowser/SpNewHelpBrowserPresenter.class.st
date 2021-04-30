@@ -141,37 +141,6 @@ SpNewHelpBrowserPresenter >> connectPresenters [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> docTopicsFromFileSystem: aFileOrFolder [
-
-	| visitor subTopic sorted topic |
-	aFileOrFolder isFile ifTrue: [ 
-		aFileOrFolder extension = 'mic'
-			ifTrue: [ 	
-				visitor := self helpTopicVisitor new.
-				visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
-				^ visitor rootTopics ] ].
-	
-	subTopic := OrderedCollection new.
-	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension capitalized.	
-	sorted := SortedCollection sortBlock: [ :a :b | a basename <= b basename ].
-	sorted addAll: (aFileOrFolder children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
-	
-	
-	sorted 	do: [ :fileOrFolder |
-			 (self docTopicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
-		subTopic add: topic.
-		^ subTopic
-	
-]
-
-{ #category : #utils }
-SpNewHelpBrowserPresenter >> docTopicsFromSystem: aFolder [
-	| topic |
-	topic := (self docTopicsFromFileSystem: aFolder) first.
-	self rootTopic: topic.
-]
-
-{ #category : #utils }
 SpNewHelpBrowserPresenter >> dummyHelp [
 
 	^  '# Empty Help
@@ -284,7 +253,7 @@ SpNewHelpBrowserPresenter >> topicList [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 
-	| visitor subTopic sorted |
+	| visitor subTopic sorted topic |
 	aFileOrFolder isFile ifTrue: [ 
 		aFileOrFolder extension = 'mic'
 			ifTrue: [ 	
@@ -293,21 +262,21 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 				^ visitor rootTopics ] ].
 	
 	subTopic := OrderedCollection new.
-	sorted := SortedCollection sortBlock: [ :a :b | a basename >= b basename ].
+	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension capitalized.	
+	sorted := SortedCollection sortBlock: [ :a :b | a basename <= b basename ].
 	sorted addAll: (aFileOrFolder children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
 	
-		
+	
 	sorted 	do: [ :fileOrFolder |
-			 subTopic addAll: (self topicsFromFileSystem: fileOrFolder)].
+			 (self topicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
+		subTopic add: topic.
 		^ subTopic
 	
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> topicsFromSystem: aFileOrFolder [
-
+SpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
 	| topic |
-	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
-	(self topicsFromFileSystem: aFileOrFolder) do: [ :each | topic addSubtopic: each ].
+	topic := (self topicsFromFileSystem: aFolder) first.
 	self rootTopic: topic.
 ]
