@@ -81,6 +81,21 @@ SpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testHelpCache [
+
+	| rootSystem file text cache |
+	text := 'this is a text'.
+	filesystem createDirectory: 'doc'.
+	rootSystem := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc/file.txt'.
+	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	SpNewHelpBrowserPresenter internalizeHelpFrom: rootSystem.
+	cache := SpNewHelpBrowserPresenter helpCache.
+	self assert: cache basenameWithoutExtension equals: 'doc'.
+	self assert: cache children first basenameWithoutExtension equals: 'file'
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testHelpCacheReturnFileReferenceEmptyIfNil [
 	SpNewHelpBrowserPresenter emptyHelpCache.
 	self assert: SpNewHelpBrowserPresenter helpCache hasChildren not 
