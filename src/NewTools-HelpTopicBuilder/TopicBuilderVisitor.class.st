@@ -125,18 +125,18 @@ TopicBuilderVisitor >> visit: anObject [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitAll: aCollection [
+
 	| collection |
 	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
-		each class = PRHeader 
-			ifTrue: [ self nodesListAdd: contents. 
-				contents := OrderedCollection new. self visit: each ] 
-			ifFalse: [ contents add: each ]
-		].
+		              each class = PRHeader 
+							  ifTrue: [ 
+			              		self nodesListAdd: contents.
+			              		contents := OrderedCollection new.
+			              		self visit: each ].
+		              contents add: each ].
 	self nodesList add: contents.
 	^ collection
-
-	
 ]
 
 { #category : #'visiting-document' }
