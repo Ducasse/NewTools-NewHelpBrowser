@@ -23,7 +23,7 @@ Un paragraphe sur Bar
 ## 1
 _Un paragraphe 1_
 
-### 2
+## 2
 Un paragraphe 2
 
 # Chapitre Foo
@@ -218,7 +218,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	browser := SpNewHelpBrowserPresenter new.
 	browser topicsFromSystem: directory.
 	
-	self assert: browser rootTopic title equals: directory basenameWithoutExtension
+	self assert: browser rootTopic title equals: directory basenameWithoutExtension capitalized
 	
 
 ]
