@@ -73,11 +73,12 @@ TopicBuilderVisitor >> actualLevel: aActualLevel [
 
 { #category : #accessing }
 TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
-	
-	aSubtopicsCollection ifNotNil: [ aSubtopicsCollection do:
-		[ :each | nodesList first do: [ :node | each addNode: node ].
-		nodesList removeFirst.
-		self addSubtopicsNodes: each subtopics ] ]
+
+	aSubtopicsCollection ifNotNil: [ 
+		aSubtopicsCollection do: [ :each | 
+			nodesList first do: [ :node | each addNode: node ].
+			nodesList removeFirst.
+			self addSubtopicsNodes: each subtopics ] ]
 ]
 
 { #category : #initialization }
@@ -141,8 +142,9 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-		anObject level > 1 ifTrue: 
+		anObject level > 1 
+		ifTrue: 
 			[ helpTopics last  addSubtopic: (NodeHelpTopic named: anObject text capitalized) with: anObject level ] 
 		ifFalse: 
-		[ helpTopics add: (NodeHelpTopic named: anObject text capitalized) ]
+			[ helpTopics add: (NodeHelpTopic named: anObject text capitalized) ]
 ]
