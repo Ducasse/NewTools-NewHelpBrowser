@@ -138,6 +138,20 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
 ]
 
 { #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> testSearchWordInTopics [
+	| browser topics text|
+	browser := SpNewHelpBrowserPresenter new.
+	text := '# section 1
+this is a paragraphe
+## section 2
+blabla
+# part 3
+lala'.
+	topics := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics.
+	self assert: (browser search: 'la' into: topics) size equals: 2
+]
+
+{ #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> testSearchWordInTopicsTitle [
 	| browser topics |
 	browser := SpNewHelpBrowserPresenter new.
