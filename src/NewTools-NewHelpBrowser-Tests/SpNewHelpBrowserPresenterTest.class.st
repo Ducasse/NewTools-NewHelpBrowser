@@ -80,6 +80,18 @@ SpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
 
 ]
 
+{ #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> testFoundNoWords [
+	| browser topics |
+	browser := SpNewHelpBrowserPresenter new.
+	topics := OrderedCollection new.
+	topics add: (NodeHelpTopic named: 'section1');
+	add: (NodeHelpTopic named: 'part 2');
+	add: (NodeHelpTopic named: 'section 3').
+	(topics at: 2) addSubtopic: (HelpTopic named: 'section2').
+	self assert: (browser search: 'aWord' into: topics) size equals: 0
+]
+
 { #category : #tests }
 SpNewHelpBrowserPresenterTest >> testHelpCache [
 
@@ -123,6 +135,18 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
 	window := browser openWithSpec. 
 	
 
+]
+
+{ #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> testSearchWordInTopicsTitle [
+	| browser topics |
+	browser := SpNewHelpBrowserPresenter new.
+	topics := OrderedCollection new.
+	topics add: (NodeHelpTopic named: 'section1');
+	add: (NodeHelpTopic named: 'part 2');
+	add: (NodeHelpTopic named: 'section 3').
+	(topics at: 2) addSubtopic: (HelpTopic named: 'section2').
+	self assert: (browser search: 'section' into: topics) size equals: 3
 ]
 
 { #category : #tests }
