@@ -243,6 +243,26 @@ SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [
 	rootTopic := aHelpTopic asHelpTopic
 ]
 
+{ #category : #initializing }
+SpNewHelpBrowserPresenter >> search: aString [
+
+	| topics |
+	topics := self rootTopic subtopics.
+	^ self search: aString into: topics. 
+]
+
+{ #category : #'as yet unclassified' }
+SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
+
+	| collection |
+	collection := OrderedCollection new.
+	aTopicCollection do: [ :topic | 
+		(topic title findString: aString startingAt: 1) > 0
+			ifTrue: [ collection add: topic ]
+			ifFalse: [ collection addAll: (self search: aString into: topic subtopics) ] ].
+	^ collection
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
 	
