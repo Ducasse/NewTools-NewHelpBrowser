@@ -92,7 +92,7 @@ SpNewHelpBrowserPresenterTest >> testFoundNoWords [
 	self assert: (browser search: 'aWord' into: topics) size equals: 0
 ]
 
-{ #category : #tests }
+{ #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testHelpCache [
 
 	| rootSystem file text cache |
@@ -107,10 +107,13 @@ SpNewHelpBrowserPresenterTest >> testHelpCache [
 	self assert: cache children first basenameWithoutExtension equals: 'file'
 ]
 
-{ #category : #tests }
+{ #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testHelpCacheReturnFileReferenceEmptyIfNil [
+	| cache |
+	cache := SpNewHelpBrowserPresenter helpCache.
 	SpNewHelpBrowserPresenter emptyHelpCache.
-	self assert: SpNewHelpBrowserPresenter helpCache hasChildren not 
+	self assert: SpNewHelpBrowserPresenter helpCache hasChildren not.
+	SpNewHelpBrowserPresenter helpCache: cache
 
 	
 ]
