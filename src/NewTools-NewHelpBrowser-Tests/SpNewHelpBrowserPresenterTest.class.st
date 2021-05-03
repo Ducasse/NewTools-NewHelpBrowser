@@ -88,7 +88,7 @@ SpNewHelpBrowserPresenterTest >> testFoundNoWords [
 	topics add: (NodeHelpTopic named: 'section1');
 	add: (NodeHelpTopic named: 'part 2');
 	add: (NodeHelpTopic named: 'section 3').
-	(topics at: 2) addSubtopic: (HelpTopic named: 'section2').
+	(topics at: 2) addSubtopic: (NodeHelpTopic named: 'section2').
 	self assert: (browser search: 'aWord' into: topics) size equals: 0
 ]
 
@@ -145,7 +145,7 @@ SpNewHelpBrowserPresenterTest >> testSearchWordInTopicsTitle [
 	topics add: (NodeHelpTopic named: 'section1');
 	add: (NodeHelpTopic named: 'part 2');
 	add: (NodeHelpTopic named: 'section 3').
-	(topics at: 2) addSubtopic: (HelpTopic named: 'section2').
+	(topics at: 2) addSubtopic: (NodeHelpTopic named: 'section2').
 	self assert: (browser search: 'section' into: topics) size equals: 3
 ]
 

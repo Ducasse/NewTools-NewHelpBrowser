@@ -257,7 +257,7 @@ SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
 	| collection |
 	collection := OrderedCollection new.
 	aTopicCollection do: [ :topic | 
-		(topic title findString: aString startingAt: 1) > 0
+		(self word: aString in: topic )
 			ifTrue: [ collection add: topic ]
 			ifFalse: [ collection addAll: (self search: aString into: topic subtopics) ] ].
 	^ collection
