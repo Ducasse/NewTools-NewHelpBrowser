@@ -156,7 +156,7 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 	This a dummy help.'
 ]
 
-{ #category : #utils }
+{ #category : #accessing }
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
 	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
@@ -243,7 +243,7 @@ SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [
 	rootTopic := aHelpTopic asHelpTopic
 ]
 
-{ #category : #initializing }
+{ #category : #search }
 SpNewHelpBrowserPresenter >> search: aString [
 
 	| topics |
@@ -251,7 +251,7 @@ SpNewHelpBrowserPresenter >> search: aString [
 	^ self search: aString into: topics. 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #search }
 SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
 
 	| collection |
@@ -313,4 +313,10 @@ SpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
 	| topic |
 	topic := (self topicsFromFileSystem: aFolder) first.
 	self rootTopic: topic.
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> word: aString in: aTopic [
+
+	^ (aTopic node text findString: aString startingAt: 1) > 0 | ((aTopic title findString: aString startingAt: 1) > 0)
 ]

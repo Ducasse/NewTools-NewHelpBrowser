@@ -278,3 +278,27 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile
 	
 	
 ]
+
+{ #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> testWordInNode [
+	| browser text topic |
+	browser := SpNewHelpBrowserPresenter new.
+	text := '# section 1
+this is a paragraphe'.
+	topic := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics first.
+	self assert: (browser word: 'para' in: topic) 
+
+
+]
+
+{ #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> testWordNotInNode [
+	| browser text topic |
+	browser := SpNewHelpBrowserPresenter new.
+	text := '# section 1
+this is a paragraphe'.
+	topic := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics first.
+	self assert: (browser word: 'nothing' in: topic) not
+
+
+]
