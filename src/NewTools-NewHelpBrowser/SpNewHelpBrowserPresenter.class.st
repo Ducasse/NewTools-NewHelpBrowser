@@ -263,6 +263,26 @@ SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
 	^ collection
 ]
 
+{ #category : #search }
+SpNewHelpBrowserPresenter >> searchList: aString [
+
+	| topics |
+	topics := self rootTopic subtopics.
+	^ self searchList: aString into: topics. 
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
+
+	| collection |
+	collection := OrderedCollection new.
+	aTopicCollection do: [ :topic | 
+		(self word: aString in: topic) 
+			ifTrue: [ collection add: topic ].
+		collection addAll: (self search: aString into: topic subtopics) ].
+	^ collection
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
 	
