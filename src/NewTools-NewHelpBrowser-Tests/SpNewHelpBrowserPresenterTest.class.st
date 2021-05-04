@@ -95,7 +95,8 @@ SpNewHelpBrowserPresenterTest >> testFoundNoWords [
 { #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testHelpCache [
 
-	| rootSystem file text cache |
+	| rootSystem file text cache save |
+	save := SpNewHelpBrowserPresenter helpCache.
 	text := 'this is a text'.
 	filesystem createDirectory: 'doc'.
 	rootSystem := filesystem workingDirectory / 'doc'.
@@ -104,7 +105,8 @@ SpNewHelpBrowserPresenterTest >> testHelpCache [
 	SpNewHelpBrowserPresenter internalizeHelpFrom: rootSystem.
 	cache := SpNewHelpBrowserPresenter helpCache.
 	self assert: cache basenameWithoutExtension equals: 'doc'.
-	self assert: cache children first basenameWithoutExtension equals: 'file'
+	self assert: cache children first basenameWithoutExtension equals: 'file'.
+	SpNewHelpBrowserPresenter helpCache: save
 ]
 
 { #category : #'tests - cache' }
@@ -311,6 +313,23 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile
 	self assert: rootTopic subtopics size equals: 2
 	
 	
+]
+
+{ #category : #'tests - cache' }
+SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFromChargeTheCache [
+
+	| rootSystem file text cache save |
+	save := SpNewHelpBrowserPresenter helpCache.
+	text := 'this is a text'.
+	filesystem createDirectory: 'doc'.
+	rootSystem := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc/file.txt'.
+	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
+	cache := SpNewHelpBrowserPresenter helpCache.
+	self assert: cache basenameWithoutExtension equals: 'doc'.
+	self assert: cache children first basenameWithoutExtension equals: 'file'.
+	SpNewHelpBrowserPresenter helpCache: save
 ]
 
 { #category : #'tests - search' }
