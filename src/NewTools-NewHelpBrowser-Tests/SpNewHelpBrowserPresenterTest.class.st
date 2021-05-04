@@ -204,10 +204,10 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecif
 
 	| visitor browser |
 	browser := SpNewHelpBrowserPresenter new.
-	browser helpTopicVisitor: MDTopicBuilder.
+	browser helpTopicVisitor: PRVisitor.
 	visitor := browser helpTopicVisitor.
 	self 
-		assert: visitor equals: MDTopicBuilder 
+		assert: visitor equals: PRVisitor
 
 ]
 
