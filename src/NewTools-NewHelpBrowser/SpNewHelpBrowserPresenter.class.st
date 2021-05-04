@@ -43,7 +43,9 @@ Class {
 		'textInput',
 		'rootTopic',
 		'topicList',
-		'helpTopicVisitor'
+		'helpTopicVisitor',
+		'searchInput',
+		'nextButton'
 	],
 	#classInstVars : [
 		'filesystem',
@@ -60,6 +62,10 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 				add: #topicList;
 				add: #textOutput;
 				yourself);
+			"add: (SpBoxLayout newLeftToRight
+				add: #searchInput withConstraints:  [ :constraints | constraints height: 18 ];
+				add: #nextButton withConstraints:  [ :constraints | constraints height: 18 ] ;
+				yourself);"
 			yourself
 ]
 
@@ -230,6 +236,14 @@ SpNewHelpBrowserPresenter >> initializePresenters [
 			in: [ :this | this textArea readOnly: true ];
 			yourself);
 		yourself.
+	searchInput := self newTextInput.
+	nextButton := self newButton 
+						help: 'To select the next one';
+						label: 'Next'.
+
+
+
+
 ]
 
 { #category : #utils }
