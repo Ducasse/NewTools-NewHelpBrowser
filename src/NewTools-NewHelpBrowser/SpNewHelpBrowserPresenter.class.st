@@ -374,12 +374,6 @@ SpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
 	self rootTopic: topic.
 ]
 
-{ #category : #utils }
-SpNewHelpBrowserPresenter >> topicsWithCacheFrom: aFolder [
-	self class internalizeHelpFrom: aFolder.
-	self topicsFromSystem
-]
-
 { #category : #search }
 SpNewHelpBrowserPresenter >> word: aString in: aTopic [
 
