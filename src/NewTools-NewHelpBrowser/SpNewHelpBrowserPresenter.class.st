@@ -24,6 +24,11 @@ After that you can also open the HelpBrowser with the helpCache :
 browser := SpNewHelpBrowserPresenter new topicsFromSystem.
 SpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
+
+to empty the cache execute the following code :
+```
+SpNewHelpBrowserPresenter emptyHelpCache
+```
 "
 Class {
 	#name : #SpNewHelpBrowserPresenter,
