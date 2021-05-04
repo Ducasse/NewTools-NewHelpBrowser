@@ -53,11 +53,10 @@ TopicBuilderVisitor class >> internalizeHelpFrom: aFolderName [
 { #category : #accessing }
 TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 
-	aSubtopicsCollection ifNotNil: [ 
-		aSubtopicsCollection do: [ :each | 
-			nodesList first do: [ :node | each addNode: node ].
-			nodesList removeFirst.
-			self addSubtopicsNodes: each subtopics ] ]
+	aSubtopicsCollection do: [ :each | 
+		nodesList first do: [ :node | each addNode: node ].
+		nodesList removeFirst.
+		self addSubtopicsNodes: each subtopics ]
 ]
 
 { #category : #initialization }
