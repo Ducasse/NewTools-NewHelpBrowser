@@ -66,7 +66,6 @@ TopicBuilderVisitor >> initialize [
 	super initialize.
 	helpTopics := OrderedCollection new.
 	nodesList := LinkedList new.
-	actualLevel := 1.
 ]
 
 { #category : #accessing }
