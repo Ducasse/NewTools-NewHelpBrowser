@@ -102,6 +102,7 @@ SpNewHelpBrowserPresenterTest >> testHelpCache [
 	rootSystem := filesystem workingDirectory / 'doc'.
 	file := filesystem workingDirectory / 'doc/file.txt'.
 	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	
 	SpNewHelpBrowserPresenter internalizeHelpFrom: rootSystem.
 	cache := SpNewHelpBrowserPresenter helpCache.
 	self assert: cache basenameWithoutExtension equals: 'doc'.
@@ -329,6 +330,7 @@ this is a text'.
 	rootSystem := filesystem workingDirectory / 'doc'.
 	file := filesystem workingDirectory / 'doc/file.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	
 	browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
 	self assert: browser rootTopic title equals: 'Doc'.
 	self assert: browser rootTopic subtopics size equals: 1.
@@ -345,6 +347,7 @@ SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFromChargeTheCache [
 	rootSystem := filesystem workingDirectory / 'doc'.
 	file := filesystem workingDirectory / 'doc/file.txt'.
 	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	
 	SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
 	cache := SpNewHelpBrowserPresenter helpCache.
 	self assert: cache basenameWithoutExtension equals: 'doc'.

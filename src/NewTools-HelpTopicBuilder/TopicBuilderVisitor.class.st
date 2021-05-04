@@ -101,7 +101,7 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-		anObject level > 1 
+	anObject level > 1 
 		ifTrue: 
 			[ helpTopics last  addSubtopic: (NodeHelpTopic named: anObject text capitalized) with: anObject level ] 
 		ifFalse: 
