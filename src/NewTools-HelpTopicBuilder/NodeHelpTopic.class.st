@@ -1,3 +1,6 @@
+"
+The difference with the HelpTopic it's we have an extra node which refers to a PRDoucment containing the pillar nodes of the document displayed on the right.
+"
 Class {
 	#name : #NodeHelpTopic,
 	#superclass : #HelpTopic,
@@ -36,21 +39,6 @@ NodeHelpTopic >> initialize [
 	super initialize.
 	node := PRDocument new.
 	self iconName: #pageIcon
-]
-
-{ #category : #inspection }
-NodeHelpTopic >> inspectionTopicTree [
-	<inspectorPresentationOrder: 35 title: 'TopicTree'>
-
-	^ SpTreePresenter new 
-		roots: { self };
-		children: [ :aNode | aNode subtopics ];
-		display: [ :each | 
-			String
-				streamContents: [ :stream | 
-					each displayStringOn: stream						
-			 ] ];
-		yourself
 ]
 
 { #category : #accessing }

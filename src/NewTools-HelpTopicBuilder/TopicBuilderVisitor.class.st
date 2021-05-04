@@ -33,24 +33,6 @@ Class {
 }
 
 { #category : #accessing }
-TopicBuilderVisitor class >> helpCache [
-	^ helpCache
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor class >> helpCache: aCache [
-	helpCache := aCache
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor class >> internalizeHelpFrom: aFolderName [
-	| directory browser |
-	directory := FileSystem workingDirectory / aFolderName.
-	browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
-	self helpCache: browser rootTopic
-]
-
-{ #category : #accessing }
 TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 
 	aSubtopicsCollection do: [ :each | 
