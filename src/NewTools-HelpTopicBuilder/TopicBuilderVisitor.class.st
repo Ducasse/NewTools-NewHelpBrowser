@@ -22,7 +22,6 @@ Class {
 	#name : #TopicBuilderVisitor,
 	#superclass : #PRVisitor,
 	#instVars : [
-		'actualLevel',
 		'contents',
 		'helpTopics',
 		'nodesList'
@@ -49,26 +48,6 @@ TopicBuilderVisitor class >> internalizeHelpFrom: aFolderName [
 	directory := FileSystem workingDirectory / aFolderName.
 	browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
 	self helpCache: browser rootTopic
-]
-
-{ #category : #'instance creation' }
-TopicBuilderVisitor class >> with: aActualTopic [
-	
-	| visitor |
-	visitor := self new.
-	visitor actualLevel: aActualTopic.
-	^ visitor 
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor >> actualLevel [
-	^ actualLevel
-]
-
-{ #category : #accessing }
-TopicBuilderVisitor >> actualLevel: aActualLevel [
-
-	actualLevel := aActualLevel
 ]
 
 { #category : #accessing }

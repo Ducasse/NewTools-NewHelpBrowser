@@ -114,19 +114,6 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testGetActualLevelPerDefault [
-
-	self assert: visitor actualLevel equals: 1
-]
-
-{ #category : #tests }
-TopicBuilderVisitorTest >> testGetActualLevelThatISpecify [
-	
-	visitor actualLevel: 2.
-	self assert: visitor actualLevel equals: 2
-]
-
-{ #category : #tests }
 TopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
 
 	visitor nodesListAdd: 1.
