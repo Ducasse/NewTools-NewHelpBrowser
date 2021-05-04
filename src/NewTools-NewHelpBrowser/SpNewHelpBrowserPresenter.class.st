@@ -29,6 +29,14 @@ to empty the cache execute the following code :
 ```
 SpNewHelpBrowserPresenter emptyHelpCache
 ```
+
+code to charge and use the cache :
+```
+| directory browser |
+directory := FileSystem workingDirectory / 'doc'.
+browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: directory.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
 "
 Class {
 	#name : #SpNewHelpBrowserPresenter,
@@ -336,6 +344,12 @@ SpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
 	| topic |
 	topic := (self topicsFromFileSystem: aFolder) first.
 	self rootTopic: topic.
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsWithCacheFrom: aFolder [
+	self class internalizeHelpFrom: aFolder.
+	self topicsFromSystem
 ]
 
 { #category : #search }

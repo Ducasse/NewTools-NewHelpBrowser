@@ -7,7 +7,7 @@ Class {
 	#category : #'NewTools-HelpTopicBuilder'
 }
 
-{ #category : #initialization }
+{ #category : #adding }
 NodeHelpTopic >> addNode: aNode [
 
 	node add: aNode
@@ -38,7 +38,7 @@ NodeHelpTopic >> initialize [
 	self iconName: #pageIcon
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #inspection }
 NodeHelpTopic >> inspectionTopicTree [
 	<inspectorPresentationOrder: 35 title: 'TopicTree'>
 
