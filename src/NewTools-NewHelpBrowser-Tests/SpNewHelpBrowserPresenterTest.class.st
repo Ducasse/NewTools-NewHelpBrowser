@@ -316,6 +316,23 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile
 ]
 
 { #category : #'tests - cache' }
+SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFrom [
+
+	| rootSystem file text browser save |
+	save := SpNewHelpBrowserPresenter helpCache.
+	text := '# section
+this is a text'.
+	filesystem createDirectory: 'doc'.
+	rootSystem := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc/file.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
+	self assert: browser rootTopic title equals: 'Doc'.
+	self assert: browser rootTopic subtopics size equals: 1.
+	SpNewHelpBrowserPresenter helpCache: save
+]
+
+{ #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFromChargeTheCache [
 
 	| rootSystem file text cache save |
