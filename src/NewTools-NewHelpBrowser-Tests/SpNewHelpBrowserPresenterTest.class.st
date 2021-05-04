@@ -51,6 +51,12 @@ SpNewHelpBrowserPresenterTest class >> spFileName [
 	^ 'test.md'
 ]
 
+{ #category : #'tests - search' }
+SpNewHelpBrowserPresenterTest >> helpTopicClass [
+
+	^ NodeHelpTopic
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenterTest >> setUp [
 	super setUp.
@@ -82,13 +88,15 @@ SpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
 
 { #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> testFoundNoWords [
+
 	| browser topics |
 	browser := SpNewHelpBrowserPresenter new.
 	topics := OrderedCollection new.
-	topics add: (NodeHelpTopic named: 'section1');
-	add: (NodeHelpTopic named: 'part 2');
-	add: (NodeHelpTopic named: 'section 3').
-	(topics at: 2) addSubtopic: (NodeHelpTopic named: 'section2').
+	topics
+		add: (self helpTopicClass named: 'section1');
+		add: (self helpTopicClass named: 'part 2');
+		add: (self helpTopicClass named: 'section 3').
+	(topics at: 2) addSubtopic: (self helpTopicClass named: 'section2').
 	self assert: (browser search: 'aWord' into: topics) size equals: 0
 ]
 
@@ -178,14 +186,15 @@ lala'.
 
 { #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> testSearchWordInTopicsTitle [
+
 	| browser topics |
 	browser := SpNewHelpBrowserPresenter new.
 	topics := OrderedCollection new.
-	topics 
-		add: (NodeHelpTopic named: 'section1');
-		add: (NodeHelpTopic named: 'part 2');
-		add: (NodeHelpTopic named: 'section 3').
-	(topics at: 2) addSubtopic: (NodeHelpTopic named: 'section2').
+	topics
+		add: (self helpTopicClass named: 'section1');
+		add: (self helpTopicClass named: 'part 2');
+		add: (self helpTopicClass named: 'section 3').
+	(topics at: 2) addSubtopic: (self helpTopicClass named: 'section2').
 	self assert: (browser search: 'section' into: topics) size equals: 3
 ]
 

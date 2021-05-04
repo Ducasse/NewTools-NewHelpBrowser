@@ -1,5 +1,11 @@
 "
-The difference with the HelpTopic it's we have an extra node which refers to a PRDoucment containing the pillar nodes of the document displayed on the right.
+The difference with my superclass (HelpTopic) is that I have an extra node which refers to a PRDocument 
+containing the pillar nodes of the document displayed on the right.
+
+Ideally this class should be merged in its superclass.
+This way we can rerender the text when needed. 
+
+
 "
 Class {
 	#name : #NodeHelpTopic,

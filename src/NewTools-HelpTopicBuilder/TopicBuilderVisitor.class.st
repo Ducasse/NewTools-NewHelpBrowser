@@ -41,6 +41,12 @@ TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 		self addSubtopicsNodes: each subtopics ]
 ]
 
+{ #category : #'visiting-document' }
+TopicBuilderVisitor >> helpTopicClass [
+
+	^ NodeHelpTopic
+]
+
 { #category : #initialization }
 TopicBuilderVisitor >> initialize [ 
 	
@@ -101,9 +107,13 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-	anObject level > 1 
-		ifTrue: 
-			[ helpTopics last  addSubtopic: (NodeHelpTopic named: anObject text capitalized) with: anObject level ] 
-		ifFalse: 
-			[ helpTopics add: (NodeHelpTopic named: anObject text capitalized) ]
+
+	anObject level > 1
+		ifTrue: [ 
+			helpTopics last
+				addSubtopic: (self helpTopicClass named: anObject text capitalized)
+				with: anObject level ]
+		ifFalse: [ 
+			helpTopics add:
+				(self helpTopicClass named: anObject text capitalized) ]
 ]

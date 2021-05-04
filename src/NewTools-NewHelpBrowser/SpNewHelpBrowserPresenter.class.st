@@ -135,7 +135,6 @@ SpNewHelpBrowserPresenter class >> open [
 SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 	"Open the receiver on the given help topic or any other object that can be transformed into
 	 a help topic by sending #asHelpTopic."
-	"self openOn: (HelpTopic new "
 
 	^ (self on:  aHelpTopic)
 		openWithSpec;
@@ -149,12 +148,14 @@ SpNewHelpBrowserPresenter >> connectPresenters [
 		whenSelectionChangedDo: [ :selection | 
 					| item node text |
 					item := selection selectedItem.
+					"case for SystemHelp when SystemHelp will manage NodeHelpTopic we will be
+					able to remove this condition"
 					item class = HelpTopic ifTrue:
 						[ text := item contents.
 						text ifNotNil: [ 
 							self render: text ] ] 
 					ifFalse: 
-						[					 node := item node.
+						[ node := item node.
 						 node ifNotNil: [ 
 							self renderNode: node ]]];
 				displayIcon: [ :each | each icon ]
@@ -165,6 +166,12 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 
 	^  '# Empty Help
 	This a dummy help.'
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> helpTopicClass [
+
+	^ NodeHelpTopic
 ]
 
 { #category : #accessing }
@@ -315,23 +322,25 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 
 	| visitor subTopic sorted topic |
 	aFileOrFolder isFile ifTrue: [ 
-		aFileOrFolder extension = 'mic'
-			ifTrue: [ 	
-				visitor := self helpTopicVisitor new.
-				visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
-				^ visitor rootTopics ] ].
-	
+		aFileOrFolder extension = 'mic' ifTrue: [ 
+			visitor := self helpTopicVisitor new.
+			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
+			^ visitor rootTopics ] ].
+
 	subTopic := OrderedCollection new.
-	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension capitalized.	
-	sorted := SortedCollection sortBlock: [ :a :b | a basename <= b basename ].
-	sorted addAll: (aFileOrFolder children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
-	
-	
-	sorted 	do: [ :fileOrFolder |
-			 (self topicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
-		subTopic add: topic.
-		^ subTopic
-	
+	topic := self helpTopicClass named:
+		         aFileOrFolder basenameWithoutExtension capitalized.
+	sorted := SortedCollection sortBlock: [ :a :b | 
+		          a basename <= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e | 
+			 e isDirectory or: [ e extension = 'mic' ] ]).
+
+
+	sorted do: [ :fileOrFolder | 
+		(self topicsFromFileSystem: fileOrFolder) do: [ :each | 
+			topic addSubtopic: each ] ].
+	subTopic add: topic.
+	^ subTopic
 ]
 
 { #category : #utils }

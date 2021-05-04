@@ -70,6 +70,12 @@ TopicBuilderVisitorTest class >> spFileName [
 	^ 'test.md'
 ]
 
+{ #category : #tests }
+TopicBuilderVisitorTest >> helpTopicClass [
+
+	^ NodeHelpTopic
+]
+
 { #category : #running }
 TopicBuilderVisitorTest >> setUp [
 	super setUp.
@@ -83,11 +89,11 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 
 	| topics |
 	topics := OrderedCollection new.
-	topics 
-		add: (NodeHelpTopic named: '1');
-		add: (NodeHelpTopic named: '2');
-		add: (NodeHelpTopic named: '3').
-	visitor 
+	topics
+		add: (self helpTopicClass named: '1');
+		add: (self helpTopicClass named: '2');
+		add: (self helpTopicClass named: '3').
+	visitor
 		nodesListAdd: (OrderedCollection new: 1);
 		nodesListAdd: (OrderedCollection new: 2);
 		nodesListAdd: (OrderedCollection new: 3).
