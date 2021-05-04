@@ -1,7 +1,7 @@
 Class {
 	#name : #SpNewHelpBrowserPresenterBook,
 	#superclass : #SpNewHelpBrowserPresenter,
-	#category : #'NewTools-NewHelpBrowser'
+	#category : #'NewTools-BookBrowser'
 }
 
 { #category : #utils }
