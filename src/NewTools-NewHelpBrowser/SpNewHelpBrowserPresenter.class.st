@@ -1,3 +1,43 @@
+"
+Execute the following code to open HelpBrowser on doc :
+```
+| directory browser |
+directory := FileSystem workingDirectory / 'doc'.
+browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
+
+Execute the following code to charge doc in the cache :
+```
+| doc |
+doc := FileSystem disk workingDirectory / 'doc'.
+SpNewHelpBrowserPresenter internalizeHelpFrom: doc.
+```
+And to watch the cache inspect that :
+```
+SpNewHelpBrowserPresenter helpCache
+```
+
+After that you can also open the HelpBrowser with the helpCache :
+```
+| browser |
+browser := SpNewHelpBrowserPresenter new topicsFromSystem.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
+
+to empty the cache execute the following code :
+```
+SpNewHelpBrowserPresenter emptyHelpCache
+```
+
+code to charge and use the cache :
+```
+| directory browser |
+directory := FileSystem workingDirectory / 'doc'.
+browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: directory.
+SpNewHelpBrowserPresenter openOn: browser rootTopic
+```
+"
 Class {
 	#name : #SpNewHelpBrowserPresenter,
 	#superclass : #SpPresenter,
@@ -9,6 +49,10 @@ Class {
 		'rootTopic',
 		'topicList',
 		'helpTopicVisitor'
+	],
+	#classInstVars : [
+		'filesystem',
+		'helpCache'
 	],
 	#category : #'NewTools-NewHelpBrowser'
 }
@@ -22,6 +66,63 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 				add: #textOutput;
 				yourself);
 			yourself
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> emptyHelpCache [
+
+	helpCache := nil
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> filesystem [
+	^ filesystem
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> filesystem: aFileSystem [
+	filesystem := aFileSystem
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> helpCache [
+
+	^ helpCache ifNil: [ helpCache := FileSystem memory workingDirectory ]
+]
+
+{ #category : #accessing }
+SpNewHelpBrowserPresenter class >> helpCache: aCache [
+	helpCache := aCache.
+]
+
+{ #category : #cache }
+SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
+	self filesystem: FileSystem memory.
+	aFolderOrFile isDirectory 
+		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename.
+					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: aFolderOrFile basename ] ]
+		ifFalse: [ | file |
+					file := self filesystem workingDirectory / aFolderOrFile basename.
+					file writeStreamDo: [ :stream |stream nextPutAll: aFolderOrFile contents ] ].
+		
+		self helpCache: self filesystem workingDirectory / aFolderOrFile basename.
+	
+	
+]
+
+{ #category : #cache }
+SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFolderName [
+
+	aFolderOrFile isDirectory 
+		ifTrue:  [ | directoryPath |
+					directoryPath := aFolderName , '/' ,aFolderOrFile basename.
+					self filesystem createDirectory: directoryPath.
+					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: directoryPath ] ]
+		ifFalse: [ | file filePath |
+					filePath := aFolderName , '/' , aFolderOrFile basename.
+					file := self filesystem workingDirectory / filePath.
+					file writeStreamDo: [ :stream |stream nextPutAll: aFolderOrFile contents ] ].
+	
 ]
 
 { #category : #examples }
@@ -55,7 +156,8 @@ SpNewHelpBrowserPresenter >> connectPresenters [
 					ifFalse: 
 						[					 node := item node.
 						 node ifNotNil: [ 
-							self renderNode: node ]]]
+							self renderNode: node ]]];
+				displayIcon: [ :each | each icon ]
 ]
 
 { #category : #utils }
@@ -65,7 +167,7 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 	This a dummy help.'
 ]
 
-{ #category : #utils }
+{ #category : #accessing }
 SpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
 	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
@@ -152,6 +254,46 @@ SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [
 	rootTopic := aHelpTopic asHelpTopic
 ]
 
+{ #category : #search }
+SpNewHelpBrowserPresenter >> search: aString [
+
+	| topics |
+	topics := self rootTopic subtopics.
+	^ self search: aString into: topics. 
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
+
+	| collection |
+	collection := OrderedCollection new.
+	aTopicCollection do: [ :topic | 
+		(self word: aString in: topic )
+			ifTrue: [ collection add: topic ]
+			ifFalse: [ collection addAll: (self search: aString into: topic subtopics) ] ].
+	^ collection
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> searchList: aString [
+
+	| topics |
+	topics := self rootTopic subtopics.
+	^ self searchList: aString into: topics. 
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
+
+	| collection |
+	collection := OrderedCollection new.
+	aTopicCollection do: [ :topic | 
+		(self word: aString in: topic) 
+			ifTrue: [ collection add: topic ].
+		collection addAll: (self search: aString into: topic subtopics) ].
+	^ collection
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
 	
@@ -169,32 +311,49 @@ SpNewHelpBrowserPresenter >> topicList [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileSystem [
+SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 
-	| visitor subTopic sorted |
-	aFileSystem isFile ifTrue: [ 
-		aFileSystem extension = 'mic'
+	| visitor subTopic sorted topic |
+	aFileOrFolder isFile ifTrue: [ 
+		aFileOrFolder extension = 'mic'
 			ifTrue: [ 	
 				visitor := self helpTopicVisitor new.
-				visitor start: (MicroDownParser parse: aFileSystem) asPillar.
+				visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
 				^ visitor rootTopics ] ].
 	
 	subTopic := OrderedCollection new.
-	sorted := SortedCollection sortBlock: [ :a :b | a basename >= b basename ].
-	sorted addAll: (aFileSystem children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
+	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension capitalized.	
+	sorted := SortedCollection sortBlock: [ :a :b | a basename <= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e  | e isDirectory or: [e extension = 'mic']]).
 	
-		
+	
 	sorted 	do: [ :fileOrFolder |
-			 subTopic addAll: (self topicsFromFileSystem: fileOrFolder)].
+			 (self topicsFromFileSystem: fileOrFolder) do: [ :each | topic addSubtopic: each ]].
+		subTopic add: topic.
 		^ subTopic
 	
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> topicsFromSystem: aFileSystem [
+SpNewHelpBrowserPresenter >> topicsFromSystem [
+	self topicsFromSystem: self class helpCache.
+]
 
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
 	| topic |
-	topic := HelpTopic named: aFileSystem basenameWithoutExtension.
-	(self topicsFromFileSystem: aFileSystem) do: [ :each | topic addSubtopic: each ].
+	topic := (self topicsFromFileSystem: aFolder) first.
 	self rootTopic: topic.
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> topicsWithCacheFrom: aFolder [
+	self class internalizeHelpFrom: aFolder.
+	self topicsFromSystem
+]
+
+{ #category : #search }
+SpNewHelpBrowserPresenter >> word: aString in: aTopic [
+
+	^ (aTopic node text findString: aString startingAt: 1) > 0 | ((aTopic title findString: aString startingAt: 1) > 0)
 ]
