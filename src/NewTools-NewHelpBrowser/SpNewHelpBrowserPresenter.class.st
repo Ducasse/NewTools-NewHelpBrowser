@@ -1,10 +1,7 @@
 "
 Execute the following code to open HelpBrowser on doc :
 ```
-| directory browser |
-directory := FileSystem workingDirectory / 'doc'.
-browser := SpNewHelpBrowserPresenter new topicsFromSystem: directory.
-SpNewHelpBrowserPresenter openOn: browser rootTopic
+SpNewHelpBrowserPresenter openOnHelpFolder:  FileSystem workingDirectory / 'doc'.
 ```
 
 Execute the following code to charge doc in the cache :
@@ -32,10 +29,8 @@ SpNewHelpBrowserPresenter emptyHelpCache
 
 code to charge and use the cache :
 ```
-| directory browser |
-directory := FileSystem workingDirectory / 'doc'.
-browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: directory.
-SpNewHelpBrowserPresenter openOn: browser rootTopic
+SpNewHelpBrowserPresenter internalizeHelpFrom: FileSystem disk workingDirectory / 'doc'.
+SpNewHelpBrowserPresenter open
 ```
 "
 Class {
@@ -98,14 +93,20 @@ SpNewHelpBrowserPresenter class >> helpCache: aCache [
 { #category : #cache }
 SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
 	self filesystem: FileSystem memory.
-	aFolderOrFile isDirectory 
-		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename.
-					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: aFolderOrFile basename ] ]
+	[ aFolderOrFile isDirectory 
+		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename. 
+					(aFolderOrFile children select: [ :e |  e isDirectory or: [ e extension = 'mic' ] ])
+						do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: aFolderOrFile basename ] ]
 		ifFalse: [ | file |
 					file := self filesystem workingDirectory / aFolderOrFile basename.
 					file writeStreamDo: [ :stream |stream nextPutAll: aFolderOrFile contents ] ].
+	self helpCache: self filesystem workingDirectory / aFolderOrFile basename.
+	] 
+		on: FileDoesNotExistException 
+		do: [  "We do not do anything special because the only thing we could do is to reinitialize
+			and we may lose the contents there was one." ]
 		
-		self helpCache: self filesystem workingDirectory / aFolderOrFile basename.
+		
 	
 	
 ]
@@ -125,18 +126,36 @@ SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFold
 	
 ]
 
-{ #category : #examples }
+{ #category : #'instance creation' }
 SpNewHelpBrowserPresenter class >> open [
+	"Open a HelpBrowser on the internalized docs."
 	<example>
-	^ self new openWithSpec
+
+	^ self openOnHelpFolder: helpCache 
 ]
 
-{ #category : #examples }
+{ #category : #'instance creation' }
 SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 	"Open the receiver on the given help topic or any other object that can be transformed into
 	 a help topic by sending #asHelpTopic."
 
 	^ (self on:  aHelpTopic)
+		openWithSpec;
+		yourself
+]
+
+{ #category : #'instance creation' }
+SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
+	"Open an help browser on a given folder."
+	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
+	Especially how to pass a model before the initialization which is normally done via message #on: "
+	
+	| inst |
+	inst := self basicNew. 
+	inst topicsFromSystem: aFileReference.
+	^ inst 
+		setModelBeforeInitialization: inst rootTopic;
+		initialize;
 		openWithSpec;
 		yourself
 ]

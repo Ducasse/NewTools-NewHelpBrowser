@@ -57,13 +57,14 @@ SpNewHelpBrowserPresenterTest >> helpTopicClass [
 	^ NodeHelpTopic
 ]
 
-{ #category : #initialization }
+{ #category : #running }
 SpNewHelpBrowserPresenterTest >> setUp [
 	super setUp.
-	filesystem := FileSystem memory
+	filesystem := FileSystem memory.
+	
 ]
 
-{ #category : #'tests - interaction' }
+{ #category : #running }
 SpNewHelpBrowserPresenterTest >> tearDown [ 
 
 	window ifNotNil: [ window close ].
@@ -103,21 +104,72 @@ SpNewHelpBrowserPresenterTest >> testFoundNoWords [
 { #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testHelpCache [
 
-	| rootSystem file text cache save |
-	save := SpNewHelpBrowserPresenter helpCache.
-	text := 'this is a text'.
+	| docFolder file cache save |
+
+	[ save := SpNewHelpBrowserPresenter helpCache.
+
 	filesystem createDirectory: 'doc'.
-	rootSystem := filesystem workingDirectory / 'doc'.
-	file := filesystem workingDirectory / 'doc/file.txt'.
-	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	docFolder := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc' / 'file.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'this is a text' ].
 	
-	SpNewHelpBrowserPresenter internalizeHelpFrom: rootSystem.
+	SpNewHelpBrowserPresenter internalizeHelpFrom: docFolder.
 	cache := SpNewHelpBrowserPresenter helpCache.
 	self assert: cache basenameWithoutExtension equals: 'doc'.
 	self 
 		assert: cache children first basenameWithoutExtension 
-		equals: 'file'.
-	SpNewHelpBrowserPresenter helpCache: save
+		equals: 'file' ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+]
+
+{ #category : #'tests - cache' }
+SpNewHelpBrowserPresenterTest >> testHelpCacheHandleShittyFiles [
+
+	| docFolder file cache save |
+
+	[ save := SpNewHelpBrowserPresenter helpCache.
+
+	filesystem createDirectory: 'doc'.
+	docFolder := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc' / 'file.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'this is a text' ].
+	
+	file := filesystem workingDirectory / 'doc' / '.DS_Store'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'crap crap' ].
+	
+	SpNewHelpBrowserPresenter internalizeHelpFrom: docFolder.
+	cache := SpNewHelpBrowserPresenter helpCache.
+	self assert: cache basenameWithoutExtension equals: 'doc'.
+	self 
+		assert: cache children size equals: 1 ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+]
+
+{ #category : #'tests - cache' }
+SpNewHelpBrowserPresenterTest >> testHelpCacheOnlyAcceptFolderAndMicFiles [
+
+	| docFolder file cache save |
+
+	[ save := SpNewHelpBrowserPresenter helpCache.
+
+	filesystem createDirectory: 'doc'.
+	docFolder := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc' / 'file.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'this is a text' ].
+	
+	file := filesystem workingDirectory / 'doc' / 'Stupid.txt'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'This is a stupid mistyped extension text' ].
+	
+	filesystem createDirectory: 'doc/Epicea'.
+	file := filesystem workingDirectory / 'doc' / 'Epicea' / 'fileEp.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll: 'this is a text about Epicea' ].
+	
+	SpNewHelpBrowserPresenter internalizeHelpFrom: docFolder.
+	cache := SpNewHelpBrowserPresenter helpCache.
+	self  assert: cache children size equals: 2.
+	self  assert: cache allChildren size equals: 4.
+	
+	
+	
+	] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
 ]
 
 { #category : #'tests - cache' }
@@ -331,37 +383,21 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile
 { #category : #'tests - cache' }
 SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFrom [
 
-	| rootSystem file text browser save |
-	save := SpNewHelpBrowserPresenter helpCache.
-	text := '# section
-this is a text'.
+	| docFolder file browser save |
+	[ save := SpNewHelpBrowserPresenter helpCache.
+
 	filesystem createDirectory: 'doc'.
-	rootSystem := filesystem workingDirectory / 'doc'.
-	file := filesystem workingDirectory / 'doc/file.mic'.
-	file writeStreamDo: [ :stream | stream nextPutAll: text ].
+	docFolder := filesystem workingDirectory / 'doc'.
+	file := filesystem workingDirectory / 'doc'/ 'file.mic'.
+	file writeStreamDo: [ :stream | stream nextPutAll:  '# section
+this is a text' ].
 	
-	browser := SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
+	SpNewHelpBrowserPresenter internalizeHelpFrom: docFolder.
+	browser := SpNewHelpBrowserPresenter open.
+	window := browser window.
 	self assert: browser rootTopic title equals: 'Doc'.
-	self assert: browser rootTopic subtopics size equals: 1.
-	SpNewHelpBrowserPresenter helpCache: save
-]
-
-{ #category : #'tests - cache' }
-SpNewHelpBrowserPresenterTest >> testTopicsWithCacheFromChargeTheCache [
-
-	| rootSystem file text cache save |
-	save := SpNewHelpBrowserPresenter helpCache.
-	text := 'this is a text'.
-	filesystem createDirectory: 'doc'.
-	rootSystem := filesystem workingDirectory / 'doc'.
-	file := filesystem workingDirectory / 'doc/file.txt'.
-	file writeStreamDo: [ :stream | stream nextPutAll: text ].
-	
-	SpNewHelpBrowserPresenter new topicsWithCacheFrom: rootSystem.
-	cache := SpNewHelpBrowserPresenter helpCache.
-	self assert: cache basenameWithoutExtension equals: 'doc'.
-	self assert: cache children first basenameWithoutExtension equals: 'file'.
-	SpNewHelpBrowserPresenter helpCache: save
+	self assert: browser rootTopic subtopics size equals: 1 ]
+		ensure: [  SpNewHelpBrowserPresenter helpCache: save ]
 ]
 
 { #category : #'tests - search' }
