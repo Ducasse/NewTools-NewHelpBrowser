@@ -92,7 +92,6 @@ SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
 	self filesystem: FileSystem memory.
 	aFolderOrFile isDirectory 
 		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename.
-					self filesystem workingDirectory / aFolderOrFile basename.
 					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: aFolderOrFile basename ] ]
 		ifFalse: [ | file |
 					file := self filesystem workingDirectory / aFolderOrFile basename.
@@ -109,7 +108,6 @@ SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFold
 	aFolderOrFile isDirectory 
 		ifTrue:  [ | directoryPath |
 					directoryPath := aFolderName , '/' ,aFolderOrFile basename.
-					self filesystem workingDirectory / aFolderName.
 					self filesystem createDirectory: directoryPath.
 					aFolderOrFile children do: [ :folderOrFile | self internalizeHelpFrom: folderOrFile  at: directoryPath ] ]
 		ifFalse: [ | file filePath |
