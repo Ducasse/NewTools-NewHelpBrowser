@@ -105,7 +105,9 @@ SpNewHelpBrowserPresenterTest >> testHelpCache [
 	SpNewHelpBrowserPresenter internalizeHelpFrom: rootSystem.
 	cache := SpNewHelpBrowserPresenter helpCache.
 	self assert: cache basenameWithoutExtension equals: 'doc'.
-	self assert: cache children first basenameWithoutExtension equals: 'file'.
+	self 
+		assert: cache children first basenameWithoutExtension 
+		equals: 'file'.
 	SpNewHelpBrowserPresenter helpCache: save
 ]
 
@@ -178,9 +180,10 @@ SpNewHelpBrowserPresenterTest >> testSearchWordInTopicsTitle [
 	| browser topics |
 	browser := SpNewHelpBrowserPresenter new.
 	topics := OrderedCollection new.
-	topics add: (NodeHelpTopic named: 'section1');
-	add: (NodeHelpTopic named: 'part 2');
-	add: (NodeHelpTopic named: 'section 3').
+	topics 
+		add: (NodeHelpTopic named: 'section1');
+		add: (NodeHelpTopic named: 'part 2');
+		add: (NodeHelpTopic named: 'section 3').
 	(topics at: 2) addSubtopic: (NodeHelpTopic named: 'section2').
 	self assert: (browser search: 'section' into: topics) size equals: 3
 ]

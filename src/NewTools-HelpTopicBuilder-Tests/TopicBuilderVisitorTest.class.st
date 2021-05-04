@@ -83,12 +83,14 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 
 	| topics |
 	topics := OrderedCollection new.
-	topics add: (NodeHelpTopic named: '1');
-	add: (NodeHelpTopic named: '2');
-	add: (NodeHelpTopic named: '3').
-	visitor nodesListAdd: (OrderedCollection new: 1);
-	nodesListAdd: (OrderedCollection new: 2);
-	nodesListAdd: (OrderedCollection new: 3).
+	topics 
+		add: (NodeHelpTopic named: '1');
+		add: (NodeHelpTopic named: '2');
+		add: (NodeHelpTopic named: '3').
+	visitor 
+		nodesListAdd: (OrderedCollection new: 1);
+		nodesListAdd: (OrderedCollection new: 2);
+		nodesListAdd: (OrderedCollection new: 3).
 	visitor addSubtopicsNodes: topics.
 	self assert: topics first node class equals: PRDocument.
 	self assert: topics second node class equals: PRDocument.
@@ -100,13 +102,15 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 
 	| topics size |
 	topics := OrderedCollection new.
-	topics add: (HelpTopic named: '1');
-	add: (HelpTopic named: '2');
-	add: (HelpTopic named: '3').
-	visitor nodesListAdd: (OrderedCollection new: 1);
-	nodesListAdd: (OrderedCollection new: 2);
-	nodesListAdd: (OrderedCollection new: 3);
-	nodesListAdd: (OrderedCollection new: 4).
+	topics 
+		add: (HelpTopic named: '1');
+		add: (HelpTopic named: '2');
+		add: (HelpTopic named: '3').
+	visitor 
+		nodesListAdd: (OrderedCollection new: 1);
+		nodesListAdd: (OrderedCollection new: 2);
+		nodesListAdd: (OrderedCollection new: 3);
+		nodesListAdd: (OrderedCollection new: 4).
 	size := visitor nodesList size.
 	visitor addSubtopicsNodes: topics.
 	self assert: visitor nodesList size equals: size - 3 
@@ -116,8 +120,9 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 { #category : #tests }
 TopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
 
-	visitor nodesListAdd: 1.
-	visitor nodesListAdd: 2.
+	visitor 
+		nodesListAdd: 1;
+		nodesListAdd: 2.
 	self assert: visitor nodesList size equals: 2.
 	self assert: visitor nodesList first equals: 1.
 	self assert: visitor nodesList second equals: 2
@@ -171,14 +176,19 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithLevelsSections [
 	self visitFile: file.
 	topic := visitor rootTopics first.
 	self assert: topic title equals: 'Section 1'.
+	
 	topic := topic subtopics first.
 	self assert: topic title equals: 'Section 2'.
+	
 	topic := topic subtopics first.
 	self assert: topic title equals: 'Section 3'.
+	
 	topic := topic subtopics first.
 	self assert: topic title equals: 'Section 4'.
+	
 	topic := topic subtopics first.
 	self assert: topic title equals: 'Section 5'.
+	
 	topic := topic subtopics first.
 	self assert: topic title equals: 'Section 6'.
 ]
@@ -192,7 +202,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 		stream nextPutAll: self class spFileContentsMoreSections ].
 	self visitFile: file.
 	self assert: (visitor rootTopics at: 2) title equals: 'Section 2'.
-	self assert: visitor rootTopics size equals: 2.
+	self assert: visitor rootTopics size equals: 2
 ]
 
 { #category : #tests }
