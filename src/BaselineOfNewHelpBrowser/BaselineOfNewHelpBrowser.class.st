@@ -5,14 +5,17 @@ Class {
 }
 
 { #category : #baselines }
-BaselineOfNewHelpBrowser >> baseline: spec [
-	<baseline>
+BaselineOfNewHelpBrowser >> baseline: spec
 
-	spec for: #'common' do: [
-		spec 
-			package: #'NewTools-NewHelpBrowser';
-			package: #'NewTools-NewHelpBrowser-Tests' with: [ spec requires: #(#'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder')];
+	<baseline>
+	spec for: #common do: [ 
+		spec
+			package: #'NewTools-NewHelpBrowser'
+			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ];
+			package: #'NewTools-NewHelpBrowser-Tests' with: [ 
+				spec requires:
+						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' ) ];
 			package: #'NewTools-HelpTopicBuilder';
-			package: #'NewTools-HelpTopicBuilder-Tests' with: [ spec requires: #(#'NewTools-HelpTopicBuilder'). ]
-		]
+			package: #'NewTools-HelpTopicBuilder-Tests'
+			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ] ]
 ]
