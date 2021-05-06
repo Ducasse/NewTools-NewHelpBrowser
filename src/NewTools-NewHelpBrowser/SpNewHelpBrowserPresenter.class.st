@@ -152,7 +152,10 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 
 { #category : #'instance creation' }
 SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
-	^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)
+	[ aDescription bookName.
+	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
+	on: MessageNotUnderstood do: [ SpNewHelpBrowserPresenter open ]
+	
 ]
 
 { #category : #'instance creation' }
