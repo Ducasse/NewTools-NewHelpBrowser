@@ -219,6 +219,20 @@ SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelp2 [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithDescription [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SUnitTutorial.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Tutorial'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithNotDescription [
 	| browser rootTopic save |	
 	[ save := SpNewHelpBrowserPresenter helpCache.
