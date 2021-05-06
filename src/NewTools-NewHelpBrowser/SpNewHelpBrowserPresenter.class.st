@@ -154,7 +154,15 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 	[ aDescription bookName.
 	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
-	on: MessageNotUnderstood do: [ SpNewHelpBrowserPresenter open ]
+	on: MessageNotUnderstood do: [ | inst |
+		inst:= self basicNew.
+		inst topicsFromSystem.
+		^ inst 
+		setModelBeforeInitialization: inst rootTopic;
+		initialize;
+		openWithSpec;
+		yourself
+	 ]
 	
 ]
 

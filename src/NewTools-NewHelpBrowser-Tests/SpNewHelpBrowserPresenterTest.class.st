@@ -219,6 +219,20 @@ SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelp2 [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithNotDescription [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SpNewHelpBrowserPresenter.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testOpenOnDoesNotExistFolder [
 	| browser rootTopic save |
 		
