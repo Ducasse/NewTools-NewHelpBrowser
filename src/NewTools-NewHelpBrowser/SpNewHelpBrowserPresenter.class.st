@@ -156,9 +156,12 @@ SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
 	Especially how to pass a model before the initialization which is normally done via message #on: "
 	
-	| inst |
+	| inst fileReference |
 	inst := self basicNew. 
-	inst topicsFromSystem: aFileReference.
+	aFileReference exists 
+		ifFalse: [ fileReference := helpCache ] 
+		ifTrue: [ fileReference := aFileReference  ].
+	inst topicsFromSystem: fileReference.
 	^ inst 
 		setModelBeforeInitialization: inst rootTopic;
 		initialize;
