@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #baselines }
-BaselineOfNewHelpBrowser >> baseline: spec
+BaselineOfNewHelpBrowser >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [ 
