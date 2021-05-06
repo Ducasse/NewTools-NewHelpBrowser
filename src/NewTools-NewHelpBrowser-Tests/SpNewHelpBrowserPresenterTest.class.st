@@ -205,6 +205,32 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
 
 ]
 
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelp2 [
+	| browser rootTopic |	
+	browser := SpNewHelpBrowserPresenter on: CustomHelp2 asHelpTopic.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Help'.
+	self assert: rootTopic icon isNotNil.
+	window := browser openWithSpec.
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnSystemHelp2 [
+	| browser rootTopic |	
+	browser := SpNewHelpBrowserPresenter on: SystemHelp2 asHelpTopic.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Help'.
+	self assert: rootTopic icon isNil.
+	window := browser openWithSpec.
+	
+	
+	
+]
+
 { #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> testSearchList [
 	| browser text topics |
