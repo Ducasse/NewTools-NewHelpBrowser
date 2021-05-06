@@ -151,6 +151,11 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 ]
 
 { #category : #'instance creation' }
+SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
+	^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)
+]
+
+{ #category : #'instance creation' }
 SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	"Open an help browser on a given folder."
 	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
