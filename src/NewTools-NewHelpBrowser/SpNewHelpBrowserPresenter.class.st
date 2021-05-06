@@ -159,7 +159,7 @@ SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	| inst fileReference |
 	inst := self basicNew. 
 	aFileReference exists 
-		ifFalse: [ fileReference := helpCache ] 
+		ifFalse: [ fileReference := self helpCache ] 
 		ifTrue: [ fileReference := aFileReference  ].
 	inst topicsFromSystem: fileReference.
 	^ inst 

@@ -219,6 +219,21 @@ SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelp2 [
 ]
 
 { #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnDoesNotExistFolder [
+	| browser rootTopic save |
+		
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnHelpFolder: FileSystem workingDirectory  / 'ojdoajdjvsaidqsjkjfzeuican'.
+	rootTopic := browser rootTopic. 
+	window := browser window] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+
+	
+	
+	
+]
+
+{ #category : #tests }
 SpNewHelpBrowserPresenterTest >> testOpenOnSystemHelp2 [
 	| browser rootTopic |	
 	browser := SpNewHelpBrowserPresenter on: SystemHelp2 asHelpTopic.
