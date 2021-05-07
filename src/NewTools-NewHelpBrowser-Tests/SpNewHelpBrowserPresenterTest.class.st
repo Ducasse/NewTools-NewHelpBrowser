@@ -261,6 +261,20 @@ SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithNotDescription [
 ]
 
 { #category : #'as yet unclassified' }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithObject [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: Object new.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
 SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithString [
 	| browser rootTopic save |	
 	[ save := SpNewHelpBrowserPresenter helpCache.
