@@ -254,6 +254,7 @@ SpNewHelpBrowserPresenterTest >> testOpenOnDoesNotExistFolder [
 	SpNewHelpBrowserPresenter emptyHelpCache.
 	browser := SpNewHelpBrowserPresenter openOnHelpFolder: FileSystem workingDirectory  / 'ojdoajdjvsaidqsjkjfzeuican'.
 	rootTopic := browser rootTopic. 
+	self assert: rootTopic title equals: '/'.
 	window := browser window] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
 
 	
