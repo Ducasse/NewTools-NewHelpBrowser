@@ -151,14 +151,33 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 ]
 
 { #category : #'instance creation' }
+SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
+	[ aDescription bookName.
+	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
+	on: MessageNotUnderstood do: [ | inst |
+		inst:= self basicNew.
+		inst topicsFromSystem.
+		^ inst 
+		setModelBeforeInitialization: inst rootTopic;
+		initialize;
+		openWithSpec;
+		yourself
+	 ]
+	
+]
+
+{ #category : #'instance creation' }
 SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	"Open an help browser on a given folder."
 	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
 	Especially how to pass a model before the initialization which is normally done via message #on: "
 	
-	| inst |
+	| inst fileReference |
 	inst := self basicNew. 
-	inst topicsFromSystem: aFileReference.
+	aFileReference exists 
+		ifFalse: [ fileReference := self helpCache ] 
+		ifTrue: [ fileReference := aFileReference  ].
+	inst topicsFromSystem: fileReference.
 	^ inst 
 		setModelBeforeInitialization: inst rootTopic;
 		initialize;

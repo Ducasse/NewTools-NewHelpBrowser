@@ -205,6 +205,118 @@ SpNewHelpBrowserPresenterTest >> testOpenIsWorkingSmokeTestOnSpecificHelp [
 
 ]
 
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelp2 [
+	| browser rootTopic |	
+	browser := SpNewHelpBrowserPresenter on: CustomHelp2 asHelpTopic.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Help'.
+	self assert: rootTopic icon isNotNil.
+	window := browser openWithSpec.
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithClass [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SpNewHelpBrowserPresenter.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithDescription [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SUnitTutorial.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Tutorial'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithMethod [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SpNewHelpBrowserPresenter>>#rootTopic:.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithObject [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: Object new.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnCustomHelpWithString [
+	| browser rootTopic save |	
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnCustomHelp: SpNewHelpBrowserPresenter>>#rootTopic:.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: '/'.
+	window := browser window ] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnDoesNotExistFolder [
+	| browser rootTopic save |
+		
+	[ save := SpNewHelpBrowserPresenter helpCache.
+	SpNewHelpBrowserPresenter emptyHelpCache.
+	browser := SpNewHelpBrowserPresenter openOnHelpFolder: FileSystem workingDirectory  / 'ojdoajdjvsaidqsjkjfzeuican'.
+	rootTopic := browser rootTopic. 
+	self assert: rootTopic title equals: '/'.
+	window := browser window] ensure: [ SpNewHelpBrowserPresenter helpCache: save ]
+
+	
+	
+	
+]
+
+{ #category : #tests }
+SpNewHelpBrowserPresenterTest >> testOpenOnSystemHelp2 [
+	| browser rootTopic |	
+	browser := SpNewHelpBrowserPresenter on: SystemHelp2 asHelpTopic.
+	rootTopic := browser rootTopic.
+	self assert: rootTopic title equals: 'Help'.
+	self assert: rootTopic icon isNil.
+	window := browser openWithSpec.
+	
+	
+	
+]
+
 { #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> testSearchList [
 	| browser text topics |
