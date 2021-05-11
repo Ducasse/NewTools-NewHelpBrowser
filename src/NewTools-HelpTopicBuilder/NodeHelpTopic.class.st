@@ -24,7 +24,7 @@ NodeHelpTopic >> addNode: aNode [
 
 { #category : #accessing }
 NodeHelpTopic >> addSubtopic: aSubTopic [
-	self iconName: #bookIcon.
+	self iconInitialize.
 	super addSubtopic: aSubTopic
 ]
 
@@ -39,12 +39,15 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
 
+{ #category : #'as yet unclassified' }
+NodeHelpTopic >> iconInitialize [ 
+]
+
 { #category : #initialization }
 NodeHelpTopic >> initialize [ 
 
 	super initialize.
 	node := PRDocument new.
-	self iconName: #pageIcon
 ]
 
 { #category : #accessing }
@@ -54,6 +57,12 @@ NodeHelpTopic >> node [
 
 { #category : #accessing }
 NodeHelpTopic >> subtopics: aCollection [
-	self iconName: #bookIcon.
+	self iconInitialize.
 	super subtopics: aCollection
+]
+
+{ #category : #accessing }
+NodeHelpTopic >> title: anObject [
+	anObject asClassIfPresent: [ self iconName: #classIcon ].
+	super title: anObject
 ]
