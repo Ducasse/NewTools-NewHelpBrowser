@@ -35,7 +35,7 @@ MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass wit
 MicrodownClassAPIHelpBuilder class >> sample [
 	<sampleInstance>
 	
-	SpNewHelpBrowserPresenter openOn: (ClassAPIHelpBuilder buildHierarchicalHelpTopicFrom: SpPresenter withSubclasses: false withMethods: true)
+	SpNewHelpBrowserPresenter openOn: (self buildHierarchicalHelpTopicFrom: SpPresenter withSubclasses: false withMethods: true)
 ]
 
 { #category : #accessing }
