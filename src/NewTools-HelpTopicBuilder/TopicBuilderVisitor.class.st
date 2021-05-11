@@ -111,9 +111,9 @@ TopicBuilderVisitor >> visitHeader: anObject [
 	anObject level > 1
 		ifTrue: [ 
 			helpTopics last
-				addSubtopic: (self helpTopicClass named: anObject text capitalized)
+				addSubtopic: (self helpTopicClass named: anObject text capitalized) iconInitialize
 				with: anObject level ]
 		ifFalse: [ 
 			helpTopics add:
-				(self helpTopicClass named: anObject text capitalized) ]
+				(self helpTopicClass named: anObject text capitalized) iconInitialize ]
 ]

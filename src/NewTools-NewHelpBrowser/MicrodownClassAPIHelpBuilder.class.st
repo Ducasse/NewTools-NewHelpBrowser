@@ -73,7 +73,7 @@ MicrodownClassAPIHelpBuilder >> build [
 	| builder |
 	builder := MicroDownParser builder.
 	topicToBuild := NodeHelpTopic named: rootToBuildFrom name.
-	topicToBuild iconName: #pageIcon.
+	"topicToBuild iconName: #pageIcon."
 	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
 	topicToBuild contents: builder contents.
@@ -126,7 +126,7 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
 	| instanceSide classSide |
 	instanceSide := HelpTopic named: 'Instance side'.
 	classSide := HelpTopic named: 'Class side'.
-	topicToBuild iconName: #bookIcon.
+	"topicToBuild iconName: #bookIcon."
 	topicToBuild
 		addSubtopic: instanceSide;
 		addSubtopic: classSide.
@@ -139,7 +139,7 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 	| topic |
 	rootToBuildFrom subclasses isEmpty
 		ifTrue: [ ^ self ].
-	topicToBuild iconName: #bookIcon.
+	"topicToBuild iconName: #bookIcon."
 	topic := subclassesAsSeparateTopic
 		ifTrue: [ topicToBuild addSubtopic: (HelpTopic named: 'Subclasses') ]
 		ifFalse: [ topicToBuild ].

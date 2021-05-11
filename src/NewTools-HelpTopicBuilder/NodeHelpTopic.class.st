@@ -24,7 +24,7 @@ NodeHelpTopic >> addNode: aNode [
 
 { #category : #accessing }
 NodeHelpTopic >> addSubtopic: aSubTopic [
-	self iconName: #bookIcon.
+	self iconInitialize.
 	super addSubtopic: aSubTopic
 ]
 
@@ -37,6 +37,16 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 				ifTrue: [ self addSubtopic: aHelpTopic ]
 				ifFalse: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] ]
 		ifFalse: [ self addSubtopic: aHelpTopic ]
+]
+
+{ #category : #'as yet unclassified' }
+NodeHelpTopic >> iconInitialize [
+	
+	icon = (Smalltalk ui icons iconNamed: #pageIcon)
+		ifTrue: [ self iconName: #bookIcon ].
+
+	icon 
+		ifNil: [ self iconName: #pageIcon ]
 ]
 
 { #category : #initialization }
@@ -54,6 +64,12 @@ NodeHelpTopic >> node [
 
 { #category : #accessing }
 NodeHelpTopic >> subtopics: aCollection [
-	self iconName: #bookIcon.
+	self iconInitialize.
 	super subtopics: aCollection
+]
+
+{ #category : #accessing }
+NodeHelpTopic >> title: anObject [
+	anObject asClassIfPresent: [ self iconName: #classIcon ].
+	super title: anObject
 ]
