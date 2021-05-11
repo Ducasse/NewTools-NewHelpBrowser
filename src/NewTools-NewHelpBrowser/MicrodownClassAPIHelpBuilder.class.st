@@ -23,12 +23,19 @@ Class {
 MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass withSubclasses: aBoolean withMethods: anotherBoolean [
 	"Start building from the given class"
 	
-	^(self new)
+	^ self new 
 		addSubclasses: aBoolean;
 		addMethods: anotherBoolean;
 		rootToBuildFrom: aClass;
 		build;
 		topicToBuild 
+]
+
+{ #category : #building }
+MicrodownClassAPIHelpBuilder class >> sample [
+	<sampleInstance>
+	
+	SpNewHelpBrowserPresenter openOn: (ClassAPIHelpBuilder buildHierarchicalHelpTopicFrom: SpPresenter withSubclasses: false withMethods: true)
 ]
 
 { #category : #accessing }
@@ -65,8 +72,9 @@ MicrodownClassAPIHelpBuilder >> addSubclasses: anObject [
 MicrodownClassAPIHelpBuilder >> build [
 	| builder |
 	builder := MicroDownParser builder.
-	topicToBuild := HelpTopic named: rootToBuildFrom name.
+	topicToBuild := NodeHelpTopic named: rootToBuildFrom name.
 	topicToBuild iconName: #pageIcon.
+	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
 	topicToBuild contents: builder contents.
 		
@@ -103,7 +111,7 @@ MicrodownClassAPIHelpBuilder >> buildMethodTopicsOn: topic for: aClass [
 { #category : #'private building' }
 MicrodownClassAPIHelpBuilder >> buildSubclassTopicFor: aSubclass [
 	 
-	^(self class new) 
+	^ self class new
 			rootToBuildFrom: aSubclass;
 			addSubclasses: addSubclasses;
 			addMethods: addMethods;
