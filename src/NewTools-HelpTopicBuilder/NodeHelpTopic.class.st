@@ -40,6 +40,11 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
 
+{ #category : #accessing }
+NodeHelpTopic >> iconBuilder: aIconBuilder [
+	iconBuilder := aIconBuilder
+]
+
 { #category : #'as yet unclassified' }
 NodeHelpTopic >> iconInitialize [
 	

@@ -168,6 +168,11 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 		ifFalse: [ topicToBuild addSubtopic: topic ]
 ]
 
+{ #category : #accessing }
+MicrodownClassAPIHelpBuilder >> iconBuilder: aIconBuilder [
+	iconBuilder := aIconBuilder
+]
+
 { #category : #initialization }
 MicrodownClassAPIHelpBuilder >> initialize [
 	"Initializes the receiver"
