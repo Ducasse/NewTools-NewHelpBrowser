@@ -14,7 +14,8 @@ Class {
 		'addSubclasses',
 		'addMethods',
 		'subclassesAsSeparateTopic',
-		'addMethodsWithoutComment'
+		'addMethodsWithoutComment',
+		'iconBuilder'
 	],
 	#category : #'NewTools-NewHelpBrowser'
 }
@@ -87,6 +88,7 @@ MicrodownClassAPIHelpBuilder >> build [
 	builder := MicroDownParser builder.
 	topicToBuild := HelpTopic named: rootToBuildFrom name.
 	"topicToBuild iconName: #pageIcon."
+	iconBuilder buildIcon: topicToBuild.
 	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
 	topicToBuild contents: builder contents.
@@ -140,6 +142,7 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
 	instanceSide := HelpTopic named: 'Instance side'.
 	classSide := HelpTopic named: 'Class side'.
 	"topicToBuild iconName: #bookIcon."
+	iconBuilder buildIcon: topicToBuild.
 	topicToBuild
 		addSubtopic: instanceSide;
 		addSubtopic: classSide.
@@ -153,6 +156,7 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 	rootToBuildFrom subclasses isEmpty
 		ifTrue: [ ^ self ].
 	"topicToBuild iconName: #bookIcon."
+	iconBuilder buildIcon: topicToBuild.
 	topic := subclassesAsSeparateTopic
 		ifTrue: [ HelpTopic named: 'Subclasses' ]
 		ifFalse: [ topicToBuild ].
@@ -173,6 +177,7 @@ MicrodownClassAPIHelpBuilder >> initialize [
 	addMethods := true.
 	subclassesAsSeparateTopic := true.
 	addMethodsWithoutComment := true.
+	iconBuilder := IconClassBuilder  new
 ]
 
 { #category : #accessing }
