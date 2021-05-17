@@ -11,7 +11,8 @@ Class {
 	#name : #NodeHelpTopic,
 	#superclass : #HelpTopic,
 	#instVars : [
-		'node'
+		'node',
+		'iconBuilder'
 	],
 	#category : #'NewTools-HelpTopicBuilder'
 }
@@ -24,7 +25,7 @@ NodeHelpTopic >> addNode: aNode [
 
 { #category : #accessing }
 NodeHelpTopic >> addSubtopic: aSubTopic [
-	self iconInitialize.
+	iconBuilder buildIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
@@ -53,8 +54,9 @@ NodeHelpTopic >> iconInitialize [
 NodeHelpTopic >> initialize [ 
 
 	super initialize.
+	iconBuilder := IconBookBuilder new.
 	node := PRDocument new.
-	self iconName: #pageIcon
+	iconBuilder buildIcon: self
 ]
 
 { #category : #accessing }
@@ -64,12 +66,11 @@ NodeHelpTopic >> node [
 
 { #category : #accessing }
 NodeHelpTopic >> subtopics: aCollection [
-	self iconInitialize.
+	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]
 
 { #category : #accessing }
 NodeHelpTopic >> title: anObject [
-	anObject asClassIfPresent: [ self iconName: #classIcon ].
 	super title: anObject
 ]
