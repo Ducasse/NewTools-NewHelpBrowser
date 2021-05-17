@@ -45,7 +45,8 @@ Class {
 		'topicList',
 		'helpTopicVisitor',
 		'searchInput',
-		'nextButton'
+		'nextButton',
+		'iconBuilder'
 	],
 	#classInstVars : [
 		'filesystem',
@@ -230,6 +231,11 @@ SpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [
 	helpTopicVisitor := aClass
 ]
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenter >> iconBuilder: aIconBuilder [
+	iconBuilder := aIconBuilder
+]
+
 { #category : #initialization }
 SpNewHelpBrowserPresenter >> initialExtent [
 	^ 800@600
@@ -382,6 +388,7 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 	subTopic := OrderedCollection new.
 	topic := self helpTopicClass named:
 		         aFileOrFolder basenameWithoutExtension capitalized.
+	iconBuilder buildIcon: topic.
 	sorted := SortedCollection sortBlock: [ :a :b | 
 		          a basename <= b basename ].
 	sorted addAll: (aFileOrFolder children select: [ :e | 
