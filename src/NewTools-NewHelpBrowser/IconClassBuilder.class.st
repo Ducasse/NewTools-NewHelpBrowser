@@ -6,5 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 IconClassBuilder >> buildIcon: aTopic [
-	aTopic icon: aTopic title asClass systemIcon
+	^ aTopic icon: aTopic title asClass systemIcon
 ]

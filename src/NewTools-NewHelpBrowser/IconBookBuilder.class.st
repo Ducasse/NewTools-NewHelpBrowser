@@ -10,7 +10,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 IconBookBuilder >> buildIcon: aTopic [
-	aTopic icon 
+	^ aTopic icon 
 		ifNil: [ aTopic iconName: pageIcon ]
 		ifNotNil: [ aTopic iconName: bookIcon ]
 ]

@@ -52,7 +52,7 @@ TopicBuilderVisitor >> initialize [
 	
 	super initialize.
 	helpTopics := OrderedCollection new.
-	nodesList := LinkedList new.
+	nodesList := LinkedList new
 ]
 
 { #category : #accessing }
@@ -107,13 +107,12 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-
 	anObject level > 1
 		ifTrue: [ 
 			helpTopics last
-				addSubtopic: (self helpTopicClass named: anObject text capitalized) iconInitialize
-				with: anObject level ]
+				addSubtopic: (self helpTopicClass named: anObject text capitalized)
+				with: anObject level. ]
 		ifFalse: [ 
 			helpTopics add:
-				(self helpTopicClass named: anObject text capitalized) iconInitialize ]
+				(self helpTopicClass named: anObject text capitalized) ]
 ]
