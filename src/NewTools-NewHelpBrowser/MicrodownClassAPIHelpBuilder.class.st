@@ -32,6 +32,19 @@ MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass wit
 ]
 
 { #category : #building }
+MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass withSubclasses: aBoolean withMethods: anotherBoolean withTopicSubclasses: aNewBoolean [
+	"Start building from the given class"
+	
+	^ self new 
+		addSubclasses: aBoolean;
+		addMethods: anotherBoolean;
+		subclassesAsSeparateTopic: aNewBoolean;
+		rootToBuildFrom: aClass;
+		build;
+		topicToBuild 
+]
+
+{ #category : #building }
 MicrodownClassAPIHelpBuilder class >> sample [
 	<sampleInstance>
 	
@@ -72,7 +85,7 @@ MicrodownClassAPIHelpBuilder >> addSubclasses: anObject [
 MicrodownClassAPIHelpBuilder >> build [
 	| builder |
 	builder := MicroDownParser builder.
-	topicToBuild := NodeHelpTopic named: rootToBuildFrom name.
+	topicToBuild := HelpTopic named: rootToBuildFrom name.
 	"topicToBuild iconName: #pageIcon."
 	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
@@ -141,12 +154,14 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 		ifTrue: [ ^ self ].
 	"topicToBuild iconName: #bookIcon."
 	topic := subclassesAsSeparateTopic
-		ifTrue: [ topicToBuild addSubtopic: (HelpTopic named: 'Subclasses') ]
+		ifTrue: [ HelpTopic named: 'Subclasses' ]
 		ifFalse: [ topicToBuild ].
 	rootToBuildFrom subclasses
 		do:
 			[ :subclass | topic addSubtopic: (self buildSubclassTopicFor: subclass) ].
-	topic sortSubtopicsByTitle
+	topic sortSubtopicsByTitle.
+	topicToBuild = topic 	
+		ifFalse: [ topicToBuild addSubtopic: topic ]
 ]
 
 { #category : #initialization }
