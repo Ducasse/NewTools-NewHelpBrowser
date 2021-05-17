@@ -45,8 +45,7 @@ Class {
 		'topicList',
 		'helpTopicVisitor',
 		'searchInput',
-		'nextButton',
-		'iconBuilder'
+		'nextButton'
 	],
 	#classInstVars : [
 		'filesystem',
@@ -174,7 +173,7 @@ SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	Especially how to pass a model before the initialization which is normally done via message #on: "
 	
 	| inst fileReference |
-	inst := self basicNew. 
+	inst := self basicNew.  
 	aFileReference exists 
 		ifFalse: [ fileReference := self helpCache ] 
 		ifTrue: [ fileReference := aFileReference  ].
@@ -229,11 +228,6 @@ SpNewHelpBrowserPresenter >> helpTopicVisitor [
 { #category : #accessing }
 SpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [ 
 	helpTopicVisitor := aClass
-]
-
-{ #category : #accessing }
-SpNewHelpBrowserPresenter >> iconBuilder: aIconBuilder [
-	iconBuilder := aIconBuilder
 ]
 
 { #category : #initialization }
@@ -388,7 +382,6 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 	subTopic := OrderedCollection new.
 	topic := self helpTopicClass named:
 		         aFileOrFolder basenameWithoutExtension capitalized.
-	iconBuilder buildIcon: topic.
 	sorted := SortedCollection sortBlock: [ :a :b | 
 		          a basename <= b basename ].
 	sorted addAll: (aFileOrFolder children select: [ :e | 
