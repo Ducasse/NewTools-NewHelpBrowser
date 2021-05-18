@@ -81,11 +81,15 @@ TopicBuilderVisitor >> rootTopics [
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
 	self visit: anObject.
-	nodesList removeFirst.
-	helpTopics do: [ :each | 
-		nodesList first do: [ :node | each addNode: node ].
-		nodesList removeFirst.
-		self addSubtopicsNodes: each subtopics ]
+	helpTopics do: [ :each |
+		nodesList first isEmpty ifTrue: [ nodesList removeFirst ].
+		each node hasChildren
+			ifFalse: [ 
+				nodesList first do: [ :node | each addNode: node ].
+				nodesList removeFirst. ].
+		self addSubtopicsNodes: each subtopics.
+		nodesList isEmpty 		
+		 ]
 	
 	
 ]
@@ -99,7 +103,6 @@ TopicBuilderVisitor >> visit: anObject [
 TopicBuilderVisitor >> visitAll: aCollection [
 
 	| collection |
-	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
 		              each class = PRHeader 
 							  ifTrue: [ 
