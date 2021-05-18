@@ -35,3 +35,13 @@ SpNewHelpBrowserPresenterBook >> topicsFromSystem: aFileOrFolder [
 		topic addSubtopic: each ].
 	self rootTopic: topic
 ]
+
+{ #category : #writing }
+SpNewHelpBrowserPresenterBook >> writePillarToMic: aFolder [
+	aFolder children do:[ :each |
+			each extension = 'pillar' 
+				ifTrue: [ | contents |
+						contents := PRPillarParser parse: each contents.
+						aFolder / (each basenameWithoutExtension , '.mic') writeStreamDo: [ :stream |
+							stream nextPutAll: (PRMicrodownWriter new start: contents) contents ] ] ]
+]
