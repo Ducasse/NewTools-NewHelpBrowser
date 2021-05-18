@@ -10,7 +10,7 @@ SpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder [
 	| visitor subTopic sorted |
 	aFileOrFolder isFile ifTrue: [ 
 		aFileOrFolder extension = 'mic' ifTrue: [ 
-			visitor := self helpTopicVisitor new.
+			visitor := self helpTopicVisitorClass new.
 			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
 			^ visitor rootTopics ] ].
 
@@ -27,12 +27,38 @@ SpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenterBook >> topicsFromSystem: aFileOrFolder [
+SpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder visitor: aVistor [
+	| subTopic sorted |
+	aFileOrFolder isFile ifTrue: [ 
+		aFileOrFolder extension = 'mic' ifTrue: [ 
+			aVistor start: (MicroDownParser parse: aFileOrFolder) asPillar.
+			^ aVistor rootTopics ] ].
+	
+	self writePillarToMic: aFileOrFolder.
+	subTopic := OrderedCollection new.
+	sorted := SortedCollection sortBlock: [ :a :b | 
+		          a basename >= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e | 
+			 e isDirectory or: [ e extension = 'mic' ] ]).
 
-	| topic |
-	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
-	(self topicsFromFileSystem: aFileOrFolder) do: [ :each | 
-		topic addSubtopic: each ].
+
+	sorted do: [ :fileOrFolder | 
+		subTopic addAll: (self topicsFromFileSystem: fileOrFolder visitor: aVistor) ].
+	^ subTopic
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenterBook >> topicsFromSystem: aBookFolder [
+
+	| topic visitor title header |
+	visitor := self helpTopicVisitorClass new.
+	title := (STON fromString: aBookFolder / 'pillar.conf' contents)at: #title.
+	visitor rootTopics add: (NodeHelpTopic named: title).
+	header := PRHeader new.
+	header level: 1.
+	header setChildren: { PRText new text: title }.
+	visitor contents add: header.
+	topic := (self topicsFromFileSystem: aBookFolder / 'Chapters' visitor: visitor) first.
 	self rootTopic: topic
 ]
 
