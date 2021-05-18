@@ -219,14 +219,14 @@ SpNewHelpBrowserPresenter >> helpTopicClass [
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitor [
+SpNewHelpBrowserPresenter >> helpTopicVisitorClass [
 	
 	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
 	^ helpTopicVisitor
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [ 
+SpNewHelpBrowserPresenter >> helpTopicVisitorClass: aClass [ 
 	helpTopicVisitor := aClass
 ]
 
@@ -375,7 +375,7 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 	| visitor subTopic sorted topic |
 	aFileOrFolder isFile ifTrue: [ 
 		aFileOrFolder extension = 'mic' ifTrue: [ 
-			visitor := self helpTopicVisitor new.
+			visitor := self helpTopicVisitorClass new.
 			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
 			^ visitor rootTopics ] ].
 
