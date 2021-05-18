@@ -41,6 +41,11 @@ TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 		self addSubtopicsNodes: each subtopics ]
 ]
 
+{ #category : #accessing }
+TopicBuilderVisitor >> contents [
+	^ contents
+]
+
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> helpTopicClass [
 
@@ -52,6 +57,7 @@ TopicBuilderVisitor >> initialize [
 	
 	super initialize.
 	helpTopics := OrderedCollection new.
+	contents := OrderedCollection new.
 	nodesList := LinkedList new
 ]
 
