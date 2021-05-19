@@ -9,10 +9,13 @@ Class {
 }
 
 { #category : #build }
-IconBookBuilder >> buildIcon: aTopic [
-	^ aTopic icon 
-		ifNil: [ aTopic iconName: pageIcon ]
-		ifNotNil: [ aTopic iconName: bookIcon ]
+IconBookBuilder >> buildBookIcon: aTopic [
+	aTopic iconName: bookIcon 
+]
+
+{ #category : #build }
+IconBookBuilder >> buildPageIcon: aTopic [
+	^ aTopic iconName: pageIcon
 ]
 
 { #category : #initialization }

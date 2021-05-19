@@ -25,7 +25,7 @@ NodeHelpTopic >> addNode: aNode [
 
 { #category : #accessing }
 NodeHelpTopic >> addSubtopic: aSubTopic [
-	iconBuilder buildIcon: self.
+	iconBuilder buildBookIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
@@ -51,7 +51,7 @@ NodeHelpTopic >> initialize [
 	super initialize.
 	iconBuilder := IconBookBuilder new.
 	node := PRDocument new.
-	iconBuilder buildIcon: self
+	iconBuilder buildPageIcon: self
 ]
 
 { #category : #accessing }
@@ -61,6 +61,6 @@ NodeHelpTopic >> node [
 
 { #category : #accessing }
 NodeHelpTopic >> subtopics: aCollection [
-	iconBuilder buildIcon: self.
+	iconBuilder buildBookIcon: self.
 	super subtopics: aCollection
 ]
