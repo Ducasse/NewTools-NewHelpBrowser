@@ -45,16 +45,6 @@ NodeHelpTopic >> iconBuilder: aIconBuilder [
 	iconBuilder := aIconBuilder
 ]
 
-{ #category : #'as yet unclassified' }
-NodeHelpTopic >> iconInitialize [
-	
-	icon = (Smalltalk ui icons iconNamed: #pageIcon)
-		ifTrue: [ self iconName: #bookIcon ].
-
-	icon 
-		ifNil: [ self iconName: #pageIcon ]
-]
-
 { #category : #initialization }
 NodeHelpTopic >> initialize [ 
 
