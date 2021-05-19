@@ -64,8 +64,3 @@ NodeHelpTopic >> subtopics: aCollection [
 	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]
-
-{ #category : #accessing }
-NodeHelpTopic >> title: anObject [
-	super title: anObject
-]
