@@ -221,8 +221,7 @@ SpNewHelpBrowserPresenter >> helpTopicClass [
 { #category : #accessing }
 SpNewHelpBrowserPresenter >> helpTopicVisitorClass [
 	
-	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
-	^ helpTopicVisitor
+	^ helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ]
 ]
 
 { #category : #accessing }
