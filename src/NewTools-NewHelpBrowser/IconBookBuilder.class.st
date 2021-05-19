@@ -8,7 +8,7 @@ Class {
 	#category : #'NewTools-NewHelpBrowser'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 IconBookBuilder >> buildIcon: aTopic [
 	^ aTopic icon 
 		ifNil: [ aTopic iconName: pageIcon ]

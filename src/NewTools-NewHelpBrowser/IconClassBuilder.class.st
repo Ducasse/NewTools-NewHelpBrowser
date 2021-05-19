@@ -4,7 +4,7 @@ Class {
 	#category : #'NewTools-NewHelpBrowser'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 IconClassBuilder >> buildIcon: aTopic [
 	^ aTopic icon: aTopic title asClass systemIcon
 ]
