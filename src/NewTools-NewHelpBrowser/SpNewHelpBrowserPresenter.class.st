@@ -173,7 +173,7 @@ SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	Especially how to pass a model before the initialization which is normally done via message #on: "
 	
 	| inst fileReference |
-	inst := self basicNew. 
+	inst := self basicNew.  
 	aFileReference exists 
 		ifFalse: [ fileReference := self helpCache ] 
 		ifTrue: [ fileReference := aFileReference  ].
@@ -219,14 +219,13 @@ SpNewHelpBrowserPresenter >> helpTopicClass [
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitor [
+SpNewHelpBrowserPresenter >> helpTopicVisitorClass [
 	
-	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ].
-	^ helpTopicVisitor
+	^ helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ]
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [ 
+SpNewHelpBrowserPresenter >> helpTopicVisitorClass: aClass [ 
 	helpTopicVisitor := aClass
 ]
 
@@ -375,7 +374,7 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 	| visitor subTopic sorted topic |
 	aFileOrFolder isFile ifTrue: [ 
 		aFileOrFolder extension = 'mic' ifTrue: [ 
-			visitor := self helpTopicVisitor new.
+			visitor := self helpTopicVisitorClass new.
 			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
 			^ visitor rootTopics ] ].
 
