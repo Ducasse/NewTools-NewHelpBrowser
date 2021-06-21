@@ -149,7 +149,7 @@ This is a paragraphe'.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: text ].
-	document := (MicroDownParser parse: file) asPillar.
+	document := (MicroDownParser new parse: file contents) asPillar.
 	visitor visitAll: document children.
 	self assert: visitor nodesList first isEmpty.
 	self assert: visitor nodesList second size equals: 2 
@@ -165,7 +165,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: text ].
-	header := (MicroDownParser parse: file) asPillar children first.
+	header := (MicroDownParser new parse: file contents) asPillar children first.
 	visitor visitHeader: header.
 	self assert: visitor rootTopics first title equals: 'SectionTest'.
 	self assert: visitor rootTopics first contents equals: ''
@@ -260,5 +260,5 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
 { #category : #tests }
 TopicBuilderVisitorTest >> visitFile: file [
 
-	visitor start: (MicroDownParser parse: file) asPillar
+	visitor start: (MicroDownParser new parse: file contents) asPillar
 ]

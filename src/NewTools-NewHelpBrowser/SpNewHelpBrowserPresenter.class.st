@@ -376,7 +376,7 @@ SpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
 	aFileOrFolder isFile ifTrue: [ 
 		aFileOrFolder extension = 'mic' ifTrue: [ 
 			visitor := self helpTopicVisitor new.
-			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
+			visitor start: (MicroDownParser new parse: aFileOrFolder contents) asPillar.
 			^ visitor rootTopics ] ].
 
 	subTopic := OrderedCollection new.
