@@ -12,7 +12,7 @@ Class {
 	#category : #'NewTools-MCHelpTopicBuilder'
 }
 
-{ #category : #accessing }
+{ #category : #adding }
 MCTopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 
 	aSubtopicsCollection do: [ :each | 
@@ -56,10 +56,7 @@ MCTopicBuilderVisitor >> rootTopics [
 MCTopicBuilderVisitor >> start: anObject [
 	self visitAll: anObject children.
 	nodesList removeFirst.
-	helpTopics do: [ :each | 
-		nodesList first do: [ :node | each addNode: node ].
-		nodesList removeFirst.
-		self addSubtopicsNodes: each subtopics ]
+	self addSubtopicsNodes: helpTopics 
 	
 	
 ]
