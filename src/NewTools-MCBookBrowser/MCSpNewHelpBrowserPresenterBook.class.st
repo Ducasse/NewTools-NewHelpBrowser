@@ -5,7 +5,17 @@ Class {
 }
 
 { #category : #utils }
-MCSpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder [
+MCSpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
+
+	| topic |
+	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
+	(self createTopicsFromFileOrFolder: aFileOrFolder) do: [ :each | 
+		topic addSubtopic: each ].
+	self rootTopic: topic
+]
+
+{ #category : #utils }
+MCSpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 
 	| visitor subTopic sorted |
 	aFileOrFolder isFile ifTrue: [ 
@@ -22,16 +32,6 @@ MCSpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder [
 
 
 	sorted do: [ :fileOrFolder | 
-		subTopic addAll: (self topicsFromFileSystem: fileOrFolder) ].
+		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
 	^ subTopic
-]
-
-{ #category : #utils }
-MCSpNewHelpBrowserPresenterBook >> topicsFromSystem: aFileOrFolder [
-
-	| topic |
-	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
-	(self topicsFromFileSystem: aFileOrFolder) do: [ :each | 
-		topic addSubtopic: each ].
-	self rootTopic: topic
 ]

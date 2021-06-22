@@ -426,7 +426,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromFileSyste
 	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser topicsFromFileSystem: file).
+	rootTopic := (browser createTopicsFromFileOrFolder: file).
 	self assert: rootTopic size equals: 2
 	
 	
@@ -440,7 +440,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromSystem [
 	file := filesystem workingDirectory / 'test/fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: directory) rootTopic.
 	self assert: rootTopic subtopics size equals: 2
 	
 	
@@ -453,7 +453,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	directory := filesystem workingDirectory / self class spDirectoryName.
 	filesystem createDirectory: self class spDirectoryName.
 	browser := SpNewHelpBrowserPresenter new.
-	browser topicsFromSystem: directory.
+	browser createRootTopicFromFolder: directory.
 	
 	self assert: browser rootTopic title equals: directory basenameWithoutExtension capitalized
 	
@@ -474,7 +474,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDire
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2  ].
 	
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: directory) rootTopic.
 	self assert: rootTopic subtopics size equals: 3
 	
 	
@@ -486,7 +486,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFile
 	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := SpNewHelpBrowserPresenter new.
-	rootTopic := (browser topicsFromSystem: file) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: file) rootTopic.
 	self assert: rootTopic subtopics size equals: 2
 	
 	

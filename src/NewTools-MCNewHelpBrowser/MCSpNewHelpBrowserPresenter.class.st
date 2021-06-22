@@ -156,7 +156,7 @@ MCSpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
 	on: MessageNotUnderstood do: [ | inst |
 		inst:= self basicNew.
-		inst topicsFromSystem.
+		inst createTopicsFromCache.
 		^ inst 
 		setModelBeforeInitialization: inst rootTopic;
 		initialize;
@@ -177,7 +177,7 @@ MCSpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
 	aFileReference exists 
 		ifFalse: [ fileReference := self helpCache ] 
 		ifTrue: [ fileReference := aFileReference  ].
-	inst topicsFromSystem: fileReference.
+	inst createRootTopicFromFolder: fileReference.
 	^ inst 
 		setModelBeforeInitialization: inst rootTopic;
 		initialize;
@@ -203,6 +203,44 @@ MCSpNewHelpBrowserPresenter >> connectPresenters [
 						 node ifNotNil: [ 
 							self renderNode: node ]]];
 				displayIcon: [ :each | each icon ]
+]
+
+{ #category : #utils }
+MCSpNewHelpBrowserPresenter >> createRootTopicFromFolder: aFolder [
+	| topic |
+	topic := (self createTopicsFromFileOrFolder: aFolder) first.
+	self rootTopic: topic.
+]
+
+{ #category : #utils }
+MCSpNewHelpBrowserPresenter >> createTopicsFromCache [
+	self createRootTopicFromFolder: self class helpCache.
+]
+
+{ #category : #utils }
+MCSpNewHelpBrowserPresenter >> createTopicsFromFileOrFolder: aFileOrFolder [
+
+	| visitor subTopic sorted topic |
+	aFileOrFolder isFile ifTrue: [ 
+		aFileOrFolder extension = 'mic' ifTrue: [
+			visitor := self helpTopicVisitor new.
+			visitor start: (MicroDownParser new parse: aFileOrFolder contents).
+			^ visitor rootTopics ] ].
+
+	subTopic := OrderedCollection new.
+	topic := self helpTopicClass named:
+		         aFileOrFolder basenameWithoutExtension capitalized.
+	sorted := SortedCollection sortBlock: [ :a :b | 
+		          a basename <= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e | 
+			 e isDirectory or: [ e extension = 'mic' ] ]).
+
+
+	sorted do: [ :fileOrFolder | 
+		(self createTopicsFromFileOrFolder: fileOrFolder) do: [ :each | 
+			topic addSubtopic: each ] ].
+	subTopic add: topic.
+	^ subTopic
 ]
 
 { #category : #utils }
@@ -367,44 +405,6 @@ MCSpNewHelpBrowserPresenter >> title [
 { #category : #accessing }
 MCSpNewHelpBrowserPresenter >> topicList [
 	^ topicList
-]
-
-{ #category : #utils }
-MCSpNewHelpBrowserPresenter >> topicsFromFileSystem: aFileOrFolder [
-
-	| visitor subTopic sorted topic |
-	aFileOrFolder isFile ifTrue: [ 
-		aFileOrFolder extension = 'mic' ifTrue: [
-			visitor := self helpTopicVisitor new.
-			visitor start: (MicroDownParser new parse: aFileOrFolder contents).
-			^ visitor rootTopics ] ].
-
-	subTopic := OrderedCollection new.
-	topic := self helpTopicClass named:
-		         aFileOrFolder basenameWithoutExtension capitalized.
-	sorted := SortedCollection sortBlock: [ :a :b | 
-		          a basename <= b basename ].
-	sorted addAll: (aFileOrFolder children select: [ :e | 
-			 e isDirectory or: [ e extension = 'mic' ] ]).
-
-
-	sorted do: [ :fileOrFolder | 
-		(self topicsFromFileSystem: fileOrFolder) do: [ :each | 
-			topic addSubtopic: each ] ].
-	subTopic add: topic.
-	^ subTopic
-]
-
-{ #category : #utils }
-MCSpNewHelpBrowserPresenter >> topicsFromSystem [
-	self topicsFromSystem: self class helpCache.
-]
-
-{ #category : #utils }
-MCSpNewHelpBrowserPresenter >> topicsFromSystem: aFolder [
-	| topic |
-	topic := (self topicsFromFileSystem: aFolder) first.
-	self rootTopic: topic.
 ]
 
 { #category : #search }

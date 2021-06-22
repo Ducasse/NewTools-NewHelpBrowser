@@ -417,7 +417,7 @@ MCSpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromFileSys
 	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := self presenterClass new.
-	rootTopic := browser topicsFromFileSystem: file.
+	rootTopic := browser createTopicsFromFileOrFolder: file.
 	self assert: rootTopic size equals: 2
 ]
 
@@ -430,7 +430,7 @@ MCSpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterDocTopicFromSystem 
 	file := filesystem workingDirectory / 'test/fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := self presenterClass new.
-	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: directory) rootTopic.
 	self assert: rootTopic subtopics size equals: 2
 ]
 
@@ -441,7 +441,7 @@ MCSpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterOpenADirectory [
 	directory := filesystem workingDirectory / self class spDirectoryName.
 	filesystem createDirectory: self class spDirectoryName.
 	browser := self presenterClass new.
-	browser topicsFromSystem: directory.
+	browser createRootTopicFromFolder: directory.
 
 	self
 		assert: browser rootTopic title
@@ -463,7 +463,7 @@ MCSpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnDi
 	file2 writeStreamDo: [ :stream | stream nextPutAll: self class spFd2 ].
 
 	browser := self presenterClass new.
-	rootTopic := (browser topicsFromSystem: directory) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: directory) rootTopic.
 	self assert: rootTopic subtopics size equals: 3
 ]
 
@@ -474,7 +474,7 @@ MCSpNewHelpBrowserPresenterTest >> testSpHelpBrowserPresenterTopicFromSystemOnFi
 	file := filesystem workingDirectory / 'fd1.mic'.
 	file writeStreamDo: [ :stream | stream nextPutAll: self class spFd1 ].
 	browser := self presenterClass new.
-	rootTopic := (browser topicsFromSystem: file) rootTopic.
+	rootTopic := (browser createRootTopicFromFolder: file) rootTopic.
 	self assert: rootTopic subtopics size equals: 2
 ]
 
