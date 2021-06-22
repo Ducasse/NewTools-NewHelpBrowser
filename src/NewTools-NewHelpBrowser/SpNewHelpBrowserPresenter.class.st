@@ -218,24 +218,26 @@ SpNewHelpBrowserPresenter >> createTopicsFromCache [
 ]
 
 { #category : #utils }
+SpNewHelpBrowserPresenter >> createTopicsFromFile: aFileOrFolder [
+
+	| visitor |
+	visitor := self helpTopicVisitor new.
+	visitor start:
+		(MicroDownParser new parse: aFileOrFolder contents) asPillar.
+	^ visitor rootTopics
+]
+
+{ #category : #utils }
 SpNewHelpBrowserPresenter >> createTopicsFromFileOrFolder: aFileOrFolder [
 
-	| visitor subTopic sorted topic |
-	aFileOrFolder isFile ifTrue: [ 
-		aFileOrFolder extension = 'mic' ifTrue: [ 
-			visitor := self helpTopicVisitor new.
-			visitor start: (MicroDownParser new parse: aFileOrFolder contents) asPillar.
-			^ visitor rootTopics ] ].
-
+	| subTopic sorted topic |
+	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic') ifTrue: [ 
+		^ self createTopicsFromFile: aFileOrFolder ].
+	
 	subTopic := OrderedCollection new.
 	topic := self helpTopicClass named:
 		         aFileOrFolder basenameWithoutExtension capitalized.
-	sorted := SortedCollection sortBlock: [ :a :b | 
-		          a basename <= b basename ].
-	sorted addAll: (aFileOrFolder children select: [ :e | 
-			 e isDirectory or: [ e extension = 'mic' ] ]).
-
-
+	sorted := self sortFileAndFolder: aFileOrFolder.
 	sorted do: [ :fileOrFolder | 
 		(self createTopicsFromFileOrFolder: fileOrFolder) do: [ :each | 
 			topic addSubtopic: each ] ].
@@ -395,6 +397,17 @@ SpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
 SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
 	
 	rootTopic := anHelpTopic
+]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenter >> sortFileAndFolder: aFileOrFolder [
+
+	| sorted |
+	sorted := SortedCollection sortBlock: [ :a :b | 
+		          a basename <= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e | 
+			 e isDirectory or: [ e extension = 'mic' ] ]).
+	^ sorted
 ]
 
 { #category : #initialization }

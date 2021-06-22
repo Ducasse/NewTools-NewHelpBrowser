@@ -72,7 +72,7 @@ MicrodownClassAPIHelpBuilder >> addSubclasses: anObject [
 MicrodownClassAPIHelpBuilder >> build [
 	| builder |
 	builder := MicroDownParser builder.
-	topicToBuild := NodeHelpTopic named: rootToBuildFrom name.
+	topicToBuild := HelpTopic named: rootToBuildFrom name.
 	topicToBuild iconName: #pageIcon.
 	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.

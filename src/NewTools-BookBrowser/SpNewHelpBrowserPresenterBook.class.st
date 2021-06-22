@@ -17,20 +17,12 @@ SpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 { #category : #utils }
 SpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 
-	| visitor subTopic sorted |
-	aFileOrFolder isFile ifTrue: [ 
-		aFileOrFolder extension = 'mic' ifTrue: [ 
-			visitor := self helpTopicVisitor new.
-			visitor start: (MicroDownParser parse: aFileOrFolder) asPillar.
-			^ visitor rootTopics ] ].
+	| subTopic sorted |
+	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic')
+		ifTrue: [ self createTopicsFromFile: aFileOrFolder ].
 
 	subTopic := OrderedCollection new.
-	sorted := SortedCollection sortBlock: [ :a :b | 
-		          a basename >= b basename ].
-	sorted addAll: (aFileOrFolder children select: [ :e | 
-			 e isDirectory or: [ e extension = 'mic' ] ]).
-
-
+	sorted := self sortFileAndFolder: aFileOrFolder.
 	sorted do: [ :fileOrFolder | 
 		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
 	^ subTopic
