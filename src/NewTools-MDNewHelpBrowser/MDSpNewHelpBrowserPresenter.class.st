@@ -1,36 +1,36 @@
 "
 Execute the following code to open HelpBrowser on doc :
 ```
-MCSpNewHelpBrowserPresenter openOnHelpFolder:  FileSystem workingDirectory / 'doc'.
+MDSpNewHelpBrowserPresenter openOnHelpFolder:  FileSystem workingDirectory / 'doc'.
 ```
 
 Execute the following code to charge doc in the cache :
 ```
 | doc |
 doc := FileSystem disk workingDirectory / 'doc'.
-MCSpNewHelpBrowserPresenter internalizeHelpFrom: doc.
+MDSpNewHelpBrowserPresenter internalizeHelpFrom: doc.
 ```
 And to watch the cache inspect that :
 ```
-MCSpNewHelpBrowserPresenter helpCache
+MDSpNewHelpBrowserPresenter helpCache
 ```
 
 After that you can also open the HelpBrowser with the helpCache :
 ```
 | browser |
-browser := MCSpNewHelpBrowserPresenter new topicsFromSystem.
-MCSpNewHelpBrowserPresenter openOn: browser rootTopic
+browser := MDSpNewHelpBrowserPresenter new topicsFromSystem.
+MDSpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
 
 to empty the cache execute the following code :
 ```
-MCSpNewHelpBrowserPresenter emptyHelpCache
+MDSpNewHelpBrowserPresenter emptyHelpCache
 ```
 
 code to charge and use the cache :
 ```
-MCSpNewHelpBrowserPresenter internalizeHelpFrom: FileSystem disk workingDirectory / 'doc'.
-MCSpNewHelpBrowserPresenter open
+MDSpNewHelpBrowserPresenter internalizeHelpFrom: FileSystem disk workingDirectory / 'doc'.
+MDSpNewHelpBrowserPresenter open
 ```
 "
 Class {
@@ -153,7 +153,7 @@ MDSpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 { #category : #'instance creation' }
 MDSpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 	[ aDescription bookName.
-	 ^ MDSpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
+	 ^ self openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
 	on: MessageNotUnderstood do: [ | inst |
 		inst:= self basicNew.
 		inst createTopicsFromCache.
@@ -190,18 +190,11 @@ MDSpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
-					| item node text |
+					| item node |
 					item := selection selectedItem.
-					"case for SystemHelp when SystemHelp will manage NodeHelpTopic we will be
-					able to remove this condition"
-					item class = HelpTopic ifTrue:
-						[ text := item contents.
-						text ifNotNil: [ 
-							self render: text ] ] 
-					ifFalse: 
-						[ node := item node.
+						node := item node.
 						 node ifNotNil: [ 
-							self renderNode: node ]]];
+							self renderNode: node ]];
 				displayIcon: [ :each | each icon ]
 ]
 
