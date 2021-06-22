@@ -153,7 +153,7 @@ MDSpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 { #category : #'instance creation' }
 MDSpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 	[ aDescription bookName.
-	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
+	 ^ MDSpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
 	on: MessageNotUnderstood do: [ | inst |
 		inst:= self basicNew.
 		inst createTopicsFromCache.
