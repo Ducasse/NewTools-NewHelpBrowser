@@ -25,7 +25,7 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 			package: #'NewTools-MDNewHelpBrowser-Tests' with: [ 
 				spec requires:
 						#( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' ) ];
-			package: #'NewTools-MDHelpTopicBuilder';
+			package: #'NewTools-MDHelpTopicBuilder' with: [ spec requires: #( #Microdown ) ];
 			package: #'NewTools-MDHelpTopicBuilder-Tests'
 			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ] ]
 ]
