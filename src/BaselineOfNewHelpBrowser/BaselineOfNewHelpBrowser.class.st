@@ -17,5 +17,15 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' ) ];
 			package: #'NewTools-HelpTopicBuilder';
 			package: #'NewTools-HelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ] ]
+			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ].
+			
+		spec
+			package: #'NewTools-MDNewHelpBrowser'
+			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ];
+			package: #'NewTools-MDNewHelpBrowser-Tests' with: [ 
+				spec requires:
+						#( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' ) ];
+			package: #'NewTools-MDHelpTopicBuilder';
+			package: #'NewTools-MDHelpTopicBuilder-Tests'
+			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ] ]
 ]
