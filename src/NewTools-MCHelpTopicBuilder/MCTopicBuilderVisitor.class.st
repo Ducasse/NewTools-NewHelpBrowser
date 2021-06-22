@@ -96,3 +96,8 @@ MCTopicBuilderVisitor >> visitHeader: anObject [
 			helpTopics add:
 				(self helpTopicClass named: anObject header capitalized) ]
 ]
+
+{ #category : #'visiting - inline elements' }
+MCTopicBuilderVisitor >> visitText: aMicTextBlock [
+
+]
