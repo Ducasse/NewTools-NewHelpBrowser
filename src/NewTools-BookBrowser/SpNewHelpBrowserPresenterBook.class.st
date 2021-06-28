@@ -14,10 +14,17 @@ SpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
 { #category : #utils }
 SpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
-	| topic |
-	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
+	| topic chapters |
+	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension.
+	chapters := self bookChapters: aFileOrFolder.
+	chapters do: [ :each |
+		(self createTopicsFromFileOrFolder:
+			 FileSystem workingDirectory / aFileOrFolder pathString / each) 
+			do: [ :e | topic addSubtopic: e ] ].
+
+	"
 	(self createTopicsFromFileOrFolder: aFileOrFolder) do: [ :each | 
-		topic addSubtopic: each ].
+		topic addSubtopic: each ]."
 	self rootTopic: topic
 ]
 
@@ -25,13 +32,14 @@ SpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 SpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 
 	| subTopic sorted |
-	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic')
-		ifTrue: [ self createTopicsFromFile: aFileOrFolder ].
+	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic') ifTrue: [ 
+		^ self createTopicsFromFile: aFileOrFolder ].
 
 	subTopic := OrderedCollection new.
-	sorted := self sortFileAndFolder: aFileOrFolder.
-	sorted do: [ :fileOrFolder | 
-		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
+	aFileOrFolder isDirectory ifTrue: [ 
+		sorted := self sortFileAndFolder: aFileOrFolder.
+		sorted do: [ :fileOrFolder | 
+			subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ] ].
 	^ subTopic
 ]
 
