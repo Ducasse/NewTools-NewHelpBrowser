@@ -4,6 +4,13 @@ Class {
 	#category : #'NewTools-BookBrowser'
 }
 
+{ #category : #accessing }
+SpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
+
+	aFolder children do: [ :each | 
+		each extension = 'pillar' ifTrue: [ ^ self listOfChapters: each ] ]
+]
+
 { #category : #utils }
 SpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
@@ -26,4 +33,20 @@ SpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 	sorted do: [ :fileOrFolder | 
 		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
 	^ subTopic
+]
+
+{ #category : #'as yet unclassified' }
+SpNewHelpBrowserPresenterBook >> indexVisitorClass [
+
+	^ IndexVisitor
+]
+
+{ #category : #'as yet unclassified' }
+SpNewHelpBrowserPresenterBook >> listOfChapters: aFile [
+
+	| pillar visitor |
+	pillar := PRPillarParser new parse: aFile contents.
+	visitor := self indexVisitorClass new.
+	pillar accept: visitor.
+	^ visitor indexList
 ]
