@@ -23,6 +23,12 @@ MDIndexVisitor >> initialize [
 { #category : #initialization }
 MDIndexVisitor >> visitAnnotation: anAnnotation [
 
-	(anAnnotation parameters includesKey: 'path') ifTrue: [ 
-		indexList add: (anAnnotation parameters at: 'path') ]
+	(anAnnotation arguments includesKey: 'path') ifTrue: [ 
+		indexList add: (anAnnotation arguments at: 'path') ]
+]
+
+{ #category : #'visiting - inline elements' }
+MDIndexVisitor >> visitText: aMicTextBlock [
+
+	
 ]

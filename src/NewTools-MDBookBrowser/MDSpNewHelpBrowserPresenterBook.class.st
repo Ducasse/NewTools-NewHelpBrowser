@@ -14,10 +14,14 @@ MDSpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
 { #category : #utils }
 MDSpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
-	| topic |
-	topic := MDNodeHelpTopic named: aFileOrFolder basenameWithoutExtension.
-	(self createTopicsFromFileOrFolder: aFileOrFolder) do: [ :each | 
-		topic addSubtopic: each ].
+	| topic chapters |
+	topic := MDNodeHelpTopic named:
+		         aFileOrFolder basenameWithoutExtension.
+	chapters := self bookChapters: aFileOrFolder.
+	chapters do: [ :each | 
+		(self createTopicsFromFileOrFolder:
+			 FileSystem workingDirectory / aFileOrFolder pathString / each) 
+			do: [ :e | topic addSubtopic: e ] ].
 	self rootTopic: topic
 ]
 
@@ -29,9 +33,11 @@ MDSpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 		ifTrue: [ ^ self createTopicsFromFile: aFileOrFolder ].
 
 	subTopic := OrderedCollection new.
-	sorted := self sortFileAndFolder: aFileOrFolder.
-	sorted do: [ :fileOrFolder | 
-		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
+	aFileOrFolder isDirectory ifTrue: [ 
+		sorted := self sortFileAndFolder: aFileOrFolder.
+		sorted do: [ :fileOrFolder | 
+			subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ]. ].
+	
 	^ subTopic
 ]
 
