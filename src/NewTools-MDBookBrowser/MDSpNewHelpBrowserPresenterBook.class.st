@@ -5,10 +5,17 @@ Class {
 }
 
 { #category : #utils }
+MDSpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
+
+	aFolder children do: [ :each | 
+		each extension = 'mic' ifTrue: [ ^ self listOfChapters: each ] ]
+]
+
+{ #category : #utils }
 MDSpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
 	| topic |
-	topic := HelpTopic named: aFileOrFolder basenameWithoutExtension.
+	topic := MDNodeHelpTopic named: aFileOrFolder basenameWithoutExtension.
 	(self createTopicsFromFileOrFolder: aFileOrFolder) do: [ :each | 
 		topic addSubtopic: each ].
 	self rootTopic: topic
@@ -26,4 +33,20 @@ MDSpNewHelpBrowserPresenterBook >> createTopicsFromFileOrFolder: aFileOrFolder [
 	sorted do: [ :fileOrFolder | 
 		subTopic addAll: (self createTopicsFromFileOrFolder: fileOrFolder) ].
 	^ subTopic
+]
+
+{ #category : #utils }
+MDSpNewHelpBrowserPresenterBook >> indexVisitorClass [
+
+	^ MDIndexVisitor
+]
+
+{ #category : #utils }
+MDSpNewHelpBrowserPresenterBook >> listOfChapters: aFile [
+
+	| mic visitor |
+	mic := self parser new parse: aFile contents.
+	visitor := self indexVisitorClass new.
+	mic accept: visitor.
+	^ visitor indexList
 ]
