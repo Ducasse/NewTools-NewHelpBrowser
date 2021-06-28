@@ -298,9 +298,9 @@ MDSpNewHelpBrowserPresenter >> initializePresenters [
 ]
 
 { #category : #utils }
-MDSpNewHelpBrowserPresenter >> morphWriter [ 
-		
-	^ BCRichTextComposer new
+MDSpNewHelpBrowserPresenter >> morphWriter [
+
+	^ MicRichTextComposer new
 ]
 
 { #category : #utils }
@@ -332,7 +332,7 @@ MDSpNewHelpBrowserPresenter >> render: aString [
 { #category : #utils }
 MDSpNewHelpBrowserPresenter >> renderNode: aNode [
 
-	textOutput morph setText: (self morphWriter start: aNode) 
+	textOutput morph setText: (self morphWriter visit: aNode) 
 ]
 
 { #category : #accessing }
