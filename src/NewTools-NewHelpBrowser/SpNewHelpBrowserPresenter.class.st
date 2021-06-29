@@ -312,7 +312,7 @@ SpNewHelpBrowserPresenter >> morphWriter [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> parser [ 
+SpNewHelpBrowserPresenter >> parserClass [ 
 	^ MicroDownParser
 ]
 
@@ -320,7 +320,7 @@ SpNewHelpBrowserPresenter >> parser [
 SpNewHelpBrowserPresenter >> render [
 
 	| document |	
-	document := self parser parse: self dummyHelp.
+	document := self parserClass parse: self dummyHelp.
 	textOutput morph setText: (self morphWriter start: document asPillar) 
 ]
 
@@ -331,7 +331,7 @@ SpNewHelpBrowserPresenter >> render: aString [
 	aString 
 		ifNil: [ text := self dummyHelp ]
 		ifNotNil: [ text := aString ].
-	 document := [ self parser parse: text ] 
+	 document := [ self parserClass parse: text ] 
 							on: MicParsingError
 							do: [ :ex | textOutput morph setText: text. ^ self ].
 	textOutput morph setText: (self morphWriter start: document asPillar) 

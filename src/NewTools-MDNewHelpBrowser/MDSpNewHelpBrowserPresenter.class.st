@@ -168,21 +168,23 @@ MDSpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 
 { #category : #'instance creation' }
 MDSpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
+
 	"Open an help browser on a given folder."
+
 	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
 	Especially how to pass a model before the initialization which is normally done via message #on: "
-	
+
 	| inst fileReference |
-	inst := self basicNew. 
-	aFileReference exists 
-		ifFalse: [ fileReference := self helpCache ] 
-		ifTrue: [ fileReference := aFileReference  ].
+	inst := self basicNew.
+	aFileReference exists
+		ifFalse: [ fileReference := self helpCache ]
+		ifTrue: [ fileReference := aFileReference ].
 	inst createRootTopicFromFolder: fileReference.
-	^ inst 
-		setModelBeforeInitialization: inst rootTopic;
-		initialize;
-		openWithSpec;
-		yourself
+	^ inst
+		  setModelBeforeInitialization: inst rootTopic;
+		  initialize;
+		  openWithSpec;
+		  yourself
 ]
 
 { #category : #initialization }
@@ -304,7 +306,7 @@ MDSpNewHelpBrowserPresenter >> morphWriter [
 ]
 
 { #category : #utils }
-MDSpNewHelpBrowserPresenter >> parser [ 
+MDSpNewHelpBrowserPresenter >> parserClass [ 
 	^ MicroDownParser
 ]
 
@@ -312,7 +314,7 @@ MDSpNewHelpBrowserPresenter >> parser [
 MDSpNewHelpBrowserPresenter >> render [
 
 	| document |	
-	document := self parser parse: self dummyHelp.
+	document := self parserClass parse: self dummyHelp.
 	textOutput morph setText: (self morphWriter start: document) 
 ]
 
@@ -323,7 +325,7 @@ MDSpNewHelpBrowserPresenter >> render: aString [
 	aString 
 		ifNil: [ text := self dummyHelp ]
 		ifNotNil: [ text := aString ].
-	 document := [ self parser parse: text ] 
+	 document := [ self parserClass parse: text ] 
 							on: MicParsingError
 							do: [ :ex | textOutput morph setText: text. ^ self ].
 	textOutput morph setText: (self morphWriter start: document) 
