@@ -1,6 +1,6 @@
 "
 ```
-	MDSpNewHelpBrowserPresenterBook openOnHelpFolder: FileSystem workingDirectory / 'Booklet-PharoWithStyle'
+	MDSpNewHelpBrowserPresenterBook openOnHelpFolder: FileSystem workingDirectory / 'Booklet-Smacc'
 ```
 "
 Class {
@@ -56,7 +56,7 @@ MDSpNewHelpBrowserPresenterBook >> indexVisitorClass [
 MDSpNewHelpBrowserPresenterBook >> listOfChapters: aFile [
 
 	| mic visitor |
-	mic := self parser new parse: aFile contents.
+	mic := self parserClass new parse: aFile contents.
 	visitor := self indexVisitorClass new.
 	mic accept: visitor.
 	^ visitor indexList
