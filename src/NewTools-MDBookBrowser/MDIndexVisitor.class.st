@@ -21,10 +21,9 @@ MDIndexVisitor >> initialize [
 ]
 
 { #category : #initialization }
-MDIndexVisitor >> visitAnnotation: anAnnotation [
-
-	(anAnnotation arguments includesKey: 'path') ifTrue: [ 
-		indexList add: (anAnnotation arguments at: 'path') ]
+MDIndexVisitor >> visitEnvironment: anEnvironment [
+	(anEnvironment arguments includesKey: 'path') ifTrue: [ 
+		indexList add: (anEnvironment arguments at: 'path') ]
 ]
 
 { #category : #'visiting - inline elements' }
