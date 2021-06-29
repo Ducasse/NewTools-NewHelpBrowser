@@ -15,9 +15,10 @@ SpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
 SpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
 	| topic chapters |
-	topic := NodeHelpTopic named: aFileOrFolder basenameWithoutExtension.
+	topic := self helpTopicClass named:
+		         aFileOrFolder basenameWithoutExtension.
 	chapters := self bookChapters: aFileOrFolder.
-	chapters do: [ :each |
+	chapters do: [ :each | 
 		(self createTopicsFromFileOrFolder:
 			 FileSystem workingDirectory / aFileOrFolder pathString / each) 
 			do: [ :e | topic addSubtopic: e ] ].

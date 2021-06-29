@@ -1,3 +1,8 @@
+"
+```
+	MDSpNewHelpBrowserPresenterBook openOnHelpFolder: FileSystem workingDirectory / 'Booklet-PharoWithStyle'
+```
+"
 Class {
 	#name : #MDSpNewHelpBrowserPresenterBook,
 	#superclass : #MDSpNewHelpBrowserPresenter,
@@ -15,7 +20,7 @@ MDSpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
 MDSpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
 	| topic chapters |
-	topic := MDNodeHelpTopic named:
+	topic := self helpTopicClass named:
 		         aFileOrFolder basenameWithoutExtension.
 	chapters := self bookChapters: aFileOrFolder.
 	chapters do: [ :each | 

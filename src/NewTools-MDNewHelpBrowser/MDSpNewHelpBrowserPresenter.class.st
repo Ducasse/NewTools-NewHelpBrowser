@@ -313,9 +313,9 @@ MDSpNewHelpBrowserPresenter >> parserClass [
 { #category : #utils }
 MDSpNewHelpBrowserPresenter >> render [
 
-	| document |	
+	| document |
 	document := self parserClass parse: self dummyHelp.
-	textOutput morph setText: (self morphWriter start: document) 
+	textOutput morph setText: (self morphWriter start: document)
 ]
 
 { #category : #utils }
