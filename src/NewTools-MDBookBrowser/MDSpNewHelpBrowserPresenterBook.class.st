@@ -16,12 +16,32 @@ MDSpNewHelpBrowserPresenterBook >> bookChapters: aFolder [
 		each extension = 'mic' ifTrue: [ ^ self listOfChapters: each ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+MDSpNewHelpBrowserPresenterBook >> createFirstPageTopic: aConfFile [
+
+	| dict topic node |
+	dict := (STONReader on: aConfFile readStream) next.
+	topic := MDNodeHelpTopic named: (dict at: 'title').
+	node := MicHeaderBlock new addChild:
+		        (MicTextBlock new substring: (dict at: 'title')).
+	node level: 1.
+	topic addNode: node.
+	node := MicParagraphBlock new addChild:
+		        (MicTextBlock new substring: (dict at: 'attribution')).
+	topic addNode: node.
+	node := MicParagraphBlock new addChild:
+		        (MicTextBlock new substring: (dict at: 'series')).
+	topic addNode: node.
+	^ topic
+]
+
 { #category : #utils }
 MDSpNewHelpBrowserPresenterBook >> createRootTopicFromFolder: aFileOrFolder [
 
 	| topic chapters |
-	topic := self helpTopicClass named:
-		         aFileOrFolder basenameWithoutExtension.
+	aFileOrFolder children do: [ :each | 
+		each extension = 'conf' ifTrue: [ 
+			topic := self createFirstPageTopic: each ] ].
 	chapters := self bookChapters: aFileOrFolder.
 	chapters do: [ :each | 
 		(self createTopicsFromFileOrFolder:
