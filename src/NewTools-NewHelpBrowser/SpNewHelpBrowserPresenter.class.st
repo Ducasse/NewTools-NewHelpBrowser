@@ -221,7 +221,7 @@ SpNewHelpBrowserPresenter >> createTopicsFromCache [
 SpNewHelpBrowserPresenter >> createTopicsFromFile: aFileOrFolder [
 
 	| visitor |
-	visitor := self helpTopicVisitor new.
+	visitor := self helpTopicVisitorClass new.
 	visitor start:
 		(MicroDownParser new parse: aFileOrFolder contents) asPillar.
 	^ visitor rootTopics
