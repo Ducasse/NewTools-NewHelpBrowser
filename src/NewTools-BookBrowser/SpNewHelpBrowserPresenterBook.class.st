@@ -59,3 +59,34 @@ SpNewHelpBrowserPresenterBook >> listOfChapters: aFile [
 	pillar accept: visitor.
 	^ visitor indexList
 ]
+
+{ #category : #utils }
+SpNewHelpBrowserPresenterBook >> topicsFromFileSystem: aFileOrFolder visitor: aVistor [
+	| subTopic sorted |
+	aFileOrFolder isFile ifTrue: [ 
+		aFileOrFolder extension = 'mic' ifTrue: [ 
+			aVistor start: (MicroDownParser parse: aFileOrFolder) asPillar.
+			^ aVistor rootTopics ] ].
+	
+	self writePillarToMic: aFileOrFolder.
+	subTopic := OrderedCollection new.
+	sorted := SortedCollection sortBlock: [ :a :b | 
+		          a basename >= b basename ].
+	sorted addAll: (aFileOrFolder children select: [ :e | 
+			 e isDirectory or: [ e extension = 'mic' ] ]).
+
+
+	sorted do: [ :fileOrFolder | 
+		subTopic addAll: (self topicsFromFileSystem: fileOrFolder visitor: aVistor) ].
+	^ subTopic
+]
+
+{ #category : #writing }
+SpNewHelpBrowserPresenterBook >> writePillarToMic: aFolder [
+	aFolder children do:[ :each |
+			each extension = 'pillar' 
+				ifTrue: [ | contents |
+						contents := PRPillarParser parse: each contents.
+						aFolder / (each basenameWithoutExtension , '.mic') writeStreamDo: [ :stream |
+							stream nextPutAll: (PRMicrodownWriter new start: contents) contents ] ] ]
+]

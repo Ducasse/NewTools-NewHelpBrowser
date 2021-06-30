@@ -14,7 +14,8 @@ Class {
 		'addSubclasses',
 		'addMethods',
 		'subclassesAsSeparateTopic',
-		'addMethodsWithoutComment'
+		'addMethodsWithoutComment',
+		'iconBuilder'
 	],
 	#category : #'NewTools-NewHelpBrowser'
 }
@@ -26,6 +27,19 @@ MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass wit
 	^ self new 
 		addSubclasses: aBoolean;
 		addMethods: anotherBoolean;
+		rootToBuildFrom: aClass;
+		build;
+		topicToBuild 
+]
+
+{ #category : #building }
+MicrodownClassAPIHelpBuilder class >> buildHierarchicalHelpTopicFrom: aClass withSubclasses: aBoolean withMethods: anotherBoolean withTopicSubclasses: aNewBoolean [
+	"Start building from the given class"
+	
+	^ self new 
+		addSubclasses: aBoolean;
+		addMethods: anotherBoolean;
+		subclassesAsSeparateTopic: aNewBoolean;
 		rootToBuildFrom: aClass;
 		build;
 		topicToBuild 
@@ -73,7 +87,8 @@ MicrodownClassAPIHelpBuilder >> build [
 	| builder |
 	builder := MicroDownParser builder.
 	topicToBuild := HelpTopic named: rootToBuildFrom name.
-	topicToBuild iconName: #pageIcon.
+	"topicToBuild iconName: #pageIcon."
+	iconBuilder buildIcon: topicToBuild.
 	"does not work anymore since we are storing nodes"
 	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
 	topicToBuild contents: builder contents.
@@ -126,7 +141,8 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
 	| instanceSide classSide |
 	instanceSide := HelpTopic named: 'Instance side'.
 	classSide := HelpTopic named: 'Class side'.
-	topicToBuild iconName: #bookIcon.
+	"topicToBuild iconName: #bookIcon."
+	iconBuilder buildIcon: topicToBuild.
 	topicToBuild
 		addSubtopic: instanceSide;
 		addSubtopic: classSide.
@@ -139,14 +155,22 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 	| topic |
 	rootToBuildFrom subclasses isEmpty
 		ifTrue: [ ^ self ].
-	topicToBuild iconName: #bookIcon.
+	"topicToBuild iconName: #bookIcon."
+	iconBuilder buildIcon: topicToBuild.
 	topic := subclassesAsSeparateTopic
-		ifTrue: [ topicToBuild addSubtopic: (HelpTopic named: 'Subclasses') ]
+		ifTrue: [ HelpTopic named: 'Subclasses' ]
 		ifFalse: [ topicToBuild ].
 	rootToBuildFrom subclasses
 		do:
 			[ :subclass | topic addSubtopic: (self buildSubclassTopicFor: subclass) ].
-	topic sortSubtopicsByTitle
+	topic sortSubtopicsByTitle.
+	topicToBuild = topic 	
+		ifFalse: [ topicToBuild addSubtopic: topic ]
+]
+
+{ #category : #accessing }
+MicrodownClassAPIHelpBuilder >> iconBuilder: aIconBuilder [
+	iconBuilder := aIconBuilder
 ]
 
 { #category : #initialization }
@@ -158,6 +182,7 @@ MicrodownClassAPIHelpBuilder >> initialize [
 	addMethods := true.
 	subclassesAsSeparateTopic := true.
 	addMethodsWithoutComment := true.
+	iconBuilder := IconClassBuilder  new
 ]
 
 { #category : #accessing }

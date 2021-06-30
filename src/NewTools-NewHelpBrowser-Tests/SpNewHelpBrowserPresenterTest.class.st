@@ -329,7 +329,7 @@ this is a paragraphe
 nothing
 #section 4
 this is a paragraphe'.
-	topics := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics.
+	topics := (browser helpTopicVisitorClass new start: (MicroDownParser parse: text) asPillar) rootTopics.
 	self assert: (browser searchList: 'para' into: topics) size equals: 3
 
 ]
@@ -344,7 +344,7 @@ this is a paragraphe
 blabla
 # part 3
 lala'.
-	topics := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics.
+	topics := (browser helpTopicVisitorClass new start: (MicroDownParser parse: text) asPillar) rootTopics.
 	self assert: (browser search: 'la' into: topics) size equals: 2
 ]
 
@@ -367,7 +367,7 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorPerDefault 
 
 	| visitor browser |
 	browser := SpNewHelpBrowserPresenter new.
-	visitor := browser helpTopicVisitor.
+	visitor := browser helpTopicVisitorClass.
 	self 
 		assert: visitor equals: TopicBuilderVisitor
 
@@ -378,8 +378,8 @@ SpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpecif
 
 	| visitor browser |
 	browser := SpNewHelpBrowserPresenter new.
-	browser helpTopicVisitor: PRVisitor.
-	visitor := browser helpTopicVisitor.
+	browser helpTopicVisitorClass: PRVisitor.
+	visitor := browser helpTopicVisitorClass.
 	self 
 		assert: visitor equals: PRVisitor
 
@@ -518,7 +518,7 @@ SpNewHelpBrowserPresenterTest >> testWordInNode [
 	browser := SpNewHelpBrowserPresenter new.
 	text := '# section 1
 this is a paragraphe'.
-	topic := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics first.
+	topic := (browser helpTopicVisitorClass new start: (MicroDownParser parse: text) asPillar) rootTopics first.
 	self assert: (browser word: 'para' in: topic) 
 
 
@@ -530,7 +530,7 @@ SpNewHelpBrowserPresenterTest >> testWordNotInNode [
 	browser := SpNewHelpBrowserPresenter new.
 	text := '# section 1
 this is a paragraphe'.
-	topic := (browser helpTopicVisitor new start: (MicroDownParser parse: text) asPillar) rootTopics first.
+	topic := (browser helpTopicVisitorClass new start: (MicroDownParser parse: text) asPillar) rootTopics first.
 	self assert: (browser word: 'nothing' in: topic) not
 
 
