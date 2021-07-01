@@ -5,7 +5,8 @@ Class {
 		'addSubclasses',
 		'addMethods',
 		'subclassesAsSeparateTopic',
-		'addMethodsWithoutComment'
+		'addMethodsWithoutComment',
+		'iconBuilder'
 	],
 	#category : #'NewTools-MDNewHelpBrowser'
 }
@@ -61,18 +62,19 @@ MDMicrodownClassAPIHelpBuilder >> addSubclasses: anObject [
 
 { #category : #building }
 MDMicrodownClassAPIHelpBuilder >> build [
+
 	| builder |
 	builder := MicroDownParser builder.
-	topicToBuild := MDNodeHelpTopic named: rootToBuildFrom name.
-	topicToBuild iconName: #pageIcon.
-	"does not work anymore since we are storing nodes"
-	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
+	topicToBuild := self topicClass
+		                named: rootToBuildFrom name
+		                with: self iconBuilder.
+	rootToBuildFrom
+		buildMicroDownUsing: builder
+		withComment: rootToBuildFrom comment.
 	topicToBuild addNode: (MicroDownParser new parse: builder contents).
-		
-	addMethods
-		ifTrue: [ self buildSubnodesForMethods ].
-	addSubclasses
-		ifTrue: [ self buildSubnodesForSubclasses ]
+
+	addMethods ifTrue: [ self buildSubnodesForMethods ].
+	addSubclasses ifTrue: [ self buildSubnodesForSubclasses ]
 ]
 
 { #category : #'private building' }
@@ -114,10 +116,10 @@ MDMicrodownClassAPIHelpBuilder >> buildSubclassTopicFor: aSubclass [
 
 { #category : #'private building' }
 MDMicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
+
 	| instanceSide classSide |
-	instanceSide := MDNodeHelpTopic named: 'Instance side'.
-	classSide := MDNodeHelpTopic named: 'Class side'.
-	topicToBuild iconName: #bookIcon.
+	instanceSide := self topicClass named: 'Instance side'.
+	classSide := self topicClass named: 'Class side'.
 	topicToBuild
 		addSubtopic: instanceSide;
 		addSubtopic: classSide.
@@ -127,28 +129,44 @@ MDMicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
 
 { #category : #'private building' }
 MDMicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
+
 	| topic |
-	rootToBuildFrom subclasses isEmpty
-		ifTrue: [ ^ self ].
-	topicToBuild iconName: #bookIcon.
+	rootToBuildFrom subclasses isEmpty ifTrue: [ ^ self ].
+	iconBuilder buildIcon: topicToBuild.
 	topic := subclassesAsSeparateTopic
-		ifTrue: [ topicToBuild addSubtopic: (HelpTopic named: 'Subclasses') ]
-		ifFalse: [ topicToBuild ].
-	rootToBuildFrom subclasses
-		do:
-			[ :subclass | topic addSubtopic: (self buildSubclassTopicFor: subclass) ].
+		         ifTrue: [ 
+			         topicToBuild addSubtopic:
+				         (self topicClass
+					          named: 'Subclasses'
+					          with: self iconBuilder) ]
+		         ifFalse: [ topicToBuild ].
+	rootToBuildFrom subclasses do: [ :subclass | 
+		topic addSubtopic: (self buildSubclassTopicFor: subclass) ].
 	topic sortSubtopicsByTitle
+]
+
+{ #category : #accessing }
+MDMicrodownClassAPIHelpBuilder >> iconBuilder [ 
+	^ IconClassBuilder new
+]
+
+{ #category : #'private building' }
+MDMicrodownClassAPIHelpBuilder >> iconBuilder: aIconBuilder [
+
+	iconBuilder := aIconBuilder
 ]
 
 { #category : #initialization }
 MDMicrodownClassAPIHelpBuilder >> initialize [
+
 	"Initializes the receiver"
-	
+
 	super initialize.
 	addSubclasses := false.
 	addMethods := true.
 	subclassesAsSeparateTopic := true.
 	addMethodsWithoutComment := true.
+	iconBuilder := IconClassBuilder new
 ]
 
 { #category : #accessing }
@@ -159,4 +177,10 @@ MDMicrodownClassAPIHelpBuilder >> subclassesAsSeparateTopic [
 { #category : #accessing }
 MDMicrodownClassAPIHelpBuilder >> subclassesAsSeparateTopic: anObject [
 	subclassesAsSeparateTopic := anObject
+]
+
+{ #category : #'private building' }
+MDMicrodownClassAPIHelpBuilder >> topicClass [
+
+	^ MDNodeHelpTopic
 ]
