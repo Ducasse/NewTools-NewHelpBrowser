@@ -8,6 +8,15 @@ Class {
 	#category : #'NewTools-MDHelpTopicBuilder'
 }
 
+{ #category : #'instance creation' }
+MDNodeHelpTopic class >> named: aName with: anIconBuilder [
+	| topic |
+	topic := self named: aName.
+	topic iconBuilder: anIconBuilder.
+	topic iconBuilder buildIcon: topic.
+	^ topic
+]
+
 { #category : #adding }
 MDNodeHelpTopic >> addNode: aNode [
 

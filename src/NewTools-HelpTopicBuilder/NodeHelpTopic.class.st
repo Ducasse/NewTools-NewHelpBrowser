@@ -17,6 +17,15 @@ Class {
 	#category : #'NewTools-HelpTopicBuilder'
 }
 
+{ #category : #'instance creation' }
+NodeHelpTopic class >> named: aName with: anIconBuilder [
+	| topic |
+	topic := self named: aName.
+	topic iconBuilder: anIconBuilder.
+	topic iconBuilder buildIcon: topic.
+	^ topic
+]
+
 { #category : #adding }
 NodeHelpTopic >> addNode: aNode [
 
