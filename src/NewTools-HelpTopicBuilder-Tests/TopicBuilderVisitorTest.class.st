@@ -73,7 +73,7 @@ TopicBuilderVisitorTest class >> spFileName [
 { #category : #tests }
 TopicBuilderVisitorTest >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #running }

@@ -54,7 +54,7 @@ SpNewHelpBrowserPresenterTest class >> spFileName [
 { #category : #'tests - search' }
 SpNewHelpBrowserPresenterTest >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #running }

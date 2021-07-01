@@ -197,5 +197,5 @@ MicrodownClassAPIHelpBuilder >> subclassesAsSeparateTopic: anObject [
 
 { #category : #'private building' }
 MicrodownClassAPIHelpBuilder >> topicClass [
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]

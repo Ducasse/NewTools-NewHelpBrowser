@@ -1,7 +1,7 @@
-Extension { #name : #NodeHelpTopic }
+Extension { #name : #PRNodeHelpTopic }
 
 { #category : #'*NewTools-NewHelpBrowser' }
-NodeHelpTopic >> inspectionTopicTree [
+PRNodeHelpTopic >> inspectionTopicTree [
 	<inspectorPresentationOrder: 35 title: 'TopicTree'>
 
 	^ SpTreePresenter new 

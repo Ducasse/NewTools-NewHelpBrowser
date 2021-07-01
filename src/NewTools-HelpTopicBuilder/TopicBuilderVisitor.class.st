@@ -44,7 +44,7 @@ TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #initialization }

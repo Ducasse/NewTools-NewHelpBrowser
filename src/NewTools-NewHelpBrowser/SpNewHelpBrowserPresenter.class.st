@@ -248,7 +248,7 @@ SpNewHelpBrowserPresenter >> dummyHelp [
 { #category : #utils }
 SpNewHelpBrowserPresenter >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #accessing }

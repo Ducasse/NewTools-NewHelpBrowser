@@ -8,7 +8,7 @@ This way we can rerender the text when needed.
 
 "
 Class {
-	#name : #NodeHelpTopic,
+	#name : #PRNodeHelpTopic,
 	#superclass : #HelpTopic,
 	#instVars : [
 		'node',
@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-NodeHelpTopic class >> named: aName with: anIconBuilder [
+PRNodeHelpTopic class >> named: aName with: anIconBuilder [
 	| topic |
 	topic := self named: aName.
 	topic iconBuilder: anIconBuilder.
@@ -27,19 +27,19 @@ NodeHelpTopic class >> named: aName with: anIconBuilder [
 ]
 
 { #category : #adding }
-NodeHelpTopic >> addNode: aNode [
+PRNodeHelpTopic >> addNode: aNode [
 
 	node add: aNode
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> addSubtopic: aSubTopic [
+PRNodeHelpTopic >> addSubtopic: aSubTopic [
 	iconBuilder buildIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
 { #category : #adding }
-NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
+PRNodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 
 	aLevel - 1 > 1
 		ifTrue: [ 
@@ -50,17 +50,17 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> iconBuilder [
+PRNodeHelpTopic >> iconBuilder [
 	^ iconBuilder
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> iconBuilder: aIconBuilder [
+PRNodeHelpTopic >> iconBuilder: aIconBuilder [
 	iconBuilder := aIconBuilder
 ]
 
 { #category : #initialization }
-NodeHelpTopic >> initialize [ 
+PRNodeHelpTopic >> initialize [ 
 
 	super initialize.
 	iconBuilder := IconBookBuilder new.
@@ -69,12 +69,12 @@ NodeHelpTopic >> initialize [
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> node [
+PRNodeHelpTopic >> node [
 	^ node
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> subtopics: aCollection [
+PRNodeHelpTopic >> subtopics: aCollection [
 	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]
