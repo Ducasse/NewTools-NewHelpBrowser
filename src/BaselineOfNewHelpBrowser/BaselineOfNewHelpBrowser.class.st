@@ -14,10 +14,10 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ];
 			package: #'NewTools-NewHelpBrowser-Tests' with: [ 
 				spec requires:
-						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' ) ];
+						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder' ) ];
 			package: #'NewTools-HelpTopicBuilder';
 			package: #'NewTools-HelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ]";
+			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder') ]";
 			
 			package: #'NewTools-MDNewHelpBrowser'
 			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ];
