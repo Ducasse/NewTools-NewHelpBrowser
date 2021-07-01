@@ -18,14 +18,17 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 			package: #'NewTools-HelpTopicBuilder';
 			package: #'NewTools-IconBuilder';
 			package: #'NewTools-HelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder') ]";
+			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder') ]].
 			
+	spec for: #common do: [ 
+		spec
 			package: #'NewTools-MDNewHelpBrowser'
 			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ];
 			package: #'NewTools-MDNewHelpBrowser-Tests' with: [ 
 				spec requires:
-						#( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' ) ];
+						#( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder' ) ];
 			package: #'NewTools-MDHelpTopicBuilder';
+			package: #'NewTools-IconBuilder';
 			package: #'NewTools-MDHelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ]" ]
+			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder' ) ]]
 ]
