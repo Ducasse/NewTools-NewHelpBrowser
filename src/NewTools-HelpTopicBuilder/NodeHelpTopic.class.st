@@ -25,7 +25,7 @@ NodeHelpTopic >> addNode: aNode [
 
 { #category : #accessing }
 NodeHelpTopic >> addSubtopic: aSubTopic [
-	iconBuilder buildBookIcon: self.
+	iconBuilder buildIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
@@ -38,6 +38,11 @@ NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 				ifTrue: [ self addSubtopic: aHelpTopic ]
 				ifFalse: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] ]
 		ifFalse: [ self addSubtopic: aHelpTopic ]
+]
+
+{ #category : #accessing }
+NodeHelpTopic >> iconBuilder [
+	^ iconBuilder
 ]
 
 { #category : #accessing }
@@ -61,6 +66,6 @@ NodeHelpTopic >> node [
 
 { #category : #accessing }
 NodeHelpTopic >> subtopics: aCollection [
-	iconBuilder buildBookIcon: self.
+	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]

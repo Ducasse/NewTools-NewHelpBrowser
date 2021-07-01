@@ -2,7 +2,8 @@ Class {
 	#name : #MDNodeHelpTopic,
 	#superclass : #HelpTopic,
 	#instVars : [
-		'node'
+		'node',
+		'iconBuilder'
 	],
 	#category : #'NewTools-MDHelpTopicBuilder'
 }
@@ -15,7 +16,8 @@ MDNodeHelpTopic >> addNode: aNode [
 
 { #category : #adding }
 MDNodeHelpTopic >> addSubtopic: aSubTopic [
-	self iconName: #bookIcon.
+
+	iconBuilder buildIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
@@ -30,12 +32,24 @@ MDNodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
 
+{ #category : #accessing }
+MDNodeHelpTopic >> iconBuilder [ 
+	^ iconBuilder
+]
+
+{ #category : #adding }
+MDNodeHelpTopic >> iconBuilder: aIconBuilder [
+
+	iconBuilder := aIconBuilder
+]
+
 { #category : #initialize }
-MDNodeHelpTopic >> initialize [ 
+MDNodeHelpTopic >> initialize [
 
 	super initialize.
+	iconBuilder := IconBookBuilder new.
 	node := MicRootBlock new.
-	self iconName: #pageIcon
+	iconBuilder buildPageIcon: self
 ]
 
 { #category : #acccessing }
@@ -45,6 +59,7 @@ MDNodeHelpTopic >> node [
 
 { #category : #setting }
 MDNodeHelpTopic >> subtopics: aCollection [
-	self iconName: #bookIcon.
+
+	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]
