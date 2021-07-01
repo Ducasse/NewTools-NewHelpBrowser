@@ -16,6 +16,7 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 				spec requires:
 						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder' ) ];
 			package: #'NewTools-HelpTopicBuilder';
+			package: #'NewTools-IconBuilder';
 			package: #'NewTools-HelpTopicBuilder-Tests'
 			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder') ]";
 			
