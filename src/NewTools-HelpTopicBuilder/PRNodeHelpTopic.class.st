@@ -41,11 +41,8 @@ PRNodeHelpTopic >> addSubtopic: aSubTopic [
 { #category : #adding }
 PRNodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 
-	aLevel - 1 > 1
-		ifTrue: [ 
-			self subtopics isEmpty
-				ifTrue: [ self addSubtopic: aHelpTopic ]
-				ifFalse: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] ]
+	(aLevel  - 1 > 1 and: self subtopics isNotEmpty)
+		ifTrue: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] 
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
 
