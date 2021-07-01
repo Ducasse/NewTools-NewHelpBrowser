@@ -190,19 +190,12 @@ SpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
-					| item node text |
+					| item node |
 					item := selection selectedItem.
-					"case for SystemHelp when SystemHelp will manage NodeHelpTopic we will be
-					able to remove this condition"
-					item class = HelpTopic ifTrue:
-						[ text := item contents.
-						text ifNotNil: [ 
-							self render: text ] ] 
-					ifFalse: 
-						[ node := item node.
-						 node ifNotNil: [ 
-							self renderNode: node ]]];
-				displayIcon: [ :each | each icon ]
+					node := item node.
+					node ifNotNil: [ 
+						self renderNode: node ]];
+		displayIcon: [ :each | each icon ]
 ]
 
 { #category : #utils }
