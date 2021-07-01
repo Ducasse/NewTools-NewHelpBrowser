@@ -5,7 +5,7 @@ Class {
 		'bookIcon',
 		'pageIcon'
 	],
-	#category : #'NewTools-NewHelpBrowser'
+	#category : #'NewTools-IconBuilder'
 }
 
 { #category : #build }
