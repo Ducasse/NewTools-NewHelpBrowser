@@ -10,7 +10,14 @@ Class {
 
 { #category : #build }
 IconBookBuilder >> buildBookIcon: aTopic [
-	aTopic iconName: bookIcon 
+
+	^ aTopic iconName: bookIcon
+]
+
+{ #category : #build }
+IconBookBuilder >> buildIcon: aTopic [
+
+	self buildBookIcon: aTopic
 ]
 
 { #category : #build }
