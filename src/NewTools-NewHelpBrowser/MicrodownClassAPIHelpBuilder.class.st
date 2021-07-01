@@ -84,19 +84,17 @@ MicrodownClassAPIHelpBuilder >> addSubclasses: anObject [
 
 { #category : #building }
 MicrodownClassAPIHelpBuilder >> build [
+
 	| builder |
 	builder := MicroDownParser builder.
-	topicToBuild := HelpTopic named: rootToBuildFrom name.
-	"topicToBuild iconName: #pageIcon."
-	iconBuilder buildIcon: topicToBuild.
-	"does not work anymore since we are storing nodes"
-	rootToBuildFrom buildMicroDownUsing: builder withComment: rootToBuildFrom comment.
-	topicToBuild contents: builder contents.
-		
-	addMethods
-		ifTrue: [ self buildSubnodesForMethods ].
-	addSubclasses
-		ifTrue: [ self buildSubnodesForSubclasses ]
+	topicToBuild := self topicClass named: rootToBuildFrom name with: self iconBuilder.
+	rootToBuildFrom
+		buildMicroDownUsing: builder
+		withComment: rootToBuildFrom comment.
+	topicToBuild addNode: (MicroDownParser new parse: builder contents) asPillar.
+
+	addMethods ifTrue: [ self buildSubnodesForMethods ].
+	addSubclasses ifTrue: [ self buildSubnodesForSubclasses ]
 ]
 
 { #category : #'private building' }
@@ -139,10 +137,8 @@ MicrodownClassAPIHelpBuilder >> buildSubclassTopicFor: aSubclass [
 { #category : #'private building' }
 MicrodownClassAPIHelpBuilder >> buildSubnodesForMethods [
 	| instanceSide classSide |
-	instanceSide := HelpTopic named: 'Instance side'.
-	classSide := HelpTopic named: 'Class side'.
-	"topicToBuild iconName: #bookIcon."
-	iconBuilder buildIcon: topicToBuild.
+	instanceSide := self topicClass named: 'Instance side'.
+	classSide := self topicClass named: 'Class side'.
 	topicToBuild
 		addSubtopic: instanceSide;
 		addSubtopic: classSide.
@@ -155,10 +151,9 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 	| topic |
 	rootToBuildFrom subclasses isEmpty
 		ifTrue: [ ^ self ].
-	"topicToBuild iconName: #bookIcon."
 	iconBuilder buildIcon: topicToBuild.
 	topic := subclassesAsSeparateTopic
-		ifTrue: [ HelpTopic named: 'Subclasses' ]
+		ifTrue: [ self topicClass named: 'Subclasses' ]
 		ifFalse: [ topicToBuild ].
 	rootToBuildFrom subclasses
 		do:
@@ -166,6 +161,11 @@ MicrodownClassAPIHelpBuilder >> buildSubnodesForSubclasses [
 	topic sortSubtopicsByTitle.
 	topicToBuild = topic 	
 		ifFalse: [ topicToBuild addSubtopic: topic ]
+]
+
+{ #category : #accessing }
+MicrodownClassAPIHelpBuilder >> iconBuilder [
+	^ iconBuilder
 ]
 
 { #category : #accessing }
@@ -193,4 +193,9 @@ MicrodownClassAPIHelpBuilder >> subclassesAsSeparateTopic [
 { #category : #accessing }
 MicrodownClassAPIHelpBuilder >> subclassesAsSeparateTopic: anObject [
 	subclassesAsSeparateTopic := anObject
+]
+
+{ #category : #'private building' }
+MicrodownClassAPIHelpBuilder >> topicClass [
+	^ NodeHelpTopic
 ]
