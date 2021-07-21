@@ -195,7 +195,7 @@ MDSpNewHelpBrowserPresenter >> connectPresenters [
 					| item node |
 					item := selection selectedItem.
 						node := item node.
-						 node ifNotNil: [ 
+						 node ifNotNil: [
 							self renderNode: node ]];
 				displayIcon: [ :each | each icon ]
 ]
@@ -217,7 +217,7 @@ MDSpNewHelpBrowserPresenter >> createTopicsFromFile: aFileOrFolder [
 
 	| visitor |
 	visitor := self helpTopicVisitor new.
-	visitor start: (MicroDownParser new parse: aFileOrFolder contents).
+	visitor start: (MicroDownParser new parseFile: aFileOrFolder).
 	^ visitor rootTopics
 ]
 
@@ -334,7 +334,14 @@ MDSpNewHelpBrowserPresenter >> render: aString [
 { #category : #utils }
 MDSpNewHelpBrowserPresenter >> renderNode: aNode [
 
-	textOutput morph setText: (self morphWriter visit: aNode) 
+	self resolver visit: aNode.
+	textOutput morph setText: (self morphWriter visit: aNode)
+]
+
+{ #category : #utils }
+MDSpNewHelpBrowserPresenter >> resolver [
+
+	^ MicResolvePath new
 ]
 
 { #category : #accessing }
