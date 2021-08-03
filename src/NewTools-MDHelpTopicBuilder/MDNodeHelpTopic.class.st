@@ -1,3 +1,10 @@
+"
+I'm a help topic and as such I hold a Microdown root document. 
+This is in this document that further microdown elements will be added. 
+
+Note that I can have subtopics in addition to the microdown element. 
+A subtopic is just similar to myself.
+"
 Class {
 	#name : #MDNodeHelpTopic,
 	#superclass : #HelpTopic,
@@ -33,7 +40,7 @@ MDNodeHelpTopic >> addSubtopic: aSubTopic [
 { #category : #adding }
 MDNodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 		
-	(aLevel  - 1 > 1 and: self subtopics isNotEmpty)
+	(aLevel - 1 > 1 and: [ self subtopics isNotEmpty] )
 		ifTrue: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] 
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
@@ -43,7 +50,7 @@ MDNodeHelpTopic >> iconBuilder [
 	^ iconBuilder
 ]
 
-{ #category : #adding }
+{ #category : #accessing }
 MDNodeHelpTopic >> iconBuilder: aIconBuilder [
 
 	iconBuilder := aIconBuilder
@@ -53,17 +60,19 @@ MDNodeHelpTopic >> iconBuilder: aIconBuilder [
 MDNodeHelpTopic >> initialize [
 
 	super initialize.
-	iconBuilder := IconBookBuilder new.
 	node := MicRootBlock new.
-	iconBuilder buildPageIcon: self
+	iconBuilder := IconBookBuilder new.
+	iconBuilder setIconOf: self
 ]
 
-{ #category : #acccessing }
+{ #category : #accessing }
 MDNodeHelpTopic >> node [
+	"Returns the microdown elements holding the document of the help"
+	
 	^ node
 ]
 
-{ #category : #setting }
+{ #category : #accessing }
 MDNodeHelpTopic >> subtopics: aCollection [
 
 	iconBuilder buildIcon: self.

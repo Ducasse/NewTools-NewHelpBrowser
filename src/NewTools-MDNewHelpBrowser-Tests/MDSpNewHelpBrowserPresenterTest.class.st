@@ -77,20 +77,6 @@ MDSpNewHelpBrowserPresenterTest >> tearDown [
 	super tearDown.
 ]
 
-{ #category : #'tests - interaction' }
-MDSpNewHelpBrowserPresenterTest >> testClickOnFirstTopicExpandTree [
-
-	| browser |
-	self skip.
-	"waiting for new release of Spec20 with fix/Expand integrated."
-	browser := self presenterClass new.
-	window := browser openWithSpec.
-
-	browser topicList expandPath: #( 1 2 ).
-
-	self assert: (browser topicList isExpanded: #( 1 2 ))
-]
-
 { #category : #'tests - search' }
 MDSpNewHelpBrowserPresenterTest >> testFoundNoWords [
 
@@ -376,9 +362,9 @@ MDSpNewHelpBrowserPresenterTest >> testSpHelpBrowserGotHelpTopicVisitorThatISpec
 
 	| visitor browser |
 	browser := self presenterClass new.
-	browser helpTopicVisitor: PRVisitor.
+	browser helpTopicVisitor: MDTopicBuilderVisitor.
 	visitor := browser helpTopicVisitor.
-	self assert: visitor equals: PRVisitor
+	self assert: visitor equals: MDTopicBuilderVisitor
 ]
 
 { #category : #tests }

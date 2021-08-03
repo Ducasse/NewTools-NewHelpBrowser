@@ -20,14 +20,14 @@ IconBookBuilder >> buildIcon: aTopic [
 	self buildBookIcon: aTopic
 ]
 
-{ #category : #build }
-IconBookBuilder >> buildPageIcon: aTopic [
-	^ aTopic iconName: pageIcon
-]
-
 { #category : #initialization }
 IconBookBuilder >> initialize [
 	super initialize.
 	bookIcon := #bookIcon.
 	pageIcon := #pageIcon
+]
+
+{ #category : #build }
+IconBookBuilder >> setIconOf: aTopic [
+	^ aTopic iconName: pageIcon
 ]

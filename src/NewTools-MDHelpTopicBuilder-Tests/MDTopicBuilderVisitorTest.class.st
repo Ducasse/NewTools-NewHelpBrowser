@@ -73,7 +73,7 @@ MDTopicBuilderVisitorTest class >> spFileName [
 { #category : #tests }
 MDTopicBuilderVisitorTest >> helpTopicClass [
 
-	^ PRNodeHelpTopic
+	^ MDNodeHelpTopic
 ]
 
 { #category : #running }
@@ -98,9 +98,9 @@ MDTopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 		nodesListAdd: (OrderedCollection new: 2);
 		nodesListAdd: (OrderedCollection new: 3).
 	visitor addSubtopicsNodes: topics.
-	self assert: topics first node class equals: PRDocument.
-	self assert: topics second node class equals: PRDocument.
-	self assert: topics third node class equals: PRDocument
+	self assert: topics first node class equals: MicRootBlock.
+	self assert: topics second node class equals: MicRootBlock.
+	self assert: topics third node class equals: MicRootBlock
 ]
 
 { #category : #tests }

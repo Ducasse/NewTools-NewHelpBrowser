@@ -1,3 +1,7 @@
+"
+When I visit a header I create a NodeHelpTopic.
+When I visit something else I add it to the nodelist of the current node (help topic).
+"
 Class {
 	#name : #MDTopicBuilderVisitor,
 	#superclass : #MicrodownVisitor,
@@ -54,6 +58,20 @@ MDTopicBuilderVisitor >> rootTopics [
 
 { #category : #visiting }
 MDTopicBuilderVisitor >> start: anObject [
+	"The normal case is to have
+	
+	#header 
+		ljklj
+		jlkklk
+		jlkl
+		
+	#header 2
+		fgddfg	
+		gjhgj
+		
+	Now it may be the case where we have some text before a header and we should not lose it. 
+	"
+	
 	self visitAll: anObject children.
 	nodesList removeFirst.
 	self addSubtopicsNodes: helpTopics 
@@ -61,13 +79,9 @@ MDTopicBuilderVisitor >> start: anObject [
 	
 ]
 
-{ #category : #visiting }
-MDTopicBuilderVisitor >> visit: anObject [
-	^ anObject accept: self
-]
-
 { #category : #'visiting-document' }
 MDTopicBuilderVisitor >> visitAll: aCollection [
+
 	| collection |
 	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
@@ -92,9 +106,4 @@ MDTopicBuilderVisitor >> visitHeader: anObject [
 		ifFalse: [ 
 			helpTopics add:
 				(self helpTopicClass named: anObject header capitalized) ]
-]
-
-{ #category : #'visiting - inline elements' }
-MDTopicBuilderVisitor >> visitText: aMicTextBlock [
-
 ]
