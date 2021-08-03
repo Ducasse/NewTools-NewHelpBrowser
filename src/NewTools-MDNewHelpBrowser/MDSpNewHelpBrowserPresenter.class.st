@@ -334,14 +334,7 @@ MDSpNewHelpBrowserPresenter >> render: aString [
 { #category : #utils }
 MDSpNewHelpBrowserPresenter >> renderNode: aNode [
 
-	self resolver visit: aNode.
 	textOutput morph setText: (self morphWriter visit: aNode)
-]
-
-{ #category : #utils }
-MDSpNewHelpBrowserPresenter >> resolver [
-
-	^ MicResolvePath new
 ]
 
 { #category : #accessing }
