@@ -9,26 +9,27 @@ BaselineOfNewHelpBrowser >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [ 
+		
 		spec
-			package: #'NewTools-NewHelpBrowser'
-			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' ) ];
-			package: #'NewTools-NewHelpBrowser-Tests' with: [ 
-				spec requires:
-						#( #'NewTools-NewHelpBrowser' #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder' ) ];
-			package: #'NewTools-HelpTopicBuilder';
-			package: #'NewTools-IconBuilder';
-			package: #'NewTools-HelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-HelpTopicBuilder' #'NewTools-IconBuilder') ]].
-			
-	"spec for: #common do: [ 
+			baseline: 'Microdown'
+			with: [
+				spec
+					loads: #('RichText');
+					repository: 'github://Pillar-markup/Microdown:dev/src' ].
+		
 		spec
-			package: #'NewTools-MDNewHelpBrowser'
-			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ];
-			package: #'NewTools-MDNewHelpBrowser-Tests' with: [ 
-				spec requires:
-						#( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder' ) ];
-			package: #'NewTools-MDHelpTopicBuilder';
-			package: #'NewTools-IconBuilder';
+			package: #'NewTools-MDHelpTopicBuilder'
+				with: [ spec requires: #( #'Microdown' ) ];
 			package: #'NewTools-MDHelpTopicBuilder-Tests'
-			with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder' ) ]]"
+				with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder') ];
+				
+			package: #'NewTools-MDNewHelpBrowser'
+				with: [ spec requires: #( #'NewTools-MDHelpTopicBuilder' ) ];
+			package: #'NewTools-MDNewHelpBrowser-Tests' 
+				with: [ spec requires: #( #'NewTools-MDNewHelpBrowser' #'NewTools-MDHelpTopicBuilder' #'NewTools-IconBuilder' ) ];
+			
+			package: #'NewTools-IconBuilder'].
+			
+			
+	
 ]
