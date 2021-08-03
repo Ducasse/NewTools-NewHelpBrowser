@@ -58,7 +58,7 @@ SystemReference2 class >> forClass: aClass [
 { #category : #'help topic creation' }
 SystemReference2 class >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #'help topic creation' }

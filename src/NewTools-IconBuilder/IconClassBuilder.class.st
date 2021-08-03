@@ -1,7 +1,7 @@
 Class {
 	#name : #IconClassBuilder,
 	#superclass : #Object,
-	#category : #'NewTools-NewHelpBrowser'
+	#category : #'NewTools-IconBuilder'
 }
 
 { #category : #build }

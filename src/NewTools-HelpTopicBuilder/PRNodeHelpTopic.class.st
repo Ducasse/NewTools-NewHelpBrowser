@@ -8,7 +8,7 @@ This way we can rerender the text when needed.
 
 "
 Class {
-	#name : #NodeHelpTopic,
+	#name : #PRNodeHelpTopic,
 	#superclass : #HelpTopic,
 	#instVars : [
 		'node',
@@ -17,36 +17,47 @@ Class {
 	#category : #'NewTools-HelpTopicBuilder'
 }
 
+{ #category : #'instance creation' }
+PRNodeHelpTopic class >> named: aName with: anIconBuilder [
+	| topic |
+	topic := self named: aName.
+	topic iconBuilder: anIconBuilder.
+	topic iconBuilder buildIcon: topic.
+	^ topic
+]
+
 { #category : #adding }
-NodeHelpTopic >> addNode: aNode [
+PRNodeHelpTopic >> addNode: aNode [
 
 	node add: aNode
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> addSubtopic: aSubTopic [
-	iconBuilder buildBookIcon: self.
+PRNodeHelpTopic >> addSubtopic: aSubTopic [
+	iconBuilder buildIcon: self.
 	super addSubtopic: aSubTopic
 ]
 
 { #category : #adding }
-NodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
+PRNodeHelpTopic >> addSubtopic: aHelpTopic with: aLevel [
 
-	aLevel - 1 > 1
-		ifTrue: [ 
-			self subtopics isEmpty
-				ifTrue: [ self addSubtopic: aHelpTopic ]
-				ifFalse: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] ]
+	(aLevel  - 1 > 1 and: self subtopics isNotEmpty)
+		ifTrue: [ self subtopics last addSubtopic: aHelpTopic with: aLevel - 1 ] 
 		ifFalse: [ self addSubtopic: aHelpTopic ]
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> iconBuilder: aIconBuilder [
+PRNodeHelpTopic >> iconBuilder [
+	^ iconBuilder
+]
+
+{ #category : #accessing }
+PRNodeHelpTopic >> iconBuilder: aIconBuilder [
 	iconBuilder := aIconBuilder
 ]
 
 { #category : #initialization }
-NodeHelpTopic >> initialize [ 
+PRNodeHelpTopic >> initialize [ 
 
 	super initialize.
 	iconBuilder := IconBookBuilder new.
@@ -55,12 +66,12 @@ NodeHelpTopic >> initialize [
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> node [
+PRNodeHelpTopic >> node [
 	^ node
 ]
 
 { #category : #accessing }
-NodeHelpTopic >> subtopics: aCollection [
-	iconBuilder buildBookIcon: self.
+PRNodeHelpTopic >> subtopics: aCollection [
+	iconBuilder buildIcon: self.
 	super subtopics: aCollection
 ]

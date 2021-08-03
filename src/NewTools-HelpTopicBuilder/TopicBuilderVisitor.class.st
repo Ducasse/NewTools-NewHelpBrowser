@@ -41,15 +41,10 @@ TopicBuilderVisitor >> addSubtopicsNodes: aSubtopicsCollection [
 		self addSubtopicsNodes: each subtopics ]
 ]
 
-{ #category : #accessing }
-TopicBuilderVisitor >> contents [
-	^ contents
-]
-
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> helpTopicClass [
 
-	^ NodeHelpTopic
+	^ PRNodeHelpTopic
 ]
 
 { #category : #initialization }
@@ -57,8 +52,7 @@ TopicBuilderVisitor >> initialize [
 	
 	super initialize.
 	helpTopics := OrderedCollection new.
-	contents := OrderedCollection new.
-	nodesList := LinkedList new
+	nodesList := LinkedList new.
 ]
 
 { #category : #accessing }
@@ -80,18 +74,10 @@ TopicBuilderVisitor >> rootTopics [
 
 { #category : #visiting }
 TopicBuilderVisitor >> start: anObject [
+
 	self visit: anObject.
-	helpTopics do: [ :each |
-		nodesList first isEmpty ifTrue: [ nodesList removeFirst ].
-		each node hasChildren
-			ifFalse: [ 
-				nodesList first do: [ :node | each addNode: node ].
-				nodesList removeFirst. ].
-		self addSubtopicsNodes: each subtopics.
-		nodesList isEmpty 		
-		 ]
-	
-	
+	nodesList removeFirst.
+	self addSubtopicsNodes: helpTopics
 ]
 
 { #category : #visiting }
@@ -103,6 +89,7 @@ TopicBuilderVisitor >> visit: anObject [
 TopicBuilderVisitor >> visitAll: aCollection [
 
 	| collection |
+	contents := OrderedCollection new.
 	collection := aCollection collect: [ :each | 
 		              each class = PRHeader 
 							  ifTrue: [ 
@@ -116,11 +103,12 @@ TopicBuilderVisitor >> visitAll: aCollection [
 
 { #category : #'visiting-document' }
 TopicBuilderVisitor >> visitHeader: anObject [
-	anObject level > 1
+
+	(anObject level > 1 and: helpTopics isNotEmpty)
 		ifTrue: [ 
 			helpTopics last
 				addSubtopic: (self helpTopicClass named: anObject text capitalized)
-				with: anObject level. ]
+				with: anObject level ]
 		ifFalse: [ 
 			helpTopics add:
 				(self helpTopicClass named: anObject text capitalized) ]

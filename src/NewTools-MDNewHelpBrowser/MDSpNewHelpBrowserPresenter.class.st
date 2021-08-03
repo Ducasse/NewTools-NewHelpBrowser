@@ -1,40 +1,40 @@
 "
 Execute the following code to open HelpBrowser on doc :
 ```
-SpNewHelpBrowserPresenter openOnHelpFolder:  FileSystem workingDirectory / 'doc'.
+MDSpNewHelpBrowserPresenter openOnHelpFolder:  FileSystem workingDirectory / 'doc'.
 ```
 
 Execute the following code to charge doc in the cache :
 ```
 | doc |
 doc := FileSystem disk workingDirectory / 'doc'.
-SpNewHelpBrowserPresenter internalizeHelpFrom: doc.
+MDSpNewHelpBrowserPresenter internalizeHelpFrom: doc.
 ```
 And to watch the cache inspect that :
 ```
-SpNewHelpBrowserPresenter helpCache
+MDSpNewHelpBrowserPresenter helpCache
 ```
 
 After that you can also open the HelpBrowser with the helpCache :
 ```
 | browser |
-browser := SpNewHelpBrowserPresenter new topicsFromSystem.
-SpNewHelpBrowserPresenter openOn: browser rootTopic
+browser := MDSpNewHelpBrowserPresenter new topicsFromSystem.
+MDSpNewHelpBrowserPresenter openOn: browser rootTopic
 ```
 
 to empty the cache execute the following code :
 ```
-SpNewHelpBrowserPresenter emptyHelpCache
+MDSpNewHelpBrowserPresenter emptyHelpCache
 ```
 
 code to charge and use the cache :
 ```
-SpNewHelpBrowserPresenter internalizeHelpFrom: FileSystem disk workingDirectory / 'doc'.
-SpNewHelpBrowserPresenter open
+MDSpNewHelpBrowserPresenter internalizeHelpFrom: FileSystem disk workingDirectory / 'doc'.
+MDSpNewHelpBrowserPresenter open
 ```
 "
 Class {
-	#name : #SpNewHelpBrowserPresenter,
+	#name : #MDSpNewHelpBrowserPresenter,
 	#superclass : #SpPresenter,
 	#instVars : [
 		'helpText',
@@ -51,11 +51,11 @@ Class {
 		'filesystem',
 		'helpCache'
 	],
-	#category : #'NewTools-NewHelpBrowser'
+	#category : #'NewTools-MDNewHelpBrowser'
 }
 
 { #category : #specs }
-SpNewHelpBrowserPresenter class >> defaultSpec [
+MDSpNewHelpBrowserPresenter class >> defaultSpec [
 
 	 ^ SpBoxLayout newTopToBottom
 			add: (SpPanedLayout newLeftToRight
@@ -70,34 +70,34 @@ SpNewHelpBrowserPresenter class >> defaultSpec [
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter class >> emptyHelpCache [
+MDSpNewHelpBrowserPresenter class >> emptyHelpCache [
 
 	helpCache := nil
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter class >> filesystem [
+MDSpNewHelpBrowserPresenter class >> filesystem [
 	^ filesystem
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter class >> filesystem: aFileSystem [
+MDSpNewHelpBrowserPresenter class >> filesystem: aFileSystem [
 	filesystem := aFileSystem
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter class >> helpCache [
+MDSpNewHelpBrowserPresenter class >> helpCache [
 
 	^ helpCache ifNil: [ helpCache := FileSystem memory workingDirectory ]
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter class >> helpCache: aCache [
+MDSpNewHelpBrowserPresenter class >> helpCache: aCache [
 	helpCache := aCache.
 ]
 
 { #category : #cache }
-SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
+MDSpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
 	self filesystem: FileSystem memory.
 	[ aFolderOrFile isDirectory 
 		ifTrue:  [self filesystem createDirectory: aFolderOrFile basename. 
@@ -118,7 +118,7 @@ SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile [
 ]
 
 { #category : #cache }
-SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFolderName [
+MDSpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFolderName [
 
 	aFolderOrFile isDirectory 
 		ifTrue:  [ | directoryPath |
@@ -133,7 +133,7 @@ SpNewHelpBrowserPresenter class >> internalizeHelpFrom: aFolderOrFile  at: aFold
 ]
 
 { #category : #'instance creation' }
-SpNewHelpBrowserPresenter class >> open [
+MDSpNewHelpBrowserPresenter class >> open [
 	"Open a HelpBrowser on the internalized docs."
 	<example>
 
@@ -141,7 +141,7 @@ SpNewHelpBrowserPresenter class >> open [
 ]
 
 { #category : #'instance creation' }
-SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
+MDSpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 	"Open the receiver on the given help topic or any other object that can be transformed into
 	 a help topic by sending #asHelpTopic."
 
@@ -151,9 +151,9 @@ SpNewHelpBrowserPresenter class >> openOn: aHelpTopic [
 ]
 
 { #category : #'instance creation' }
-SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
+MDSpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 	[ aDescription bookName.
-	 ^ SpNewHelpBrowserPresenter openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
+	 ^ self openOn: (CustomHelpHelpBuilder new createTopicFrom: aDescription)] 
 	on: MessageNotUnderstood do: [ | inst |
 		inst:= self basicNew.
 		inst createTopicsFromCache.
@@ -167,69 +167,70 @@ SpNewHelpBrowserPresenter class >> openOnCustomHelp: aDescription [
 ]
 
 { #category : #'instance creation' }
-SpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
+MDSpNewHelpBrowserPresenter class >> openOnHelpFolder: aFileReference [
+
 	"Open an help browser on a given folder."
+
 	"Implementation note: the logic is not really good because I have to copy the logic from SpPresenter class>>#newApplication:model:.
 	Especially how to pass a model before the initialization which is normally done via message #on: "
-	
+
 	| inst fileReference |
-	inst := self basicNew. 
-	aFileReference exists 
-		ifFalse: [ fileReference := self helpCache ] 
-		ifTrue: [ fileReference := aFileReference  ].
+	inst := self basicNew.
+	aFileReference exists
+		ifFalse: [ fileReference := self helpCache ]
+		ifTrue: [ fileReference := aFileReference ].
 	inst createRootTopicFromFolder: fileReference.
-	^ inst 
-		setModelBeforeInitialization: inst rootTopic;
-		initialize;
-		openWithSpec;
-		yourself
+	^ inst
+		  setModelBeforeInitialization: inst rootTopic;
+		  initialize;
+		  openWithSpec;
+		  yourself
 ]
 
 { #category : #initialization }
-SpNewHelpBrowserPresenter >> connectPresenters [
+MDSpNewHelpBrowserPresenter >> connectPresenters [
  
 	topicList
 		whenSelectionChangedDo: [ :selection | 
 					| item node |
 					item := selection selectedItem.
-					node := item node.
-					node ifNotNil: [ 
-						self renderNode: node ]];
-		displayIcon: [ :each | each icon ]
+						node := item node.
+						 node ifNotNil: [
+							self renderNode: node ]];
+				displayIcon: [ :each | each icon ]
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> createRootTopicFromFolder: aFolder [
+MDSpNewHelpBrowserPresenter >> createRootTopicFromFolder: aFolder [
 	| topic |
 	topic := (self createTopicsFromFileOrFolder: aFolder) first.
 	self rootTopic: topic.
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> createTopicsFromCache [
+MDSpNewHelpBrowserPresenter >> createTopicsFromCache [
 	self createRootTopicFromFolder: self class helpCache.
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> createTopicsFromFile: aFileOrFolder [
+MDSpNewHelpBrowserPresenter >> createTopicsFromFile: aFileOrFolder [
 
 	| visitor |
-	visitor := self helpTopicVisitorClass new.
-	visitor start:
-		(MicroDownParser new parse: aFileOrFolder contents) asPillar.
+	visitor := self helpTopicVisitor new.
+	visitor start: (MicroDownParser new parseFile: aFileOrFolder).
 	^ visitor rootTopics
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> createTopicsFromFileOrFolder: aFileOrFolder [
+MDSpNewHelpBrowserPresenter >> createTopicsFromFileOrFolder: aFileOrFolder [
 
 	| subTopic sorted topic |
-	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic') ifTrue: [ 
-		^ self createTopicsFromFile: aFileOrFolder ].
 	
+	(aFileOrFolder isFile and: aFileOrFolder extension = 'mic')
+		ifTrue: [ ^ self createTopicsFromFile: aFileOrFolder ].
+		
 	subTopic := OrderedCollection new.
-	topic := self helpTopicClass named:
-		         aFileOrFolder basenameWithoutExtension capitalized.
+	topic := self helpTopicClass named: aFileOrFolder basenameWithoutExtension capitalized.
 	sorted := self sortFileAndFolder: aFileOrFolder.
 	sorted do: [ :fileOrFolder | 
 		(self createTopicsFromFileOrFolder: fileOrFolder) do: [ :each | 
@@ -239,36 +240,37 @@ SpNewHelpBrowserPresenter >> createTopicsFromFileOrFolder: aFileOrFolder [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> dummyHelp [
+MDSpNewHelpBrowserPresenter >> dummyHelp [
 
 	^  '# Empty Help
 	This a dummy help.'
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> helpTopicClass [
+MDSpNewHelpBrowserPresenter >> helpTopicClass [
 
-	^ PRNodeHelpTopic
+	^ MDNodeHelpTopic
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitorClass [
+MDSpNewHelpBrowserPresenter >> helpTopicVisitor [
 	
-	^ helpTopicVisitor ifNil: [ ^ helpTopicVisitor := TopicBuilderVisitor. ]
+	helpTopicVisitor ifNil: [ ^ helpTopicVisitor := MDTopicBuilderVisitor. ].
+	^ helpTopicVisitor
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> helpTopicVisitorClass: aClass [ 
+MDSpNewHelpBrowserPresenter >> helpTopicVisitor: aClass [ 
 	helpTopicVisitor := aClass
 ]
 
 { #category : #initialization }
-SpNewHelpBrowserPresenter >> initialExtent [
+MDSpNewHelpBrowserPresenter >> initialExtent [
 	^ 800@600
 ]
 
 { #category : #initialization }
-SpNewHelpBrowserPresenter >> initializePresenters [
+MDSpNewHelpBrowserPresenter >> initializePresenters [
 
 	super initializePresenters.
 	topicList := self newTree.
@@ -298,26 +300,26 @@ SpNewHelpBrowserPresenter >> initializePresenters [
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> morphWriter [ 
-		
-	^ PRRichTextComposer new
+MDSpNewHelpBrowserPresenter >> morphWriter [
+
+	^ MicRichTextComposer new
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> parserClass [ 
+MDSpNewHelpBrowserPresenter >> parserClass [ 
 	^ MicroDownParser
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> render [
+MDSpNewHelpBrowserPresenter >> render [
 
-	| document |	
+	| document |
 	document := self parserClass parse: self dummyHelp.
-	textOutput morph setText: (self morphWriter start: document asPillar) 
+	textOutput morph setText: (self morphWriter start: document)
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> render: aString [
+MDSpNewHelpBrowserPresenter >> render: aString [
 
 	| document text |
 	aString 
@@ -326,27 +328,27 @@ SpNewHelpBrowserPresenter >> render: aString [
 	 document := [ self parserClass parse: text ] 
 							on: MicParsingError
 							do: [ :ex | textOutput morph setText: text. ^ self ].
-	textOutput morph setText: (self morphWriter start: document asPillar) 
+	textOutput morph setText: (self morphWriter start: document) 
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> renderNode: aNode [
+MDSpNewHelpBrowserPresenter >> renderNode: aNode [
 
-	textOutput morph setText: (self morphWriter start: aNode) 
+	textOutput morph setText: (self morphWriter visit: aNode)
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> rootTopic [
+MDSpNewHelpBrowserPresenter >> rootTopic [
 	^ rootTopic ifNil: [ self rootTopic: SystemHelp2 asHelpTopic. rootTopic ]
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [ 
+MDSpNewHelpBrowserPresenter >> rootTopic: aHelpTopic [ 
 	rootTopic := aHelpTopic asHelpTopic
 ]
 
 { #category : #search }
-SpNewHelpBrowserPresenter >> search: aString [
+MDSpNewHelpBrowserPresenter >> search: aString [
 
 	| topics |
 	topics := self rootTopic subtopics.
@@ -354,7 +356,7 @@ SpNewHelpBrowserPresenter >> search: aString [
 ]
 
 { #category : #search }
-SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
+MDSpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
 
 	| collection |
 	collection := OrderedCollection new.
@@ -366,7 +368,7 @@ SpNewHelpBrowserPresenter >> search: aString into: aTopicCollection [
 ]
 
 { #category : #search }
-SpNewHelpBrowserPresenter >> searchList: aString [
+MDSpNewHelpBrowserPresenter >> searchList: aString [
 
 	| topics |
 	topics := self rootTopic subtopics.
@@ -374,7 +376,7 @@ SpNewHelpBrowserPresenter >> searchList: aString [
 ]
 
 { #category : #search }
-SpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
+MDSpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
 
 	| collection |
 	collection := OrderedCollection new.
@@ -386,13 +388,13 @@ SpNewHelpBrowserPresenter >> searchList: aString into: aTopicCollection [
 ]
 
 { #category : #initialization }
-SpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
+MDSpNewHelpBrowserPresenter >> setModelBeforeInitialization: anHelpTopic [
 	
 	rootTopic := anHelpTopic
 ]
 
 { #category : #utils }
-SpNewHelpBrowserPresenter >> sortFileAndFolder: aFileOrFolder [
+MDSpNewHelpBrowserPresenter >> sortFileAndFolder: aFileOrFolder [
 
 	| sorted |
 	sorted := SortedCollection sortBlock: [ :a :b | 
@@ -403,17 +405,17 @@ SpNewHelpBrowserPresenter >> sortFileAndFolder: aFileOrFolder [
 ]
 
 { #category : #initialization }
-SpNewHelpBrowserPresenter >> title [
+MDSpNewHelpBrowserPresenter >> title [
 	^ 'Help Topic Browser'
 ]
 
 { #category : #accessing }
-SpNewHelpBrowserPresenter >> topicList [
+MDSpNewHelpBrowserPresenter >> topicList [
 	^ topicList
 ]
 
 { #category : #search }
-SpNewHelpBrowserPresenter >> word: aString in: aTopic [
+MDSpNewHelpBrowserPresenter >> word: aString in: aTopic [
 
 	^ (aTopic node text findString: aString startingAt: 1) > 0 | ((aTopic title findString: aString startingAt: 1) > 0)
 ]

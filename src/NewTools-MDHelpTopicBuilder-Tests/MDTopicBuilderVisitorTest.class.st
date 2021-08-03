@@ -1,15 +1,15 @@
 Class {
-	#name : #TopicBuilderVisitorTest,
+	#name : #MDTopicBuilderVisitorTest,
 	#superclass : #TestCase,
 	#instVars : [
 		'filesystem',
 		'visitor'
 	],
-	#category : #'NewTools-HelpTopicBuilder-Tests'
+	#category : #'NewTools-MDHelpTopicBuilder-Tests'
 }
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileContentsLevelsSections [
+MDTopicBuilderVisitorTest class >> spFileContentsLevelsSections [
 
 	^ '# Section 1
 blabla1
@@ -26,7 +26,7 @@ blabla6'
 ]
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileContentsMoreSections [
+MDTopicBuilderVisitorTest class >> spFileContentsMoreSections [
 
 	^ '# Section 1
 blabla1
@@ -36,7 +36,7 @@ blabla2
 ]
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileContentsOneSection [
+MDTopicBuilderVisitorTest class >> spFileContentsOneSection [
 
 	^ '# Section 1	
 _blabla_
@@ -45,7 +45,7 @@ blabla'
 ]
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileContentsWithMoreSubSection [
+MDTopicBuilderVisitorTest class >> spFileContentsWithMoreSubSection [
 
 	^ '# Section 1
 blabla1
@@ -56,7 +56,7 @@ blabla3'
 ]
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileContentsWithOneSubSection [
+MDTopicBuilderVisitorTest class >> spFileContentsWithOneSubSection [
 
 	^ '# Section 1
 blabla1
@@ -65,27 +65,27 @@ blabla2'
 ]
 
 { #category : #resources }
-TopicBuilderVisitorTest class >> spFileName [
+MDTopicBuilderVisitorTest class >> spFileName [
 
 	^ 'test.md'
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> helpTopicClass [
+MDTopicBuilderVisitorTest >> helpTopicClass [
 
 	^ PRNodeHelpTopic
 ]
 
 { #category : #running }
-TopicBuilderVisitorTest >> setUp [
+MDTopicBuilderVisitorTest >> setUp [
 	super setUp.
 	filesystem := FileSystem memory.
-	visitor := TopicBuilderVisitor new
+	visitor := MDTopicBuilderVisitor new
 	
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
+MDTopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 
 	| topics |
 	topics := OrderedCollection new.
@@ -104,7 +104,7 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesAddPRDocumentInNodeTopic [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
+MDTopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 
 	| topics size |
 	topics := OrderedCollection new.
@@ -124,7 +124,7 @@ TopicBuilderVisitorTest >> testAddSubtopicsNodesUseNodesList [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
+MDTopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
 
 	visitor 
 		nodesListAdd: 1;
@@ -135,13 +135,13 @@ TopicBuilderVisitorTest >> testGetNodesListAfterAddObject [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testGetNodesListAtInitialization [
+MDTopicBuilderVisitorTest >> testGetNodesListAtInitialization [
 
 	self assert: visitor nodesList isEmpty
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInNodesList [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorVisitAllAddInNodesList [
 
 	| file text document |
 	text := '# SectionTest
@@ -149,7 +149,7 @@ This is a paragraphe'.
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: text ].
-	document := (MicroDownParser new parse: file contents) asPillar.
+	document := (MicroDownParser new parse: file contents).
 	visitor visitAll: document children.
 	self assert: visitor nodesList first isEmpty.
 	self assert: visitor nodesList second size equals: 2 
@@ -157,7 +157,7 @@ This is a paragraphe'.
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 
 	| file text header |
 	text := '# SectionTest
@@ -165,7 +165,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: text ].
-	header := (MicroDownParser new parse: file contents) asPillar children first.
+	header := (MicroDownParser new parse: file contents) children first.
 	visitor visitHeader: header.
 	self assert: visitor rootTopics first title equals: 'SectionTest'.
 	self assert: visitor rootTopics first contents equals: ''
@@ -173,7 +173,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeader [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeaderAtLevel2 [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeaderAtLevel2 [
 
 	| file text header |
 	text := '## SectionTest
@@ -181,7 +181,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeaderAtLevel2 [
 	(file := filesystem workingDirectory / self class spFileName) 
 		writeStreamDo: [ :stream | 
 		stream nextPutAll: text ].
-	header := (MicroDownParser new parse: file contents) asPillar children first.
+	header := (MicroDownParser new parse: file contents) children first.
 	visitor visitHeader: header.
 	self assert: visitor rootTopics first title equals: 'SectionTest'.
 	self assert: visitor rootTopics first contents equals: ''
@@ -189,7 +189,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorVisitHeaderAtLevel2 [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorWithLevelsSections [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorWithLevelsSections [
 
 	| file topic |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -216,7 +216,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithLevelsSections [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -228,7 +228,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSections [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSubSection [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSubSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -243,7 +243,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithMoreSubSection [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSection [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSection [
 
 	| file text |
 	text := '
@@ -259,7 +259,7 @@ blabla
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
+MDTopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
 
 	| file |
 	(file := filesystem workingDirectory / self class spFileName) 
@@ -274,7 +274,7 @@ TopicBuilderVisitorTest >> testTopicBuilderVisitorWithOneSubSection [
 ]
 
 { #category : #tests }
-TopicBuilderVisitorTest >> visitFile: file [
+MDTopicBuilderVisitorTest >> visitFile: file [
 
-	visitor start: (MicroDownParser new parse: file contents) asPillar
+	visitor start: (MicroDownParser new parse: file contents)
 ]

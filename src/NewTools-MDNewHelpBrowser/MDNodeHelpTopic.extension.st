@@ -1,8 +1,8 @@
-Extension { #name : #NodeHelpTopic }
+Extension { #name : #MDNodeHelpTopic }
 
-{ #category : #'*NewTools-NewHelpBrowser' }
-NodeHelpTopic >> inspectionTopicTree [
-	<inspectorPresentationOrder: 35 title: 'TopicTree'>
+{ #category : #'*NewTools-MDNewHelpBrowser' }
+MDNodeHelpTopic >> inspectionMCTopicTree [
+	<inspectorPresentationOrder: 930 title: 'TopicTree'>
 
 	^ SpTreePresenter new 
 		roots: { self };
